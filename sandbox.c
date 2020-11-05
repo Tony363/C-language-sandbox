@@ -32,45 +32,48 @@ int main(int argc, char *argv[])
    // b = 5555;
    // printf("The Formula is:%lf+%lf=%lf\n",a,b,a+b);
 
-    //char str[MAX];
-    //printf("enter character string for fgets sample:\n");
-    //fgets(str,MAX,stdin);
-    //printf("%s\n",str);
-    //decimals();
-    //print_int();
-    //print_plus();
-    //int m,n;
-    //printf("even or odd:\n");
-    //scanf("%d",&m);
-    //scanf("%d",&n);
-    //print_odd(m,n);
-    //double y,z;
-    //printf("enter range between intervals:\n");
-    //scanf("%le",&y);
-    //scanf("%le",&z);
-    //print_20(y,z);
-    //printf("Read the integer N as the number of input values:\n");
-    //integer_N();
-    //rectangles();
-    
+   //char str[MAX];
+   //printf("enter character string for fgets sample:\n");
+   //fgets(str,MAX,stdin);
+   //printf("%s\n",str);
+   //decimals();
+   //print_int();
+   //print_plus();
+   //int m,n;
+   //printf("even or odd:\n");
+   //scanf("%d",&m);
+   //scanf("%d",&n);
+   //print_odd(m,n);
+   //double y,z;
+   //printf("enter range between intervals:\n");
+   //scanf("%le",&y);
+   //scanf("%le",&z);
+   //print_20(y,z);
+   //printf("Read the integer N as the number of input values:\n");
+   //integer_N();
+   //rectangles();
+
     read_5();
-return 0;
+    return 0;
 }
 
 int read_5(){
-    int n,i,input;
+    int n,i=0,input=1;
     
     printf("please enter N numbers:\n");
     scanf("%d",&n);
-    
+    //printf("\n");
     int array[n];
     
-    scanf("%d",&input);
-    while(i<n || input<=0){
-        array[i] = input;
+    //scanf("%d",&input);
+    printf("\n");
+    while(i<n && input>0){
         scanf("%d",&input);
+        array[i] = input;
+        
         i++;
     }
+    printf("\n");
     for(int j=0;j<n;j++){
         printf("%d\n",array[(n-1)-j]);
     }
