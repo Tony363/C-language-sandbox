@@ -4,8 +4,9 @@
 void reverseString(char* str);
 
 int main(void){
-    // Here your code !
-    char Tony[10] = "Tony";
+    char *Tony = "Tony";
+    
+    //char Tony[10] = "Tony";
     //reverseString(Tony);
     char *myname = Tony;
     char **myalmightyname = &myname;

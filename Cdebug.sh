@@ -1,0 +1,2 @@
+
+gdb -tui pointers  

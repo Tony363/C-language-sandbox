@@ -12,6 +12,7 @@ int print_20(double a,double b);
 int integer_N();
 int rectangles();
 int read_5();
+int read_words();
 
 int main(int argc, char *argv[])
 {
@@ -53,10 +54,31 @@ int main(int argc, char *argv[])
    //integer_N();
    //rectangles();
 
-    read_5();
+    //read_5();
+    read_words();
     return 0;
 }
 
+int parse_para(){
+    char text[100];
+    while (scanf("%s",text) == 1){
+        printf("%s ",text);
+    }
+    printf("\n");
+    return 0;
+}
+
+int read_words(){
+    
+   char para[150];
+ 
+   printf("Enter Your Paragraph:");
+   scanf("%[^\n]s", para);
+ 
+   printf("Your Entered Paragraph is: %s\n", para);
+ 
+   return 0;
+}
 int read_5(){
     int n,i=0,input=1;
     
@@ -67,19 +89,32 @@ int read_5(){
     
     //scanf("%d",&input);
     printf("\n");
+    int count=0;
     while(i<n && input>0){
         scanf("%d",&input);
-        array[i] = input;
-        
+        array[i] = input;        
         i++;
+        count++;
     }
     printf("\n");
-    for(int j=0;j<n;j++){
-        printf("%d\n",array[(n-1)-j]);
+    for(int j=0;j<count;j++){
+        printf("%d\n",array[(count-2)-j]);
     }
     return 0;
 }
 
+int rectangles_mid(){
+     int h;
+     //printf("enter width and height\n");
+     scanf("%d",&h);
+     for(int i=0;i<h;i++){
+         for(int j=0;j<h;j++){
+            ((i!=0 && i!=(h-1))&&(j!=0&&j!=(h-1))&&(i!=(h/2)||j!=(h/2)))?printf(" "):printf("*");
+         }
+         printf("\n");
+     }
+     return 0;
+}
 int print_20(double y, double z){
 	double interval;
 	printf("enter interval:\n");
