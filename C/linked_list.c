@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 struct ListNode {
       int val;
       struct ListNode *next;
@@ -30,27 +31,47 @@ struct ListNode* reverseList(struct ListNode* head){
 }
 void linked_list(struct ListNode **head,int NodesN){
     struct ListNode *temp=NULL;
-    for (int i=0;i<NodesN;i++){
-        struct ListNode Node;
-        Node.val=i;
-        Node.next = NULL;
-        if (i==0){
-            temp = &Node;
-            *head = &Node;
+    // for (int i=0;i<NodesN;i++){
+    //     struct ListNode Node;
+    //     Node.val=i;
+    //     Node.next = NULL;
+    //     if (i==0){
+    //         temp = &Node;
+    //         *head = &Node;
+    //         continue;
+    //     }
+    //     temp->next = &Node;
+    //     temp = &Node;
+        
+    //     // printf("%p\n",Node.next);
+    // }
+    // temp->next = NULL;
+    for(int i=0;i<NodesN;i++) {
+        struct ListNode * Node_ptr = (struct ListNode*)malloc(sizeof(struct ListNode));
+        Node_ptr->val = i;
+        Node_ptr->next = NULL;
+        if(i==0) {
+            temp = Node_ptr;
+            *head = Node_ptr;
             continue;
         }
-        temp->next = &Node;
-        temp = &Node;
-        // printf("%p\n",Node.next);
+        temp->next = Node_ptr;
+        temp = Node_ptr;   
     }
     temp->next = NULL;
 }
 void print_list(struct ListNode *head){
     struct ListNode *temp=NULL;
     temp = head;
-    while (temp->next != NULL){
+    // do{
+    //     printf("%d\n",temp->val);
+    //     printf("%p\n",temp->next);
+    //     temp = temp->next;
+    // }
+    // while (temp != NULL);
+    while(temp != NULL) {
         printf("%d\n",temp->val);
-        printf("%p\n",temp->next);
+        // printf("%p\n",temp->next);
         temp = temp->next;
     }
 }
@@ -60,6 +81,7 @@ int main (void){
     int NodesN=3;
     linked_list(&head,NodesN);
     print_list(head);
+    head = reverseList(head);
+    print_list(head);
     return 0;
-  
 }
