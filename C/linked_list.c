@@ -1,13 +1,9 @@
 #include<stdio.h>
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     struct ListNode *next;
- * };
- */
-
-
+struct ListNode {
+      int val;
+      struct ListNode *next;
+};
+ 
 struct ListNode* reverseList(struct ListNode* head){
     // prev is null
     if (head == NULL){
@@ -31,4 +27,39 @@ struct ListNode* reverseList(struct ListNode* head){
         // prev is current nodes address
     // assign head as prev
     return head;   
+}
+void linked_list(struct ListNode **head,int NodesN){
+    struct ListNode *temp=NULL;
+    for (int i=0;i<NodesN;i++){
+        struct ListNode Node;
+        Node.val=i;
+        Node.next = NULL;
+        if (i==0){
+            temp = &Node;
+            *head = &Node;
+            continue;
+        }
+        temp->next = &Node;
+        temp = &Node;
+        // printf("%p\n",Node.next);
+    }
+    temp->next = NULL;
+}
+void print_list(struct ListNode *head){
+    struct ListNode *temp=NULL;
+    temp = head;
+    while (temp->next != NULL){
+        printf("%d\n",temp->val);
+        printf("%p\n",temp->next);
+        temp = temp->next;
+    }
+}
+int main (void){
+    struct ListNode Node1,Node2,Node3;
+    struct ListNode *head=NULL;
+    int NodesN=3;
+    linked_list(&head,NodesN);
+    print_list(head);
+    return 0;
+  
 }
