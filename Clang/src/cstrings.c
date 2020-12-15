@@ -2,14 +2,9 @@
 #include <string.h>
 #include <ctype.h>
 
-void parse_s(char *s){
-    for (int i=0,firstc=0;i<strlen(s);i++){
-        if (isalpha(s[i])!=0){
-            s[i] = (firstc==0)?toupper(s[i]):tolower(s[i]);
-            firstc++;
-        }else{
-            firstc=0;
-        }
+void cvt_str(char *s){
+    for (int i=0,firstc=0;i<strlen(s);i++,firstc=(isalpha(s[i])!=0)?1+firstc:-1){   
+        s[i] = (isalpha(s[i])!=0&&firstc==0)?toupper(s[i]):tolower(s[i]);
     }
 }
 
