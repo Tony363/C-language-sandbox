@@ -3,17 +3,17 @@
 # include <string.h>
 int main (void){
     char symbol;
-    char *mult="*",*add="+",*sub="-",*div="/";
+    char mult='*',add='+',sub='-',div='/';
     int a,b;
     scanf("%d %c %d", &a, &symbol, &b);
     printf("%d %c %d\n",a,symbol,b);
-    if (strcmp(&symbol,add)!=0){
+    if (symbol == '*'){
         printf("%d\n",a+b);
-    }else if (strcmp(&symbol,sub)!=0){
+    }else if (symbol == '-'){
         printf("%d\n",a-b);
-    }else if (strcmp(&symbol,div)!=0){
+    }else if (symbol == '/'){
         printf("%d\n",a/b);
-    }else if (strcmp(&symbol,mult)!=0){
+    }else if (symbol == '*'){
         printf("%d\n",a*b);
     }else{
         printf("wrong operator\n");
