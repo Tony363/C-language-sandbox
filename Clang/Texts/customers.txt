@@ -1,0 +1,16 @@
+Trump, Donald
+B
+1770
+19000
+Sanders, Bernie
+A
+995
+900
+Musk, Elon
+A
+1100
+10005
+Obama, Barack
+B
+2050
+21000
