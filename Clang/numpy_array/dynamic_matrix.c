@@ -4,7 +4,7 @@
 // structure wrapper to 2d or 1d
 
 typedef struct IntMat{
-    char type;
+    char type,result;
     int rows,cols;
     void *data;
 } IntMat;
@@ -19,49 +19,73 @@ void *createMat(int rows,int cols){
 }
 
 void transMat(IntMat *m){
-    // IntMat *t = (IntMat *)malloc(sizeof(IntMat));
     int temp;
     temp = (m)->rows;
     (m)->rows = (m)->cols;
     (m)->cols = temp;
-    // m->data = m;
     (m)->type = '1';
-    // return m;
 }
 
 void set(IntMat *m,int i, int j,int value){
-    if (m->type == '0')
+    if (m->type == '0'){
         *(((int *)m->data)+(i*m->cols)+j) = value;
+        m->result = 'S';
+    }
     else if (m->type == '1'){
         set(m,j,i,value);
+        m->result = 'S';
     }
 }
 
 int get(IntMat *m,int i,int j){
-    if (m->type == '0'){
-        //return ((int)(m->data))+(i*(m->cols))+j;
-        return *(((int *)m->data)+(i*(m->cols))+j);
-    }else if(m->type == '1'){
-        return *(((int *)m->data)+(j*(m->cols+1))+i);
+    if (m->cols == m->rows){
+        if (m->type == '0'){
+            return *(((int *)m->data)+(i*(m->cols))+j);
+        }else if(m->type == '1'){
+            return *(((int *)m->data)+(j*(m->cols))+i);
+        }    
+    }else{
+        if (m->type == '0'){
+            //return ((int)(m->data))+(i*(m->cols))+j;
+            return *(((int *)m->data)+(i*(m->cols))+j);
+        }else if(m->type == '1'){
+            return *(((int *)m->data)+(j*(m->cols+1))+i);
+        }
     }
-}
-
-int **matrix(int r,int c){
-    int **arr = (int **)malloc(r * sizeof(int *)); 
-    for (int i=0; i<r; i++) 
-        arr[i] = (int *)malloc(c * sizeof(int)); 
-    return arr;
 }
 
 void printMatrix(IntMat *matrix){
-    for (int i=0;i<matrix->rows;i++){
-        printf("[");
-        for (int j=0;j<matrix->cols;j++){
-            printf("%d ",get(matrix,i,j));
+    if (matrix->result == 'S'){
+        for (int i=0;i<matrix->rows;i++){
+            printf("[");
+            for (int j=0;j<matrix->cols;j++){
+                printf("%d ",get(matrix,i,j));
+            }
+            printf("]\n");
         }
-        printf("]\n");
+        printf("\n");
+    }else{
+        printf("matrix not populated\n");
     }
-    printf("\n");
+
+}
+
+IntMat *dotProduct(IntMat *matrix,IntMat *vector){
+    IntMat *m = createMat(matrix->rows,matrix->cols);
+    if (matrix->cols == vector->rows){
+        for (int i=0;i<m->rows;i++){
+            for (int j=0;j<m->cols;j++){
+                // printf("%d\n",(*(((int *)matrix->data)+(i*(matrix->cols))+j))*(*(((int *)vector->data)+(i*(vector->cols))+j)));
+                set(m,i,j,(*(((int *)matrix->data)+(i*(matrix->cols))+j))*(*(((int *)vector->data)+(i*(vector->cols))+j)));
+            }
+        }
+        m->result = 'S';
+        return m;
+    }else {
+        printf("wrong dot product dimensions\n");
+        m->result = 'F';
+        return m;
+    }
 }
 
 int main(void){
@@ -71,14 +95,16 @@ int main(void){
     IntMat *matrix = createMat(row,col);
     for (int i=0;i<row;i++){
         for (int j=0;j<col;j++){
-            printf("Enter value for matrix[%d][%d]:\n",i,j);
-            scanf("%d",&input);
+            printf("Enter value for matrix[%d][%d]:\n",i,j);scanf("%d",&input);
             set(matrix,i,j,input);
         }
     }
+    matrix->result = 'S';
+    IntMat *matrixCopy = matrix;
     printMatrix(matrix);
     transMat(matrix);
-    printf("%d\n",get(matrix,0,1));
     printMatrix(matrix);
+    IntMat *dotprodMatrix = dotProduct(matrixCopy,matrix);
+    printMatrix(dotprodMatrix);
     return 0;
 }
