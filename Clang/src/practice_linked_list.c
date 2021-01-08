@@ -38,12 +38,7 @@ int remove_by_value(node_t ** head, int val) {
     /*  fill in your code here */
     node_t *tmp=*head;
     node_t *prev;
-    // if (tmp!=NULL && tmp->val == val){
-    //     *head = tmp->next;
-    //     free(tmp);
-    // }
     while (tmp->next != NULL){
-        // printf("%d\n",tmp->val);
         if (tmp->val == val){
             prev->next = tmp->next;
             break;
@@ -52,7 +47,6 @@ int remove_by_value(node_t ** head, int val) {
         tmp = tmp->next;  
        
     }
-    // print_list(*head);
     return 0;
 }
 

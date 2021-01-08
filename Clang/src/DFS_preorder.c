@@ -80,8 +80,16 @@ void insert(node_t * tree, int val)
 void printDFS(node_t * current)
 {
   /* change the code here */
+/*
+Below is an implementation of a binary tree that 
+has insertion and printing capabilities. This tree 
+is ordered but not balanced. This example maintains its 
+ordering at insertion time.
+
+Change the print routine to depth-first search pre-order.
+*/
   if (current == NULL)         return;   /* security measure */
-  if (current->left != NULL)   printDFS(current->left);
   if (current != NULL)         printf("%d ", current->val);
+  if (current->left != NULL)   printDFS(current->left);
   if (current->right != NULL)  printDFS(current->right);
 }

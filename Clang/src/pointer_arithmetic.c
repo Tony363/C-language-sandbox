@@ -19,7 +19,7 @@ int main() {
     for (i = 0; i < 3; i++) {
         // Insert code here
         parray[i] = &pointer[i];
-        printf("%p\n",parray[i]);
+    
     }
 
     // Test code

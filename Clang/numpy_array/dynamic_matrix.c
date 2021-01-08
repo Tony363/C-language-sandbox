@@ -98,9 +98,6 @@ IntMat *dotProduct(IntMat *matrix,IntMat *vector){
                 m_val = (*(((int *)matrix->data)+(i*(matrix->cols))+(m_iter)));
                 v_val = (*(((int *)vector->data)+(j*(vector->rows))+v_iter));
                 value += (m_val * v_val);
-                // Debug outputs
-                // printf("m:v = %d:%d\n", m_val, v_val);
-                // printf("value: %d\n",m_val * v_val);
             }
             set(m,i,j,value);
         }
