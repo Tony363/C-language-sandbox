@@ -68,8 +68,13 @@ int main (int argc,char *argv[]){
     const char *expr = argv[1];
     printf("Evaluating:\n\t%s\n", expr);
 
-    double area_of_trapezoid = integrate_by_trapezoidal_rule(expr,5,10,100);
-    double area_of_midpoint =  integrate_by_midpont(expr,5,10,100);
+    int upperbound,lowerbound,section; 
+    scanf("%d",&upperbound);
+    scanf("%d",&lowerbound);
+    scanf("%d",&section);
+    
+    double area_of_trapezoid = integrate_by_trapezoidal_rule(expr,upperbound,lowerbound,section);
+    double area_of_midpoint =  integrate_by_midpont(expr,upperbound,lowerbound,section);
     printf("%lf\n",area_of_trapezoid);
     printf("%lf\n",area_of_midpoint);
 

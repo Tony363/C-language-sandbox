@@ -5,7 +5,8 @@ int main(void) {
 
     /* your code goes here */
     int *pointer_to_n = &n;
-    n++;
+    printf("%d\n",*pointer_to_n);
+    *pointer_to_n += 1;
     /* testing code */
     if (pointer_to_n != &n){
         return 1;
