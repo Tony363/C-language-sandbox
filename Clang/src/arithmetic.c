@@ -7,7 +7,7 @@ int main (void){
     int a,b;
     scanf("%d %c %d", &a, &symbol, &b);
     printf("%d %c %d\n",a,symbol,b);
-    if (symbol == '*'){
+    if (symbol == '+'){
         printf("%d\n",a+b);
     }else if (symbol == '-'){
         printf("%d\n",a-b);
