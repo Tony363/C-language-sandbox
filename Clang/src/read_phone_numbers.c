@@ -73,5 +73,6 @@ int main (void){
         }
         print_phone_number(phone_number);
     }
+    fclose(fp);
     return 0;
 }

@@ -35,12 +35,36 @@ void print_no_delim(char *number){
     printf("(%s) %s-%s\n",region,first,second);
 }
 
-int main (void){
-    // char *contents = "content=0&website=Google";
-    // char arg[100] = {0};
-    // char value[100] = {0};
-    // sscanf(contents, "%[^&]&%s", arg, value);
-    // printf("%s\n%s\n", arg, value);
+int main (int argc,char** argv){
+    char *contents = "content=0&website=Google";
+    char arg[100] = {0};
+    char value[100] = {0};
+    sscanf(contents, "%[^&]&%s", arg, value);
+    printf("%s\n%s\n\n", arg, value);
+    // reading from file with path from command line
+    if (argc < 2){
+        return -1;
+    }
+    FILE *file = fopen(argv[1],"r");char line[100];
+    if (file == NULL){
+        exit(EXIT_FAILURE);
+    }
+    char period='.',hyphon='-',paren1='(',paren2=')',space=' ';
+    while (fgets(line,100,file)!=0){
+        if (strchr(line,period)==NULL&&
+            strchr(line,hyphon)==NULL&&
+            strchr(line,paren1)==NULL&&
+            strchr(line,paren2)==NULL&&
+            strchr(line,space)==NULL){
+            line[strlen(line)-1] = 0;
+            print_no_delim(line);
+        }else{
+            line[strlen(line)-1] = 0;
+            print_phone_num(line);
+        }
+    }
+    // using array of c strings
+    printf("\nreading from array of c stings\n\n");
     char phone_numbers[5][15] = {
         "404.817.6900",
         "(215) 686-1776",
@@ -49,7 +73,6 @@ int main (void){
         "6173434200"
         };
     int n_phone = (sizeof(phone_numbers)/sizeof(phone_numbers[0]));
-    char period='.',hyphon='-',paren1='(',paren2=')',space=' ';
     for (int i=0;i<n_phone;i++){   
         if (strchr(phone_numbers[i],period)==NULL&&
             strchr(phone_numbers[i],hyphon)==NULL&&
