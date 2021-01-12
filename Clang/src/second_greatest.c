@@ -36,9 +36,6 @@ int second_minamum(){
     second_minamum = INT_MAX;
     while(number>=0){
         scanf("%d",&number);
-       // if(number<0){
-       //     break;
-       // }
         if(number<minamum){
             second_minamum = minamum;
             minamum = number;

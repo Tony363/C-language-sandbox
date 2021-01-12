@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 char *join_two(const char *s1,const char *s2) {
     char *str = (char *)malloc((strlen(s1)+strlen(s2))*sizeof(char));   
     strcpy(str,s1);

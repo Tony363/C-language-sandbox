@@ -55,6 +55,7 @@ void printRoot(TreeNodePtr T)
 	// print the right with recursive call
 	printRoot(T->right);
 }
+
 TreeNodePtr tranverseTree(TreeNodePtr T,TreeNodePtr prev,double key){
 	TreeNodePtr tmp=NULL;
 	if (T == NULL){

@@ -19,7 +19,7 @@ int main()
 		start++;
 		end--;										    }
 
-					    /* Write the logic to reverse the array. */
+	/* Write the logic to reverse the array. */
 	for(i = 0; i < num; i++){
 		printf("%d\n", *(arr + i));
 	}
