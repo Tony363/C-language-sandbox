@@ -5,9 +5,11 @@
  * Note: The returned array must be malloced, assume caller calls free().
  */
 void print_nums(int *nums,int numsSize){
+    printf("[");
     for (int i=0;i<numsSize;i++){
-        printf("%d:",nums[i]);
+        printf("%d,",nums[i]);
     }
+    printf("]\n");
 }
 
 int compare (const void * a, const void * b)
@@ -16,7 +18,7 @@ int compare (const void * a, const void * b)
 }
 
 int* sortedSquares(int* nums, int numsSize, int* returnSize){
-    int *array = malloc(sizeof(int)*(*returnSize=numsSize)); 
+    int *array = (int *)malloc(sizeof(int)*(*returnSize=numsSize)); 
     if (array == NULL) {
       fprintf(stderr, "malloc failed\n");
       return -1;
@@ -43,5 +45,6 @@ int main(void){
     int array[] = {-4,-1,0,3,10};
     int returnSize=0;
     int *sorted = sortedSquares(array,5,&returnSize);
+    print_nums(sorted,5);
     return 0;
 }
