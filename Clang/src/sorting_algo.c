@@ -43,7 +43,7 @@ int* sortedSquares(int* nums, int numsSize, int* returnSize){
 
 int main(void){
     int array[] = {-4,-1,0,3,10};
-    int returnSize=0;
+    int returnSize;
     int *sorted = sortedSquares(array,5,&returnSize);
     print_nums(sorted,5);
     return 0;
