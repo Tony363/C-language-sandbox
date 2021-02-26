@@ -17,11 +17,11 @@ class Point{
         Point(int c1,int c2){
             x = c1; y = c2;
         }
-        Point& operator=(Point a){
+        Point& operator=(const Point a){
             x = a.x; y = a.y;
             return *this;
         }
-        Point& operator+(Point a){
+        Point& operator+(const Point a){
             x = x + a.x; y = y + a.y;
             return *this;
         }
@@ -39,6 +39,11 @@ class Complex: public Point{
             c1 = r;c2 = i;
             cout << "Forming..." << *this;
         } 
+        Complex& operator=(const Complex &a){
+            // c1 = a.c1; c2 = a.c2;
+            Complex::operator=(a);
+            return *this;
+        }
         int getc1()const{return c1;}
         int getc2()const{return c2;}
 };
@@ -65,9 +70,9 @@ ostream& operator<<(ostream& out, const Point& c){
     return out;
 }
 
-// template<typename T>
-void swap( Complex &a,Complex &b){
-    Complex temp = a;
+template<class T>
+void SwapP(T &a,T &b){
+    T temp = a;
     a = b;
     b = temp;
 }
@@ -77,10 +82,11 @@ int main()
     Complex c1(15, 30), c2 (100, 200);
     Point& p_c1 = c1; Point& p_c2 = c2;
     cout << endl;
-    swap (p_c1, p_c2);  // swapping Complex objects as Point objects
+    SwapP <Point> (p_c1, p_c2);  // swapping Complex objects as Point objects
     
     cout << "c1: (Point) " << p_c1 << "c2: " << p_c2 << endl;	    
     cout << "c1: " << c1 << "c2: " << c2 << endl;
     return 0;
 }
 
+// swap function for anything 
