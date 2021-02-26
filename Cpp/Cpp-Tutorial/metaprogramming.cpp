@@ -14,6 +14,6 @@ struct power2<0>{
 
 int main() 
 { 
-    cout << power2<8>::val << endl; 
+    cout << power2<2>::val << endl; 
     return 0; 
 } 

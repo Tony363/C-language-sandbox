@@ -1,11 +1,17 @@
 #include <iostream>
 using namespace std;
 
-struct person{
+typedef struct person{
     string name;
     int age;
     bool do_programming;
-};
+}person ;
+
+ostream& operator<<(ostream& out,const person& Person)
+{
+   out << Person.name << " (" << to_string(Person.age) << ")" << endl;
+   return out;
+}
 
 int main(void){
     person p1,p2;
@@ -16,9 +22,10 @@ int main(void){
     p2.name = "bob";
     p2.age = 18;
     p2.do_programming = false;
-    cout << p1.name << p1.age ;
-    printf("%s (%d)",p1.name,p1.age);
-    cout << p1.name << " (" << p1.age << ")" << endl;
-    cout << p2.name << " (" << p2.age << ")" << endl;
+
+    cout << p1 ;
+    cout << p2 ;
     return 0;
 }
+
+
