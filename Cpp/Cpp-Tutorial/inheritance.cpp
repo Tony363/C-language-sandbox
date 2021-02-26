@@ -31,13 +31,16 @@ ostream& operator<<(ostream& out, const Point& c){
 }
 
 class Complex: public Point{
-    private:
-        int &real,&imag;
+    // private:
+    //     int &real,&imag;
     public:
-        Complex(int r,int i): Point(r,i),real(x),imag(y)
-        { cout << "Forming.....\n" << *this << endl ;} 
+        // int &real,&imag;
+        Complex(int r,int i): Point(r,i)//,real(x),imag(y)
+        {  
+            cout << "Forming.....\n" << *this << endl;
+        } 
         // Point& operator=(Point a){
-        //     real = a.x; imag = a.y;
+        //     x = a.x; imag = a.y;
         //     return *this;
         // }
 };
@@ -51,7 +54,7 @@ ostream& operator<<(ostream& out, const Complex& c){
 
 
 // template<typename T>
-void swap(Complex a,Complex b){
+void swap( Complex &a,Complex &b){
     Complex temp = a;
     a = b;
     b = temp;
@@ -60,10 +63,8 @@ void swap(Complex a,Complex b){
 int main()
 {
     Complex c1(15, 15), c2 (100, 100);
-    // swap(c1,c2);
+    swap(c1,c2);
     cout << c1;
     cout << c2;
     return 0;
 }
-
-
