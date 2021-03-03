@@ -9,81 +9,85 @@ class Plans;
 class DietPlan; 
 class ExercisePlan; 
 class FitnessAppWrapper;
-ifstream& operator>>(ifstream& is, DietPlan& plan);
-ifstream& operator>>(ifstream& is, ExercisePlan& plan);
+class readFile;
 
-// typedef struct TodayPlan{
-//     string planName;
-//     int goalCalories;
-//     string dateIntended;
-// }TodayPlan;
+
+ifstream& operator>>(ifstream& is, ExercisePlan& plans);
+ifstream& operator>>(ifstream& is, DietPlan& plans);
+
+iostream& operator<<(iostream& out,ExercisePlan& plans);
+iostream& operator<<(iostream& out,DietPlan& plans);
+iostream& operator<<(iostream& out,int& goal);
+
+// void BindInput( ifstream & inputChannel ); 
 
 int main(){
-    class FitnessAppWrapper app;class DietPlan diet; class ExercisePlan exercise;
-    app.dietfile.open("dietPlans.txt");app.exercisefile.open("exercisePlans.txt");
-    
-    app.dietfile.close();app.exercisefile.close();
+    FitnessAppWrapper app();
+    DietPlan diet(); 
+    ExercisePlan exercise();
     return 0;
 }
 
 class Plans{
     public:
-        Plans();
+        Plans(){
+
+        };
 
         int goalCalories; // maximum intake of calories 
         string planName;
         string dateIntended; // date plan is intended to be
 
-        iostream& operator<<(int goal){
-            cout << "You goal is updated (" << goal << ")" << endl;
-        }
         void editGoal() {
-            cout << "Please enter goal(calories):" << endl;
+            cout << "Pleasifstream& operator>>(ifstream& is, plans)e enter goal(calories):" << endl;
             cin >> goalCalories;
         }
 };
 
 class DietPlan:public Plans{
     public:
-        // TodayPlan dietP;
         DietPlan(){
-            
+
         };
-        int coolvar;
 };
 
 class ExercisePlan:public Plans{
     public:
-        // TodayPlan exerciseP;
         ExercisePlan(){
 
         }
 };
 
 class FitnessAppWrapper{
-    public:
+    private: 
         ifstream dietfile,exercisefile;
         vector<DietPlan> StoredDietPlans = {};
         vector<ExercisePlan> StoredExercisePlans = {};
+
+    public:
         FitnessAppWrapper(){
-           
+            runApp();
         }
 
-        void runApp(void){cout << "starting main application" << endl;}
+        void runApp(void){
+            cout << "starting main application" << endl;
+            dietfile.open("dietPlans.txt");
+            exercisefile.open("exercisePlans.txt");
+            }
 
         void loadDailyPlan(ifstream &Dietfile,DietPlan &plan){
-            Dietfile.open("dietPlans.txt");
-            if (Dietfile.is_open()){
-                Dietfile >> plan;
+            dietfile.open("dietPlans.txt");
+            if (dietfile.is_open()){
+                dietfile >> plan;
             } else {
                 cout << "Unable to open dietPlans.txt" << endl;
             }
         }
 
         void loadDailyPlan(ifstream &Exercisefile,ExercisePlan &plan){
-            Exercisefile.open("exercisePlans.txt");
-            if (Exercisefile.is_open()){
-                Exercisefile >> plan;
+            exercisefile.open("exercisePlans.txt");
+            if (exercisefile.is_open()){
+                exercisefile >> plan;
             } else {
                 cout << "Unable to open dietPlans.txt" << endl;
             }
@@ -102,77 +106,78 @@ class FitnessAppWrapper{
                 loadDailyPlan(dietfile,forExercise);
             }
         }
-        iostream& operator<<(iostream& out,ExercisePlan& plan){
-            out << "Plan: " << plan.planName 
-                << "Goals: "<< plan.goalCalories 
-                << "Date: " << plan.dateIntended 
-                << endl;
-            return out;
-        }
-
-        iostream& operator<<(iostream& out,DietPlan& plan){
-            out << "Plan: " << plan.planName 
-                << "Goals: "<< plan.goalCalories 
-                << "Date: " << plan.dateIntended 
-                << endl;
-            return out;
-        }
 
         template<class plans>
         void displayDailyPlan(plans & plan){
             cout << plan;
         }
+        void closeApp(){
+            cout << "closing APP" << endl;
+            dietfile.close();
+            exercisefile.close();
+        }
 };  
 
-ifstream& operator>>(ifstream& is, DietPlan& plan){
-    string line;
-    int count;
-    while (getline(is,line)){
-        if (count==0){
-            plan.planName = line;
-            plan.coolvar = 3;
-        } else if (count==1){
-            plan.goalCalories = stoi(line);
-        } else if (count==2){
-            plan.dateIntended = line;
-            for (auto& it : plan.StoredDietPlans){
-                if (plan.dietP.dateIntended != it.dateIntended){
-                    plan.StoredDietPlans.push_back(plan.dietP);
-                    break;
-                }
+class readFile{
+
+    private: 
+        int count=planName,curPos=0;
+        enum {planName,goalCalories,dateIntended};
+        string line;
+
+    public:
+        template<class plans>
+        readFile(ifstream& file,plans& plan){
+            file.seekg(curPos);
+            while (getline(file,line) && count <= dateIntended){
+                if (count==0){
+                    plan.planName = line;
+                } else if (count==1){
+                    plan.goalCalories = stoi(line);
+                } else if (count==2){
+                    plan.dateIntended = line;
+                } 
+                count ++;
+                // cout << line << endl;
             }
-        } else{
-            count = 0;
-            continue;
+            store_Pos(file);
+            returnStream(file);
         }
-        count ++;
-        cout << line << endl;
-    }
+
+        void store_Pos(ifstream& stream){
+            curPos = stream.tellg();
+        }
+
+        ifstream& returnStream(ifstream& stream){
+            return stream;
+        }
+
+};
+
+ifstream& operator>>(ifstream& is, ExercisePlan& plans){
+    readFile file(is,plans);
+    return is;
+}
+ifstream& operator>>(ifstream& is, DietPlan& plans){
+    readFile file(is,plans);
     return is;
 }
 
-ifstream& operator>>(ifstream& is, ExercisePlan& plan){
-    string line;
-    int count;
-    while (getline(is,line)){
-        if (count==0){
-            plan.exerciseP.planName = line;
-        } else if (count==1){
-            plan.exerciseP.goalCalories = stoi(line);
-        } else if (count==2){
-            plan.exerciseP.dateIntended = line;
-            for (auto& it : plan.StoredExercisePlans){
-                if (plan.exerciseP.dateIntended != it.dateIntended){
-                    plan.StoredExercisePlans.push_back(plan.exerciseP);
-                    break;
-                }
-            }
-        } else{
-            count = 0;
-            continue;
+iostream& operator<<(iostream& out,ExercisePlan& plans){
+            out << "Plan: " << plans.planName 
+                << "Goals: "<< plans.goalCalories 
+                << "Date: " << plans.dateIntended 
+                << endl;
+            return out;
         }
-        count ++;
-        cout << line << endl;
-    }
-    return is;
-}
+iostream& operator<<(iostream& out,DietPlan& plans){
+            out << "Plan: " << plans.planName 
+                << "Goals: "<< plans.goalCalories 
+                << "Date: " << plans.dateIntended 
+                << endl;
+            return out;
+        }
+iostream& operator<<(iostream& out,int& goal){
+            out << "You goal is updated (" << goal << ")" << endl;
+            return out;
+        }
