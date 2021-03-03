@@ -44,6 +44,19 @@ class Plans{
                 << endl;
             cin >> goalCalories;
         }
+        // get plan type
+        template <class T>
+        int getType(T &plan){
+            if (plan.planName == "exercise"){
+                return 1;
+            }else if (plan.planName == "diet"){
+                return 0;
+            }else {
+                cout << "Plan "
+            }
+        }
+
+
 };
 
 class DietPlan:public Plans{
@@ -51,12 +64,24 @@ class DietPlan:public Plans{
         DietPlan(){
 
         };
+        DietPlan readNextPlan(ifstream& Efile,DietPlan& plan){
+            Efile >> plan.planName;
+            Efile >> plan.goalCalories;
+            Efile >> plan.dateIntended;
+            return plan;    
+        }
 };
 
 class ExercisePlan:public Plans{
     public:
         ExercisePlan(){
 
+        }
+        ExercisePlan readNextPlan(ifstream& Efile,ExercisePlan& plan){
+            Efile >> plan.planName;
+            Efile >> plan.goalCalories;
+            Efile >> plan.dateIntended;
+            return plan;    
         }
 };
 
@@ -86,6 +111,7 @@ class FitnessAppWrapper{
             exercisefile.open("exercisePlans.txt");
             }
 
+        // exercise plan diet plan differentiate
         void loadDailyPlan(ifstream &Dietfile,DietPlan &plan){
             Dietfile.open("dietPlans.txt");
             if (Dietfile.is_open()){
@@ -107,7 +133,9 @@ class FitnessAppWrapper{
                 cout << "Unable to open dietPlans.txt" << endl;
             }
         }
-
+        // read first line, then create object.
+        // need reference to file and reference to object *2 layers of deferencing for dailyload plan and overloading  operator
+        // pass reference
         void loadWeeklyPlan(ifstream &Dietfile){
             for(int i=0;i<7;i++){
                 DietPlan forDiet;
@@ -318,12 +346,11 @@ class readFile{
 };
 
 ifstream& operator>>(ifstream& is, ExercisePlan& plans){
-    readFile file(is,plans);
-    // is >> file;
+    plans.readNextPlan(is,plans);
     return is;
 }
 ifstream& operator>>(ifstream& is, DietPlan& plans){
-    readFile file(is,plans);
+    plans.readNextPlan(is,plans);
     return is;
 }
 
