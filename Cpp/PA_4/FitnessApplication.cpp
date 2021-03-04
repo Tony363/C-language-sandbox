@@ -44,19 +44,6 @@ class Plans{
                 << endl;
             cin >> goalCalories;
         }
-        // get plan type
-        template <class T>
-        int getType(T &plan){
-            if (plan.planName == "exercise"){
-                return 1;
-            }else if (plan.planName == "diet"){
-                return 0;
-            }else {
-                cout << "Plan "
-            }
-        }
-
-
 };
 
 class DietPlan:public Plans{
@@ -136,19 +123,23 @@ class FitnessAppWrapper{
         // read first line, then create object.
         // need reference to file and reference to object *2 layers of deferencing for dailyload plan and overloading  operator
         // pass reference
-        void loadWeeklyPlan(ifstream &Dietfile){
+        // determine by which file stream to call which method
+        void loadWeeklyPlan(ifstream &filestream,int type){
             for(int i=0;i<7;i++){
-                DietPlan forDiet;
-                loadDailyPlan(Dietfile,forDiet);
+                DietPlan forDiet;ExercisePlan forExercise;
+                if (type == 0){
+                    loadDailyPlan(filestream,forDiet);
+                }else{
+                    loadDailyPlan(filestream,forExercise);
+                }
             }
         }
-
-        void loadWeeklyPlan(ifstream &Exercisefile){
-            for(int i=0;i<7;i++){
-                ExercisePlan forExercise;
-                loadDailyPlan(Exercisefile,forExercise);
-            }
-        }
+        // void loadWeeklyPlan(ifstream &Exercisefile){
+        //     for(int i=0;i<7;i++){
+        //         ExercisePlan forExercise;
+        //         loadDailyPlan(Exercisefile,forExercise);
+        //     }
+        // }
 
         void displayDailyPlan(ExercisePlan& plan){
             cout << plan;
@@ -273,10 +264,10 @@ class FitnessAppWrapper{
         void evalChoice(int choice){
             switch (choice){
                 case 1: 
-                    loadWeeklyPlan(exercisefile);
+                    loadWeeklyPlan(exercisefile,1);
                     break;
                 case 2: 
-                    loadWeeklyPlan(dietfile);
+                    loadWeeklyPlan(dietfile,0);
                     break;
                 case 3: 
                     storeWeeklyPlan(StoredDietPlans);
@@ -297,53 +288,54 @@ class FitnessAppWrapper{
                     editExercisePlans();
                     break;
                 case 9:
-
+                    closeApp();
+                    break;
             }
         }
 };  
 
-class readFile{
+// class readFile{
 
-    private: 
-        int count=planName,curPos=0;
-        enum {planName,goalCalories,dateIntended};
-        string line;
+//     private: 
+//         int count=planName,curPos=0;
+//         enum {planName,goalCalories,dateIntended};
+//         string line;
 
-    public:
-        template<class plans>
-        readFile(ofstream &file,plans& plan){
-            file << plan.planName;
-            file << plan.goalCalories;
-            file << plan.dateIntended;
-            file << "\n";
-        }
-        template<class plans>
-        readFile(ifstream& file,plans& plan){
-            file.seekg(curPos);
-            while (getline(file,line) && count <= dateIntended){
-                if (count==0){
-                    plan.planName = line;
-                } else if (count==1){
-                    plan.goalCalories = stoi(line);
-                } else if (count==2){
-                    plan.dateIntended = line;
-                } 
-                count ++;
-                // cout << line << endl;
-            }
-            store_Pos(file);
-            returnStream(file);
-        }
+//     public:
+//         template<class plans>
+//         readFile(ofstream &file,plans& plan){
+//             file << plan.planName;
+//             file << plan.goalCalories;
+//             file << plan.dateIntended;
+//             file << "\n";
+//         }
+//         template<class plans>
+//         readFile(ifstream& file,plans& plan){
+//             file.seekg(curPos);
+//             while (getline(file,line) && count <= dateIntended){
+//                 if (count==0){
+//                     plan.planName = line;
+//                 } else if (count==1){
+//                     plan.goalCalories = stoi(line);
+//                 } else if (count==2){
+//                     plan.dateIntended = line;
+//                 } 
+//                 count ++;
+//                 // cout << line << endl;
+//             }
+//             store_Pos(file);
+//             returnStream(file);
+//         }
 
-        void store_Pos(ifstream& stream){
-            curPos = stream.tellg();
-        }
+//         void store_Pos(ifstream& stream){
+//             curPos = stream.tellg();
+//         }
 
-        ifstream& returnStream(ifstream& stream){
-            return stream;
-        }
+//         ifstream& returnStream(ifstream& stream){
+//             return stream;
+//         }
 
-};
+// };
 
 ifstream& operator>>(ifstream& is, ExercisePlan& plans){
     plans.readNextPlan(is,plans);
@@ -354,14 +346,14 @@ ifstream& operator>>(ifstream& is, DietPlan& plans){
     return is;
 }
 
-ofstream& operator<<(ofstream& os,ExercisePlan& plans){
-    readFile file(os,plans);
-    return os;
-}
-ofstream& operator<<(ofstream& os,DietPlan& plans){
-    readFile file(os,plans);
-    return os;
-}
+// ofstream& operator<<(ofstream& os,ExercisePlan& plans){
+//     readFile file(os,plans);
+//     return os;
+// }
+// ofstream& operator<<(ofstream& os,DietPlan& plans){
+//     readFile file(os,plans);
+//     return os;
+// }
 
 ostream& operator<<(ostream& out,ExercisePlan& plans){
             out << "Plan: " << plans.planName 

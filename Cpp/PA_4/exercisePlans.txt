@@ -1,0 +1,13 @@
+Plan name
+
+Goal
+
+Date in the form mm/dd/yyyy
+
+(blank line)
+
+Plan name
+
+Goal
+
+Date in the form mm/dd/yyyy
