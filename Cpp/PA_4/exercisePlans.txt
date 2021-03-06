@@ -1,13 +1,27 @@
-Plan name
+Walking
+15
+02/01/2021
 
-Goal
+Running
+20
+02/02/2021
 
-Date in the form mm/dd/yyyy
+Biking
+50
+02/03/2021
 
-(blank line)
+Swimming
+10
+02/04/2021
 
-Plan name
+Rope_Jumping
+100
+02/05/2021
 
-Goal
+Rock_Climbing
+1000
+02/06/2021
 
-Date in the form mm/dd/yyyy
+Lifting
+40
+02/07/2021

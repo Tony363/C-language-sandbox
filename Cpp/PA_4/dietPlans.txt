@@ -1,13 +1,27 @@
-Plan name
+Walking_diet
+2000
+02/01/2021
 
-Goal
+Running_diet
+3000
+02/02/2021
 
-Date in the form mm/dd/yyyy
+Biking_diet
+3500
+02/03/2021
 
-(blank line)
+Swimming_diet
+2300
+02/04/2021
 
-Plan name
+Rope_Jumping_diet
+1500
+02/05/2021
 
-Goal
+Rock_Climbing_diet
+3200
+02/06/2021
 
-Date in the form mm/dd/yyyy
+Lifting_diet
+6000
+02/07/2021
