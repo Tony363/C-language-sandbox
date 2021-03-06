@@ -88,7 +88,9 @@ class FitnessAppWrapper{
         void editExercisePlans();
 
         void closeApp();
-        
+
+        void Continue();
+
         void displayMenu();
 
         void evalChoice(int choice);

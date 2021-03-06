@@ -8,10 +8,10 @@
 using namespace std;
 
 void Plans::editGoal() {
-    cout << "Pleaes enter goal(calories):\n" 
-        << "-> " 
-        << endl;
+    cout << "Please enter goal(calories):\n" 
+        << "-> ";
     cin >> goalCalories;
+    // cout << "Goal set to:" << goalCalories << endl;
 }
 
 FitnessAppWrapper::FitnessAppWrapper(){
@@ -34,10 +34,10 @@ ExercisePlan ExercisePlan::readNextPlan(ifstream& Efile,ExercisePlan& plan){
 
 void FitnessAppWrapper::runApp(void){
     cout << "starting main application" << endl;
-    dietfile.open("dietPlans.txt");
-    exercisefile.open("exercisePlans.txt");
+    dietfile.open("txtfiles/dietPlans.txt");
+    exercisefile.open("txtfiles/exercisePlans.txt");
     displayMenu();
-    }
+}
 
 // exercise plan diet plan differentiate
 void FitnessAppWrapper::loadDailyPlan(ifstream &Dietfile,DietPlan &plan){
@@ -96,7 +96,7 @@ void FitnessAppWrapper::displayWeeklyPlan(vector<DietPlan> plan){
 // ?? does this is even work to not overwrite file of original?
 void FitnessAppWrapper::storeDailyPlan(ExercisePlan& plan){
     ofstream outfile;
-    outfile.open("exerciseStore.txt",ios::out |ios::app);
+    outfile.open("txtfiles/exerciseStore.txt");//,ios::out |ios::app
     outfile << plan;
     outfile.close();
 }
@@ -104,7 +104,7 @@ void FitnessAppWrapper::storeDailyPlan(ExercisePlan& plan){
 // ?? does this is even work to not overwrite file of original?
 void FitnessAppWrapper::storeDailyPlan(DietPlan plan){
     ofstream outfile;
-    outfile.open("dietStore.txt",ios::out |ios::app);
+    outfile.open("txtfiles/dietStore.txt");//,ios::out |ios::app
     outfile << plan;
     outfile.close();
 }
@@ -176,9 +176,23 @@ void FitnessAppWrapper::closeApp(){
     exercisefile.close();
 }
 
+void FitnessAppWrapper::Continue(){
+    char yesno;
+    cout << "Continue using app? [y/n]" << endl;
+    cin >> yesno;
+    if (yesno == 'y'){
+        displayMenu();
+    }else if (yesno != 'y' && yesno != 'n'){
+        cout << "Please answer [y/n]" << endl;
+        Continue();
+    }
+    else {
+        evalChoice(9);
+    }
+}
+
 void FitnessAppWrapper::displayMenu(){
     int choice;
-    char yesno;
     cout << "Please Choose Options\n"
             << "[1] Load weekly diet plan from file\n"
             << "[2] Load weekly exercise plan from file\n"
@@ -193,13 +207,7 @@ void FitnessAppWrapper::displayMenu(){
 
     cin >> choice;
     evalChoice(choice);
-    cout << "continue using app? [y/n]" << endl;
-    cin >> yesno;
-    if (yesno == 'y'){
-        displayMenu();
-    }else {
-        evalChoice(9);
-    }
+    Continue();
 }
 
 void FitnessAppWrapper::evalChoice(int choice){
@@ -244,18 +252,20 @@ ifstream& operator>>(ifstream& is, DietPlan& plans){
 }
 
 ostream& operator<<(ostream& out,ExercisePlan& plans){
-            out << "Plan: " << plans.planName << "\n"
-                << "Goals: "<< to_string(plans.goalCalories) << "\n"
-                << "Date: " << plans.dateIntended << endl;
-            return out;
-        }
+    out << "Plan: " << plans.planName << "\n"
+        << "Goals: "<< to_string(plans.goalCalories) << "\n"
+        << "Date: " << plans.dateIntended << endl;
+    return out;
+}
+
 ostream& operator<<(ostream& out,DietPlan& plans){
-            out << "Plan: " << plans.planName << "\n"
-                << "Goals: "<< to_string(plans.goalCalories) << "\n"
-                << "Date: " << plans.dateIntended << endl;
-            return out;
-        }
+    out << "Plan: " << plans.planName << "\n"
+        << "Goals: "<< to_string(plans.goalCalories) << "\n"
+        << "Date: " << plans.dateIntended << endl;
+    return out;
+}
+
 ostream& operator<<(ostream& out,int& goal){
-            out << "You goal is updated (" << to_string(goal) << ")" << endl;
-            return out;
-        }
+    out << "You goal is updated (" << to_string(goal) << ")" << endl;
+    return out;
+}
