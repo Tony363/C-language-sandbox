@@ -96,7 +96,7 @@ void FitnessAppWrapper::displayWeeklyPlan(vector<DietPlan> plan){
 // ?? does this is even work to not overwrite file of original?
 void FitnessAppWrapper::storeDailyPlan(ExercisePlan& plan){
     ofstream outfile;
-    outfile.open("txtfiles/exerciseStore.txt");//,ios::out |ios::app
+    outfile.open("txtfiles/exerciseStore.txt",ios::out|ios::app);// |ios::app
     outfile << plan;
     outfile.close();
 }
@@ -104,7 +104,7 @@ void FitnessAppWrapper::storeDailyPlan(ExercisePlan& plan){
 // ?? does this is even work to not overwrite file of original?
 void FitnessAppWrapper::storeDailyPlan(DietPlan plan){
     ofstream outfile;
-    outfile.open("txtfiles/dietStore.txt");//,ios::out |ios::app
+    outfile.open("txtfiles/dietStore.txt",ios::out|ios::app);// |ios::app
     outfile << plan;
     outfile.close();
 }
