@@ -1,4 +1,4 @@
-#include "Fitness_Application.h"
+#include "FitnessApp.h"
 
 int main(){
     FitnessAppWrapper app;

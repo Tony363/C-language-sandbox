@@ -50,7 +50,7 @@ class FitnessAppWrapper{
 
     public:
         FitnessAppWrapper();
-        ~FitnessAppWrapper();
+        ~FitnessAppWrapper(){};
 
         void runApp(void);
 
