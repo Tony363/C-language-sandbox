@@ -11,6 +11,8 @@ vector<double> readFile(vector<double>inArray,ifstream &inFile){
         inFile >> inArray[i];
         if (inArray[i] < 0){
             break;
+        }else if (inFile.eof()){
+            break;
         }
     }
     return inArray;
@@ -30,6 +32,8 @@ void printFile(vector<double>inArray){
     for (int i=0;i<inArray.size()-1;i++){
         cout << "Grade "<< i << ": " << inArray[i] << endl;
     } 
+    cout << "Average is: " << calAverage(inArray) << endl;
+
 }
 
 // Main function
@@ -48,7 +52,6 @@ int main(int argc,char** argv){
         cout << "Couldn't read file" << endl;
     }
     printFile(Grades);
-    cout << "Average is: " << calAverage(Grades) << endl;
     infile.close();
     return 0; 
 }
