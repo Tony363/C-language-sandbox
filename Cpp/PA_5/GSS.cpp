@@ -1,19 +1,23 @@
+#include <GSStest.h>
+#include <gss.h>
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
 #include <assert.h>
-#include <Gss.h>
 
 using namespace std;
+int getRand(bool laneType);
+bool inRange(int randInt,bool laneType);
+void test_function1();
 
-// Function to test
-bool function1(int a) {
-    return a > 5;   
+int main(void) {
+    // Call all tests. Using a test framework would simplify this.
+    test_function1();
 }
 
-int genRand(bool laneType) {
+int getRand(string laneType) {
     srand(time(NULL));
-    if (laneType == true)
+    if (laneType == "express")
         return 1 + (rand() % (5 - 1 + 1) );
     return 3 + (rand() % (8 - 3 + 1) );
 }
@@ -24,22 +28,58 @@ bool inRange(int randInt,bool laneType){
     return  (3 <= randInt && 8 >= randInt); 
 }
 
-// If parameter is not true, test fails
-// This check function would be provided by the test framework
-#define IS_TRUE(x) { if (!x) std::cout << __FUNCTION__ << " failed on line " << __LINE__ << std::endl; }
-
-
-// Test for function1()
-// You would need to write these even when using a framework
-void test_function1(){
-    // IS_TRUE(!function1(0));
-    // IS_TRUE(!function1(5));
-    // IS_TRUE(function1(10));
-    // IS_TRUE(function1(0));
-    assert(inRange(getRand(true)));
+// Data methods
+Data::Data(string lanetype){
+    totalTime = 0;
+    laneType = lanetype;
 }
 
-int main(void) {
-    // Call all tests. Using a test framework would simplify this.
-    test_function1();
+void Data::getID(int id){
+    customerNumber = id;
+}
+
+void Data::printData(){
+    cout << customerNumber << "\n"
+         << laneType << "\n"
+         << getRand(laneType) << "\n"
+         << endl;
+}
+// ==============
+
+// QueueNode methods
+QueueNode::QueueNode(string laneType){
+    Data ofCustomer = Data(laneType);
+    ofCustomer.getID(ID);
+    ofCustomer.printData();
+    pData -> &ofCustomer;
+    pNext -> NULL;
+}
+
+void QueueNode::getID(int id){
+    ID = id;
+}
+
+// ==============
+
+// Queue methods
+Queue::Queue(string type){
+    laneType = type;
+}
+
+string Queue::getLaneType(){
+    return laneType;
+}
+
+QueueNode Queue::addCustomer(){
+    QueueNode customer(getLaneType());
+    customerNumberinQueue += 1;
+    customer.getID(customerNumberinQueue);
+    return customer;
+}
+// ==============
+
+void test_function1(){
+    // test random in range generator
+    assert(inRange(getRand(true),true) == true);
+    assert(inRange(getRand(false),false) == true);
 }
