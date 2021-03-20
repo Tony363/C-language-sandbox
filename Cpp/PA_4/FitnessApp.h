@@ -17,7 +17,9 @@ class Plans{
         int goalCalories; // maximum intake of calories 
         string planName;
         string dateIntended; // date plan is intended to be
-33
+    public:
+        void editGoal();
+};
 
 class DietPlan:public Plans{
     public:
