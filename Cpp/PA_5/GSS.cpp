@@ -29,40 +29,47 @@ bool inRange(int randInt,bool laneType){
 }
 
 // Data methods
-Data::Data(string lanetype){
-    totalTime = 0;
+Data::Data(string lanetype,int id){
     laneType = lanetype;
-}
-
-void Data::getID(int id){
     customerNumber = id;
+    arrivalTime = getRand(laneType);
+    serviceTime = getRand(laneType);
 }
 
+int Data::getServiceTime(){
+    return serviceTime;
+}
 void Data::printData(){
     cout << customerNumber << "\n"
          << laneType << "\n"
-         << getRand(laneType) << "\n"
+         << arrivalTime << "\n"
          << endl;
 }
 // ==============
 
 // QueueNode methods
 QueueNode::QueueNode(string laneType){
-    Data ofCustomer = Data(laneType);
-    ofCustomer.getID(ID);
+    Data ofCustomer = Data(laneType,ID);
     ofCustomer.printData();
-    pData -> &ofCustomer;
-    pNext -> NULL;
+    pData = &ofCustomer;
+    pNext = NULL;
 }
 
 void QueueNode::getID(int id){
     ID = id;
 }
 
+Data* QueueNode::getData(){
+    return pData;
+}
+QueueNode* QueueNode::getNext(){
+    return pNext;
+}
 // ==============
 
 // Queue methods
 Queue::Queue(string type){
+    totalTime = 0;
     laneType = type;
 }
 
@@ -74,7 +81,17 @@ QueueNode Queue::addCustomer(){
     QueueNode customer(getLaneType());
     customerNumberinQueue += 1;
     customer.getID(customerNumberinQueue);
+    pHead = &customer;
     return customer;
+}
+
+int Queue::getTotalTime(){
+    QueueNode *temp = pHead;
+    while (temp != NULL){
+        totalTime += temp->getData()->getServiceTime();
+        temp = temp->getNext();
+    };
+    return totalTime;
 }
 // ==============
 
