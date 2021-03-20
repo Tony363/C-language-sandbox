@@ -3,30 +3,38 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
-#include <assert.h>
 
 using namespace std;
-int getRand(bool laneType);
-bool inRange(int randInt,bool laneType);
-void test_function1();
 
-int main(void) {
-    // Call all tests. Using a test framework would simplify this.
-    test_function1();
+// unit testing methods
+GSStesting::GSStesting(){
+
 }
 
-int getRand(string laneType) {
-    srand(time(NULL));
+bool GSStesting::inRange(int randInt,string laneType){
     if (laneType == "express")
-        return 1 + (rand() % (5 - 1 + 1) );
-    return 3 + (rand() % (8 - 3 + 1) );
-}
-
-bool inRange(int randInt,bool laneType){
-    if (laneType == true)
         return  (1 <= randInt && 5 >= randInt);
     return  (3 <= randInt && 8 >= randInt); 
 }
+
+bool GSStesting::testEnqueue(){
+
+    return false;
+}
+
+bool GSStesting::testDequeue(){
+    
+    return false;
+}
+
+void GSStesting::testPrintQueue(){
+
+}
+
+GSStesting::~GSStesting(){
+
+}
+// ===================
 
 // Data methods
 Data::Data(string lanetype,int id){
@@ -34,6 +42,13 @@ Data::Data(string lanetype,int id){
     customerNumber = id;
     arrivalTime = getRand(laneType);
     serviceTime = getRand(laneType);
+}
+
+int Data::getRand(string laneType) {
+    srand(time(NULL));
+    if (laneType == "express")
+        return 1 + (rand() % (5 - 1 + 1) );
+    return 3 + (rand() % (8 - 3 + 1) );
 }
 
 int Data::getServiceTime(){
@@ -45,6 +60,9 @@ void Data::printData(){
          << arrivalTime << "\n"
          << endl;
 }
+Data::~Data(){
+
+}
 // ==============
 
 // QueueNode methods
@@ -52,7 +70,6 @@ QueueNode::QueueNode(string laneType){
     Data ofCustomer = Data(laneType,ID);
     ofCustomer.printData();
     pData = &ofCustomer;
-    pNext = NULL;
 }
 
 void QueueNode::getID(int id){
@@ -64,6 +81,10 @@ Data* QueueNode::getData(){
 }
 QueueNode* QueueNode::getNext(){
     return pNext;
+}
+
+QueueNode::~QueueNode(){
+
 }
 // ==============
 
@@ -77,12 +98,21 @@ string Queue::getLaneType(){
     return laneType;
 }
 
-QueueNode Queue::addCustomer(){
+void Queue::enqueue(){
     QueueNode customer(getLaneType());
     customerNumberinQueue += 1;
     customer.getID(customerNumberinQueue);
-    pHead = &customer;
-    return customer;
+    pTail = pHead;
+    QueueNode* nextQueueNode = pHead->getNext();
+    nextQueueNode = &customer;
+}
+
+void Queue::dequeue(){
+    pTail = pTail->getNext();
+    
+}
+void Queue::printQueue(){
+
 }
 
 int Queue::getTotalTime(){
@@ -93,10 +123,8 @@ int Queue::getTotalTime(){
     };
     return totalTime;
 }
-// ==============
 
-void test_function1(){
-    // test random in range generator
-    assert(inRange(getRand(true),true) == true);
-    assert(inRange(getRand(false),false) == true);
+Queue::~Queue(){
+
 }
+// ==============

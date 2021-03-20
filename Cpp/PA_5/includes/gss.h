@@ -11,6 +11,7 @@ class Data{
         Data(string laneType,int id);
         void printData();
         int getServiceTime();
+        int getRand(string laneType);
         ~Data();
     private:
         int customerNumber;// Unique identifier; starts at 1; after 24 hours should be reset to 1
@@ -35,7 +36,9 @@ class QueueNode{
 class Queue{
     public: // Member functions
         Queue(string type);
-        QueueNode addCustomer();
+        void enqueue();
+        void dequeue();
+        void printQueue();
         string getLaneType();
         int getTotalTime();
         ~Queue();
