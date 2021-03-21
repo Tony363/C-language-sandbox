@@ -18,7 +18,10 @@ bool GSStesting::inRange(int randInt,string laneType){
 }
 
 bool GSStesting::testEnqueue(){
-
+    Queue express("express"),normal("normal");
+    express.enqueue();normal.enqueue();
+    if (express.getHead() != NULL && normal.getHead() != NULL)
+        return true;
     return false;
 }
 
@@ -60,9 +63,9 @@ int Data::getServiceTime(){
     return serviceTime;
 }
 void Data::printData(){
-    cout << customerNumber << "\n"
-         << laneType << "\n"
-         << arrivalTime << "\n"
+    cout << "Customer ID: " << customerNumber << "\n"
+         << "Lane Type: " << laneType << "\n"
+         << "Time to arrive: " << arrivalTime << "\n"
          << endl;
 }
 Data::~Data(){
@@ -106,7 +109,13 @@ string Queue::getLaneType(){
     return laneType;
 }
 
+QueueNode* Queue::getHead(){
+    return pHead;
+}
 
+QueueNode* Queue::getTail(){
+    return pTail;
+}
 
 void Queue::enqueue(){
     QueueNode customer(getLaneType());

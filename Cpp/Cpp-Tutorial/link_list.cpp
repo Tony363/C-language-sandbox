@@ -28,8 +28,7 @@ struct power2<0>{
     enum{val=1};
 };
 
-int main() #include <iostream> 
-using namespace std; 
+ 
 
 // write code here
 template<unsigned int n>

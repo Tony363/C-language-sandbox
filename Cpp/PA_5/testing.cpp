@@ -13,10 +13,10 @@ int main(void) {
     test_function1();
 }
 
-
 void test_function1(){
     // test random in range generator
     GSStesting test; Data dtest;
+    assert(test.testEnqueue()==true);
     assert(test.inRange(dtest.getRand("express"),"express") == true);
     assert(test.inRange(dtest.getRand("normal"),"normal") == true);
 }

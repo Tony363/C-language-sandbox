@@ -55,18 +55,18 @@ void math_sort(int *n1,int *n2,int *n3){
 
 int main(void){
     int a=3,b=2,c=1;
-    s(a,b);
-    printf("%d:%d\n",a,b);
-    int *aptr=&a,*bptr=&b;
-    struct Tuple r = swap(aptr,bptr);
-    printf("%d:%d\n",a,b);
-    printf("%d:%d\n",*aptr,*bptr);
-    printf("%d:%d\n",*r.a,*r.b);
-    printf("%d\n%d\n%d\n",a,b,c);
-    small_to_large(&a,&b,&c);
-    printf("%d\n%d\n%d\n",a,b,c);
-    // math_sort(&a,&b,&c);
+    // s(a,b);
+    // printf("%d:%d\n",a,b);
+    // int *aptr=&a,*bptr=&b;
+    // struct Tuple r = swap(aptr,bptr);
+    // printf("%d:%d\n",a,b);
+    // printf("%d:%d\n",*aptr,*bptr);
+    // printf("%d:%d\n",*r.a,*r.b);
     // printf("%d\n%d\n%d\n",a,b,c);
+    // small_to_large(&a,&b,&c);
+    printf("%d\n%d\n%d\n",a,b,c);
+    math_sort(&a,&b,&c);
+    printf("%d\n%d\n%d\n",a,b,c);
     return 0;
 }
 

@@ -36,14 +36,15 @@ class QueueNode{
 
 class Queue{
     public: // Member functions
-
+        Queue();
         Queue(string type);
-        void headToQueue();
         void enqueue();
         void dequeue();
         void printQueue();
         string getLaneType();
         int getTotalTime();
+        QueueNode* getHead();
+        QueueNode* getTail();
         ~Queue();
     private:
         QueueNode *pHead=NULL; 
