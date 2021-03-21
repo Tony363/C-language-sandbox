@@ -37,6 +37,11 @@ GSStesting::~GSStesting(){
 // ===================
 
 // Data methods
+
+Data::Data(){
+
+}
+
 Data::Data(string lanetype,int id){
     laneType = lanetype;
     customerNumber = id;
@@ -89,6 +94,9 @@ QueueNode::~QueueNode(){
 // ==============
 
 // Queue methods
+Queue::Queue(){
+
+}
 Queue::Queue(string type){
     totalTime = 0;
     laneType = type;
@@ -98,10 +106,18 @@ string Queue::getLaneType(){
     return laneType;
 }
 
+
+
 void Queue::enqueue(){
     QueueNode customer(getLaneType());
     customerNumberinQueue += 1;
     customer.getID(customerNumberinQueue);
+
+    if (customerNumberinQueue == 1)
+        pTail = pHead;
+        pHead = &customer;
+        return ;
+
     pTail = pHead;
     QueueNode* nextQueueNode = pHead->getNext();
     nextQueueNode = &customer;
@@ -109,10 +125,15 @@ void Queue::enqueue(){
 
 void Queue::dequeue(){
     pTail = pTail->getNext();
-    
+    pHead = NULL;
 }
-void Queue::printQueue(){
 
+void Queue::printQueue(){
+    QueueNode* temp = pTail;
+    while(temp != NULL){
+        temp->getData()->printData();
+        temp = temp->getNext();
+    }
 }
 
 int Queue::getTotalTime(){

@@ -8,6 +8,7 @@ using namespace std;
 
 class Data{
     public://Member functions
+        Data();
         Data(string laneType,int id);
         void printData();
         int getServiceTime();
@@ -35,7 +36,9 @@ class QueueNode{
 
 class Queue{
     public: // Member functions
+
         Queue(string type);
+        void headToQueue();
         void enqueue();
         void dequeue();
         void printQueue();
@@ -43,8 +46,8 @@ class Queue{
         int getTotalTime();
         ~Queue();
     private:
-        QueueNode *pHead; 
-        QueueNode *pTail;
+        QueueNode *pHead=NULL; 
+        QueueNode *pTail=NULL;
         string laneType;
         int customerNumberinQueue=0;
         // totalTime = serviceTime + sum of serviceTime of customers in line before this customer ; units in minutes

@@ -1,4 +1,5 @@
 #include <GSStest.h>
+#include <gss.h>
 #include <iostream>
 #include <vector>
 #include <assert.h>
@@ -15,7 +16,7 @@ int main(void) {
 
 void test_function1(){
     // test random in range generator
-    GSStesting test;
-    assert(test.inRange(getRand("express"),"express") == true);
-    assert(test.inRange(getRand("normal"),"normal") == true);
+    GSStesting test; Data dtest;
+    assert(test.inRange(dtest.getRand("express"),"express") == true);
+    assert(test.inRange(dtest.getRand("normal"),"normal") == true);
 }
