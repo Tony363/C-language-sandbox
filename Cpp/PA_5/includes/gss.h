@@ -23,7 +23,8 @@ class Data{
 
 class QueueNode{
     public: // Member functions
-        QueueNode(string laneType);
+        // QueueNode(string laneType);
+        QueueNode(string laneType,bool test=false);
         void getID(int id);
         Data* getData();
         QueueNode* getNext();
@@ -38,7 +39,7 @@ class Queue{
     public: // Member functions
         Queue();
         Queue(string type);
-        void enqueue();
+        void enqueue(bool test = false);
         void dequeue();
         void printQueue();
         string getLaneType();
@@ -49,6 +50,7 @@ class Queue{
     private:
         QueueNode *pHead=NULL; 
         QueueNode *pTail=NULL;
+        QueueNode *CNode=NULL;
         string laneType;
         int customerNumberinQueue=0;
         // totalTime = serviceTime + sum of serviceTime of customers in line before this customer ; units in minutes

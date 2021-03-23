@@ -13,20 +13,45 @@ GSStesting::GSStesting(){
 
 bool GSStesting::inRange(int randInt,string laneType){
     if (laneType == "express")
+        cout << "[inRange] test PASSED" << endl;
         return  (1 <= randInt && 5 >= randInt);
+    cout << "[inRange] test FAILED" << endl;
     return  (3 <= randInt && 8 >= randInt); 
 }
 
-bool GSStesting::testEnqueue(){
+bool GSStesting::testEnqueue(bool test=true){
     Queue express("express"),normal("normal");
-    express.enqueue();normal.enqueue();
-    if (express.getHead() != NULL && normal.getHead() != NULL)
+    express.enqueue(test);normal.enqueue(test);
+    if (express.getTail() != NULL && normal.getTail() != NULL)
+        cout << "[testEnqueue] test PASSED" << endl;
         return true;
+    cout << "[testEnqueue] test FAILED" << endl;
     return false;
+}
+bool GSStesting::testEnqueueWithNodes(){
+    bool test = true;
+    Queue express("express"),normal("normal");
+    express.enqueue(test);normal.enqueue(test);
+    express.enqueue(test);normal.enqueue(test);
+    if (express.getTail() != NULL && normal.getTail() != NULL)
+        cout << "[testEnqueueWithNodes] test PASSED" << endl;
+        return true;
+    cout << "[testEnqueueWithNodes] test FAILED" << endl;
+    return false;  
 }
 
 bool GSStesting::testDequeue(){
-    
+    bool test = true;
+    Queue express("express"),normal("normal");
+    express.enqueue(test);normal.enqueue(test);
+    express.dequeue();normal.dequeue();
+    // cout << "wtf" << endl;
+    if (express.getTail()==NULL && normal.getTail()==NULL){
+        cout << "[testDequeue] test PASSED" << endl;
+        return true;
+    }
+    cout << "wtf" << endl;
+    cout << "[testDequeue] test FAILED" << endl;
     return false;
 }
 
@@ -74,9 +99,10 @@ Data::~Data(){
 // ==============
 
 // QueueNode methods
-QueueNode::QueueNode(string laneType){
+QueueNode::QueueNode(string laneType,bool test){
     Data ofCustomer = Data(laneType,ID);
-    ofCustomer.printData();
+    if (!test)
+        ofCustomer.printData();
     pData = &ofCustomer;
 }
 
@@ -117,24 +143,33 @@ QueueNode* Queue::getTail(){
     return pTail;
 }
 
-void Queue::enqueue(){
-    QueueNode customer(getLaneType());
-    customerNumberinQueue += 1;
-    customer.getID(customerNumberinQueue);
+void Queue::enqueue(bool test){
 
+    QueueNode customer(getLaneType(),test);
+    if (test){
+        cout << "[" << getLaneType() << "] testing..." << endl;
+        QueueNode customer(getLaneType(),test);
+        customerNumberinQueue += 1;
+        customer.getID(customerNumberinQueue);
+    } else{
+        QueueNode customer(getLaneType());
+        customerNumberinQueue += 1;
+        customer.getID(customerNumberinQueue);
+    }
+    
     if (customerNumberinQueue == 1)
-        pTail = pHead;
+        pTail = &customer;
         pHead = &customer;
         return ;
 
-    pTail = pHead;
-    QueueNode* nextQueueNode = pHead->getNext();
+    QueueNode* nextQueueNode = pTail->getNext();
     nextQueueNode = &customer;
+    pTail = nextQueueNode;
 }
 
 void Queue::dequeue(){
-    pTail = pTail->getNext();
-    pHead = NULL;
+    QueueNode* nextQueueNode = pHead->getNext();
+    pHead = nextQueueNode;
 }
 
 void Queue::printQueue(){
