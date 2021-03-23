@@ -9,10 +9,11 @@ using namespace std;
 class Data{
     public://Member functions
         Data();
-        Data(string laneType,int id);
+        Data(string laneType);
         void printData();
         int getServiceTime();
         int getRand(string laneType);
+        int getCustomerID();
         ~Data();
     private:
         int customerNumber;// Unique identifier; starts at 1; after 24 hours should be reset to 1
@@ -25,7 +26,7 @@ class QueueNode{
     public: // Member functions
         // QueueNode(string laneType);
         QueueNode(string laneType,bool test=false);
-        void getID(int id);
+        void passinID(int id);
         Data* getData();
         QueueNode* getNext();
         ~QueueNode();
@@ -39,22 +40,26 @@ class Queue{
     public: // Member functions
         Queue();
         Queue(string type);
-        void enqueue(bool test = false);
-        void dequeue();
+
+        void enqueue(bool test);
+        int dequeue(bool test);
         void printQueue();
+
         string getLaneType();
         int getTotalTime();
+        int getQueueHeadID();
+
         QueueNode* getHead();
         QueueNode* getTail();
         ~Queue();
     private:
         QueueNode *pHead=NULL; 
         QueueNode *pTail=NULL;
-        QueueNode *CNode=NULL;
         string laneType;
-        int customerNumberinQueue=0;
+        int customerNumberinQueue;
         // totalTime = serviceTime + sum of serviceTime of customers in line before this customer ; units in minutes
         int totalTime;
+        int QueueHeadID;
 };
 
 #endif

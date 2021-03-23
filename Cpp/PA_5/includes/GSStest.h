@@ -14,9 +14,9 @@ class GSStesting{
     public:
         GSStesting();
         bool inRange(int randInt,string laneType);
-        bool testEnqueue(bool test);
+        bool testEnqueue(bool test=true);
         bool testEnqueueWithNodes();
-        bool testDequeue();
+        bool testDequeue(bool test=true);
         void testPrintQueue();
         ~GSStesting();
     private:

@@ -6,62 +6,6 @@
 
 using namespace std;
 
-// unit testing methods
-GSStesting::GSStesting(){
-
-}
-
-bool GSStesting::inRange(int randInt,string laneType){
-    if (laneType == "express")
-        cout << "[inRange] test PASSED" << endl;
-        return  (1 <= randInt && 5 >= randInt);
-    cout << "[inRange] test FAILED" << endl;
-    return  (3 <= randInt && 8 >= randInt); 
-}
-
-bool GSStesting::testEnqueue(bool test=true){
-    Queue express("express"),normal("normal");
-    express.enqueue(test);normal.enqueue(test);
-    if (express.getTail() != NULL && normal.getTail() != NULL)
-        cout << "[testEnqueue] test PASSED" << endl;
-        return true;
-    cout << "[testEnqueue] test FAILED" << endl;
-    return false;
-}
-bool GSStesting::testEnqueueWithNodes(){
-    bool test = true;
-    Queue express("express"),normal("normal");
-    express.enqueue(test);normal.enqueue(test);
-    express.enqueue(test);normal.enqueue(test);
-    if (express.getTail() != NULL && normal.getTail() != NULL)
-        cout << "[testEnqueueWithNodes] test PASSED" << endl;
-        return true;
-    cout << "[testEnqueueWithNodes] test FAILED" << endl;
-    return false;  
-}
-
-bool GSStesting::testDequeue(){
-    bool test = true;
-    Queue express("express"),normal("normal");
-    express.enqueue(test);normal.enqueue(test);
-    express.dequeue();normal.dequeue();
-    // cout << "wtf" << endl;
-    if (express.getTail()==NULL && normal.getTail()==NULL){
-        cout << "[testDequeue] test PASSED" << endl;
-        return true;
-    }
-    cout << "wtf" << endl;
-    cout << "[testDequeue] test FAILED" << endl;
-    return false;
-}
-
-void GSStesting::testPrintQueue(){
-
-}
-
-GSStesting::~GSStesting(){
-
-}
 // ===================
 
 // Data methods
@@ -70,9 +14,10 @@ Data::Data(){
 
 }
 
-Data::Data(string lanetype,int id){
+Data::Data(string lanetype){
     laneType = lanetype;
-    customerNumber = id;
+    customerNumber = 0;
+    // cout << customerNumber << endl;
     arrivalTime = getRand(laneType);
     serviceTime = getRand(laneType);
 }
@@ -93,6 +38,11 @@ void Data::printData(){
          << "Time to arrive: " << arrivalTime << "\n"
          << endl;
 }
+
+int Data::getCustomerID(){
+    return customerNumber;
+}
+
 Data::~Data(){
 
 }
@@ -100,14 +50,17 @@ Data::~Data(){
 
 // QueueNode methods
 QueueNode::QueueNode(string laneType,bool test){
-    Data ofCustomer = Data(laneType,ID);
+    Data ofCustomer = Data(laneType);
     if (!test)
         ofCustomer.printData();
     pData = &ofCustomer;
 }
 
-void QueueNode::getID(int id){
-    ID = id;
+void QueueNode::passinID(int id){
+    cout << id << endl;
+    int tempID = pData->getCustomerID();
+    tempID = id;
+    cout << tempID << endl;
 }
 
 Data* QueueNode::getData(){
@@ -124,7 +77,8 @@ QueueNode::~QueueNode(){
 
 // Queue methods
 Queue::Queue(){
-
+    QueueHeadID = 0;
+    customerNumberinQueue = 0;
 }
 Queue::Queue(string type){
     totalTime = 0;
@@ -144,32 +98,33 @@ QueueNode* Queue::getTail(){
 }
 
 void Queue::enqueue(bool test){
-
     QueueNode customer(getLaneType(),test);
     if (test){
         cout << "[" << getLaneType() << "] testing..." << endl;
-        QueueNode customer(getLaneType(),test);
-        customerNumberinQueue += 1;
-        customer.getID(customerNumberinQueue);
-    } else{
-        QueueNode customer(getLaneType());
-        customerNumberinQueue += 1;
-        customer.getID(customerNumberinQueue);
     }
-    
-    if (customerNumberinQueue == 1)
+    customerNumberinQueue += 1;
+    customer.passinID(customerNumberinQueue);
+    if (customerNumberinQueue == 1){
         pTail = &customer;
         pHead = &customer;
+        QueueHeadID = customer.getData()->getCustomerID();
+        // cout << QueueHeadID << endl;
         return ;
-
+    }
     QueueNode* nextQueueNode = pTail->getNext();
     nextQueueNode = &customer;
     pTail = nextQueueNode;
 }
 
-void Queue::dequeue(){
+int Queue::dequeue(bool test){
+    Data* processed = pHead->getData();
     QueueNode* nextQueueNode = pHead->getNext();
     pHead = nextQueueNode;
+    if (!test){
+        processed->printData();
+    }
+    QueueHeadID = pHead->getData()->getCustomerID();
+    return processed->getCustomerID();
 }
 
 void Queue::printQueue(){
@@ -187,6 +142,10 @@ int Queue::getTotalTime(){
         temp = temp->getNext();
     };
     return totalTime;
+}
+
+int Queue::getQueueHeadID(){
+    return QueueHeadID;
 }
 
 Queue::~Queue(){
