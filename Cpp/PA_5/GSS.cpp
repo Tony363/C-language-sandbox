@@ -43,6 +43,10 @@ int Data::getCustomerID(){
     return customerNumber;
 }
 
+void Data::setCustomerID(int id){
+    customerNumber = id;
+}
+
 Data::~Data(){
 
 }
@@ -58,9 +62,9 @@ QueueNode::QueueNode(string laneType,bool test){
 
 void QueueNode::passinID(int id){
     cout << id << endl;
-    int tempID = pData->getCustomerID();
-    tempID = id;
-    cout << tempID << endl;
+    pData->setCustomerID(id);
+    // tempID = id;
+    cout << pData->getCustomerID() << endl;
 }
 
 Data* QueueNode::getData(){
@@ -77,12 +81,16 @@ QueueNode::~QueueNode(){
 
 // Queue methods
 Queue::Queue(){
+    totalTime = 0;
     QueueHeadID = 0;
     customerNumberinQueue = 0;
+    laneType = "NONE";
 }
 Queue::Queue(string type){
     totalTime = 0;
     laneType = type;
+    customerNumberinQueue = 0;
+    QueueHeadID = 0;
 }
 
 string Queue::getLaneType(){
@@ -108,7 +116,7 @@ void Queue::enqueue(bool test){
         pTail = &customer;
         pHead = &customer;
         QueueHeadID = customer.getData()->getCustomerID();
-        // cout << QueueHeadID << endl;
+        cout << QueueHeadID << endl;
         return ;
     }
     QueueNode* nextQueueNode = pTail->getNext();

@@ -76,7 +76,7 @@ void test_function1(){
     GSStesting test; Data dtest;
     assert(test.testEnqueue(true)==true);
     // assert(test.testEnqueueWithNodes()==true);
-    // assert(test.testDequeue()==true);
+    assert(test.testDequeue()==true);
     // assert(test.inRange(dtest.getRand("express"),"express") == true);
     // assert(test.inRange(dtest.getRand("normal"),"normal") == true);
 }

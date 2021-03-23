@@ -14,6 +14,7 @@ class Data{
         int getServiceTime();
         int getRand(string laneType);
         int getCustomerID();
+        void setCustomerID(int id);
         ~Data();
     private:
         int customerNumber;// Unique identifier; starts at 1; after 24 hours should be reset to 1
@@ -33,7 +34,6 @@ class QueueNode{
     private:
         Data *pData; // The memory for Data will need to be allocated on the heap as well
         QueueNode *pNext;
-        int ID;
 };
 
 class Queue{
