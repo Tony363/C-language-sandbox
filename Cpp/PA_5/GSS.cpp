@@ -17,7 +17,6 @@ Data::Data(){
 Data::Data(string lanetype){
     laneType = lanetype;
     customerNumber = 0;
-    // cout << customerNumber << endl;
     arrivalTime = getRand(laneType);
     serviceTime = getRand(laneType);
 }
@@ -61,10 +60,9 @@ QueueNode::QueueNode(string laneType,bool test){
 }
 
 void QueueNode::passinID(int id){
-    cout << id << endl;
+    // cout << id << endl;
     pData->setCustomerID(id);
-    // tempID = id;
-    cout << pData->getCustomerID() << endl;
+    // cout << pData->getCustomerID() << endl;
 }
 
 Data* QueueNode::getData(){
@@ -116,7 +114,7 @@ void Queue::enqueue(bool test){
         pTail = &customer;
         pHead = &customer;
         QueueHeadID = customer.getData()->getCustomerID();
-        cout << QueueHeadID << endl;
+        // cout << QueueHeadID << endl;
         return ;
     }
     QueueNode* nextQueueNode = pTail->getNext();
@@ -125,13 +123,14 @@ void Queue::enqueue(bool test){
 }
 
 int Queue::dequeue(bool test){
+    // cout might fuck up the pHead address
     Data* processed = pHead->getData();
     QueueNode* nextQueueNode = pHead->getNext();
     pHead = nextQueueNode;
     if (!test){
         processed->printData();
     }
-    QueueHeadID = pHead->getData()->getCustomerID();
+    QueueHeadID = processed->getCustomerID();
     return processed->getCustomerID();
 }
 

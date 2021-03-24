@@ -32,8 +32,8 @@ class QueueNode{
         QueueNode* getNext();
         ~QueueNode();
     private:
-        Data *pData; // The memory for Data will need to be allocated on the heap as well
-        QueueNode *pNext;
+        Data *pData=NULL; // The memory for Data will need to be allocated on the heap as well
+        QueueNode *pNext=NULL;
 };
 
 class Queue{

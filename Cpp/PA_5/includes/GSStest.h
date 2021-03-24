@@ -17,6 +17,7 @@ class GSStesting{
         bool testEnqueue(bool test=true);
         bool testEnqueueWithNodes();
         bool testDequeue(bool test=true);
+        bool testDequeueWithNodes(bool test=true);
         void testPrintQueue();
         ~GSStesting();
     private:
