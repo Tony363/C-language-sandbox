@@ -43,9 +43,17 @@ bool GSStesting::testEnqueueWithNodes(){
     bool test = true;
     cout << "[testEnqueueWithNodes] test" << endl;
     Queue express("express"),normal("normal");
+    int ExpressID,NormalID,ExpressID1,NormalID1;
+    
     express.enqueue(test);normal.enqueue(test);
+    ExpressID = express.getHead()->getData()->getCustomerID();
+    NormalID = normal.getHead()->getData()->getCustomerID();
+    
     express.enqueue(test);normal.enqueue(test);
-    if (express.getTail() != NULL && normal.getTail() != NULL){
+    ExpressID1 = express.getHead()->getData()->getCustomerID();
+    NormalID1 = normal.getHead()->getData()->getCustomerID();
+    
+    if (ExpressID!=ExpressID1 && NormalID!=NormalID1){
         cout << "[testEnqueueWithNodes] test PASSED\n" << endl;
         return true;
     }
@@ -69,12 +77,16 @@ bool GSStesting::testDequeue(bool test){
 
 bool GSStesting::testDequeueWithNodes(bool test){
     Queue express("express"),normal("normal");
+    int ExpressID,NormalID,ExpressID1,NormalID1;
     cout << "[testDequeueWithNode] test" << endl;
+   
     express.enqueue(test);normal.enqueue(test);
+    ExpressID = express.getHead()->getData()->getCustomerID();
+    NormalID = normal.getHead()->getData()->getCustomerID();
+    
     express.enqueue(test);normal.enqueue(test);
-    int ExpressID = express.dequeue(test);
-    int NormalID = normal.dequeue(test);
-    if (express.getQueueHeadID()==ExpressID&& normal.getQueueHeadID()==NormalID){
+    ExpressID1 = express.dequeue(test);NormalID1 = normal.dequeue(test);
+    if (ExpressID1!=ExpressID&&NormalID1!=NormalID){
         cout << "[testDequeueWithNode] test PASSED\n" << endl;
         return true;
     }
