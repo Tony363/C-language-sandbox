@@ -30,6 +30,7 @@ class BST{
         void printBST();
         void traverse(BSTNode* root);
         void search(BSTNode* root,char charcter);
+        BSTNode* getRoot();
         ~BST();
 };
 

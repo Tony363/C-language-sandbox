@@ -51,7 +51,9 @@ void BST::parseFile(ifstream &file){
         istringstream iss(line);
         vector<string> results(istream_iterator<string>{iss},istream_iterator<string>());
         insert(results);
+        // cout << "wtf" << endl;
     }
+    cout << "FUCK" << endl;
 }
 void BST::insert(vector<string>results){
     BSTNode* temp = root;
@@ -69,17 +71,19 @@ void BST::insert(vector<string>results){
             string code = accumulate(results.begin()++,results.end(),string(""));
             BSTNode newNode(character,code);
             temp = &newNode;
-            cout << character << endl;
+            // cout << character << endl;
         }
         itv ++;
     }
-    
+    // cout << character << endl;
+    // cout << "FUCK!!!"<< endl;
 }
 void BST::printBST(){
     BSTNode* leftNode = root->getLeft();
     BSTNode* rightNode = root->getRight();
-    cout << leftNode<-getChar() << endl;
-    cout << leftNode<-getChar() << endl;
+    cout << "wtf"<< endl;
+    // cout << leftNode << endl;
+    // cout << rightNode << endl;
     traverse(leftNode);
     traverse(rightNode);
 }
@@ -110,6 +114,9 @@ void BST::search(BSTNode* root,char character){
     if (root->getRight()){
         traverse(root->getRight());
     }
+}
+BSTNode* BST::getRoot(){
+    return root;
 }
 BST::~BST(){
 
