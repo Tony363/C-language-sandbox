@@ -12,8 +12,8 @@ class BSTNode{
     public:
         BSTNode* pLeft=NULL;
         BSTNode* pRight=NULL;
-        char character;
-        string Mcode;
+        char character=' ';
+        string Mcode=" ";
         BSTNode(char text,string code);
         BSTNode* getLeft();
         BSTNode* getRight();
@@ -28,7 +28,7 @@ class BST{
     public:
         BST();
         void parseFile(ifstream &file);
-        void insert(BSTNode root,char character,string line);
+        void insert(BSTNode* root,char character,string line);
         void printBST();
         void traverse(BSTNode* root);
         void traverse(char path);

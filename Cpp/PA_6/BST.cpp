@@ -56,33 +56,34 @@ void BST::parseFile(ifstream &file){
         getline (ss,Mcode,character);
         if (root == NULL){
             BSTNode newNode(character,Mcode);
+            // cout << root << endl;
             root = &newNode;
-            // cout << (*root).pLeft << endl;
+            temp = root;
+            cout << root << endl;
             continue;
         }
-        insert(*root,character,Mcode);
+        insert(temp,character,Mcode);
     }
     // cout << root->getLeft() << " | " << root->getRight() << endl;
 }
-void BST::insert(BSTNode nextNode,char text,string line){
+void BST::insert(BSTNode* nextNode,char text,string line){
     // cout << nextNode->pLeft << nextNode->pRight << endl;
-    if (&nextNode == NULL){
+    if (nextNode == NULL){
         BSTNode newNode(text,line);
-        nextNode = newNode;
-        cout << nextNode.character << endl;
+        nextNode = &newNode;
+        cout << nextNode << endl;
         return ;
     }
     // cout << nextNode << endl;
     // cout << nextNode->character << (int)nextNode->character << endl;
     // cout << (int)text << " | " << (int)nextNode->character << endl;
-    if (((int)text) < ((int)nextNode.character)){
+    if (((int)text) < ((int)nextNode->character)){
         cout << "wtf" << endl; 
-        insert(*nextNode.pLeft,text,line);
+        insert(nextNode->pLeft,text,line);
     }
-    if (((int)text) > ((int)nextNode.character)){
-        cout << "wtf1" << endl; 
-        // cout << nextNode- << nextNode->pRight << endl;
-        insert(*nextNode.pRight,text,line);
+    if (((int)text) > ((int)nextNode->character)){
+        // cout << "wtf1" << endl; 
+        insert(nextNode->pRight,text,line);
     }
 }
 
