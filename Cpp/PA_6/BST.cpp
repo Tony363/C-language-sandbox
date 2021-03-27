@@ -15,6 +15,7 @@ using namespace std;
 BSTNode::BSTNode(char text, string code){
     char character = text;
     string Mcode = code;
+    // cout << character << Mcode << endl;
 }
 BSTNode* BSTNode::getLeft(){
     return pLeft;
@@ -45,45 +46,50 @@ BST::BST(){
     MorseFile.close();
 }
 void BST::parseFile(ifstream &file){
-    string line;
+    string line,Mcode;
+    BSTNode* temp;
     while(getline(file,line)){
-        // cout << line << endl;
-        istringstream iss(line);
-        vector<string> results(istream_iterator<string>{iss},istream_iterator<string>());
-        insert(results);
-        // cout << "wtf" << endl;
-    }
-    cout << "FUCK" << endl;
-}
-void BST::insert(vector<string>results){
-    BSTNode* temp = root;
-    BSTNode* prev = root;
-    vector<string>::const_iterator itv;
-    itv = results.begin()++;
-    char character = results.front()[0];
-    while (itv != results.end()){
-        if (*itv == "-"){
-            temp = temp->getRight();
-        }else if (*itv == "."){
-            temp = temp->getLeft();
+        char character = line[0];
+        stringstream ss;
+        ss << line;
+        getline (ss,Mcode,character);
+        getline (ss,Mcode,character);
+        if (root == NULL){
+            BSTNode newNode(character,Mcode);
+            root = &newNode;
+            // cout << (*root).pLeft << endl;
+            continue;
         }
-        if (temp == NULL || (*itv != "." && *itv!= "-")){
-            string code = accumulate(results.begin()++,results.end(),string(""));
-            BSTNode newNode(character,code);
-            temp = &newNode;
-            // cout << character << endl;
-        }
-        itv ++;
+        insert(*root,character,Mcode);
     }
-    // cout << character << endl;
-    // cout << "FUCK!!!"<< endl;
+    // cout << root->getLeft() << " | " << root->getRight() << endl;
 }
+void BST::insert(BSTNode nextNode,char text,string line){
+    // cout << nextNode->pLeft << nextNode->pRight << endl;
+    if (&nextNode == NULL){
+        BSTNode newNode(text,line);
+        nextNode = newNode;
+        cout << nextNode.character << endl;
+        return ;
+    }
+    // cout << nextNode << endl;
+    // cout << nextNode->character << (int)nextNode->character << endl;
+    // cout << (int)text << " | " << (int)nextNode->character << endl;
+    if (((int)text) < ((int)nextNode.character)){
+        cout << "wtf" << endl; 
+        insert(*nextNode.pLeft,text,line);
+    }
+    if (((int)text) > ((int)nextNode.character)){
+        cout << "wtf1" << endl; 
+        // cout << nextNode- << nextNode->pRight << endl;
+        insert(*nextNode.pRight,text,line);
+    }
+}
+
 void BST::printBST(){
     BSTNode* leftNode = root->getLeft();
     BSTNode* rightNode = root->getRight();
-    cout << "wtf"<< endl;
-    // cout << leftNode << endl;
-    // cout << rightNode << endl;
+    // cout << leftNode << " | " << rightNode << endl; 
     traverse(leftNode);
     traverse(rightNode);
 }

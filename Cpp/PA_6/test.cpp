@@ -21,9 +21,6 @@ testBST::testBST(){
 }
 bool testBST::testReadFile(){
     BST test = BST();
-    // BSTNode rootNode('r',"rootNode");
-    // BSTNode* root = test.getRoot();
-    // root = &rootNode;
     cout << "File read" << endl;
     // test.printBST();
     return true;
