@@ -24,13 +24,11 @@ testBST::testBST(){
 }
 bool testBST::testReadFile(){
     BST test = BST();
-    test.setTest();
     cout << "Test read File: PASSED" << endl;
     return true;
 } 
 bool testBST::accessTest(){
     BST test = BST();
-    test.setTest();
     cout << test.getRoot()->getChar() << test.getRoot()->getMcode() << endl;
     cout << test.getRoot()->getLeft() << test.getRoot()->getRight() << endl;
     cout << "Testing class object access rights: PASSED" << endl;
@@ -38,14 +36,12 @@ bool testBST::accessTest(){
 }
 bool testBST::testPrintTree(){
     BST test = BST();
-    test.setTest();
     test.printBST();
     cout << "Testing print tree: PASSED" << endl;
     return true;
 }
 bool testBST::testSearch(){
     BST test = BST();
-    test.setTest();
     test.search(test.getRoot(),'A');
     cout << "Testing Search tree: PASSED" << endl;
     return true;

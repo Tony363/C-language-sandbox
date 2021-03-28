@@ -14,6 +14,8 @@ class BSTNode{
     public:
         BSTNode();
         BSTNode(char text,string code);
+        void setChar(char text);
+        void setMcode(string code);
         BSTNode* getLeft();
         BSTNode* getRight();
         char getChar();
@@ -24,7 +26,7 @@ class BSTNode{
 class BST{
     private:
         BSTNode* root;
-        string test;
+        bool test;
     public:
         BST();
         void parseFile(ifstream &file);
