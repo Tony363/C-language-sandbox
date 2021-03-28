@@ -12,30 +12,37 @@ using namespace std;
 
 // =================================================================
 // BST node methods
+// =================================================================
 BSTNode::BSTNode(){
 
 }
 BSTNode::BSTNode(char text,string code){
-    character = text;
-    Mcode = code;
+    this->character = text;
+    this->Mcode = code;
+    this->pLeft = NULL;
+    this->pRight = NULL;
+    this->parent = NULL;
 }
 void BSTNode::setChar(char text){
-    character = text;
+    this->character = text;
 }
 void BSTNode::setMcode(string code){
-    Mcode = code;
+    this->Mcode = code;
 }
 BSTNode* BSTNode::getLeft(){
-    return pLeft;
+    return this->pLeft;
 }
 BSTNode* BSTNode::getRight(){
-    return pRight;
+    return this->pRight;
+}
+BSTNode* BSTNode::getParent(){
+    return this->parent;
 }
 char BSTNode::getChar(){
-    return character;
+    return this->character;
 }
 string BSTNode::getMcode(){
-    return Mcode;
+    return this->Mcode;
 }
 BSTNode::~BSTNode(){
 
@@ -43,9 +50,10 @@ BSTNode::~BSTNode(){
 
 // =================================================================
 // Binary search tree methods
+// =================================================================
 BST::BST(){
     setTest();
-    root=NULL;
+    this->root=NULL;
     ifstream MorseFile;
     MorseFile.open("morseCode.txt");
     if (MorseFile.is_open()){
@@ -63,37 +71,26 @@ void BST::parseFile(ifstream &file){
         ss << line;
         getline (ss,Mcode,character);
         getline (ss,Mcode,character);
-        if (root == NULL){
+        if (this->root == NULL){
             BSTNode* newNode = new BSTNode(character,Mcode);
-            // newNode->setChar(character);
-            // newNode->setMcode(Mcode);
-            root = newNode;
-            // cout << root << endl;
+            this->root = newNode;
             continue;
         }
-        insert(root,character,Mcode);
+        this->root = insert(this->root,character,Mcode);
     }
     cout << endl;
-    // cout << root->getLeft() << " | " << root->getRight() << endl;
 }
-void BST::insert(BSTNode* nextNode,char text,string line){
-    // cout << nextNode->pLeft << nextNode->pRight << endl;
+BSTNode* BST::insert(BSTNode* nextNode,char text,string line){
     if (nextNode == NULL){
         BSTNode* newNode = new BSTNode(text,line);
-        // newNode->setChar(text);
-        // newNode->setMcode(line);
         nextNode = newNode;
-        if (!test){
+        if (!(this->test)){
             cout << nextNode << " | "  << nextNode->getChar() << " | " << nextNode->getMcode() << endl;
         }
-        return ;
     }
-    // cout << nextNode << endl;
-    // cout << nextNode->character << (int)nextNode->character << endl;
-    // cout << (int)text << " | " << (int)nextNode->character << endl;
     if (((int)text) < ((int)(nextNode->getChar()))){
         BSTNode* left = nextNode->getLeft();
-        if (!test){
+        if (!(this->test)){
             cout << "left " 
                 << (int)text 
                 << " | " 
@@ -103,7 +100,9 @@ void BST::insert(BSTNode* nextNode,char text,string line){
         }else{
             cout << "left::";
         }
-        insert(left,text,line);
+        left = insert(left,text,line);
+        BSTNode* parent = left->getParent();
+        parent = nextNode;
     }
     if (((int)text) > ((int)(nextNode->getChar()))){
         BSTNode* right = nextNode->getRight();
@@ -117,53 +116,60 @@ void BST::insert(BSTNode* nextNode,char text,string line){
         }else{
             cout << "right::";
         }
-        insert(right,text,line);
+        right = insert(right,text,line);
+        BSTNode* parent = right->getParent();
+        parent = nextNode;
     }
+    return nextNode;
 }
 
 void BST::printBST(){
-    BSTNode* leftNode = root->getLeft();
-    BSTNode* rightNode = root->getRight();
-    traverse(leftNode);
-    traverse(rightNode);
+    if (this->root==NULL){
+        cout << "root was NULL" << endl;
+        return;
+    }
+    cout << this->root->getChar()<< " | " << this->root->getMcode() << endl;
+    traverse(this->root->getLeft());
 }
-void BST::traverse(BSTNode* root){
-    if (root == NULL){
+void BST::traverse(BSTNode* node){
+    if (node == NULL){
+        cout << "wtf" << endl;
         return ;
     }
-    if (root->getLeft()){
-        cout << root->getChar() << " | ";
-        traverse(root->getLeft());
+    if (node->getLeft()){
+        cout << node->getChar() << " | ";
+        traverse(node->getLeft());
+        cout << node->getChar() << " | ";
     }
-    if (root->getRight()){
-        cout << root->getChar() << " | ";
-        traverse(root->getRight());
+    if (node->getRight()){
+        cout << node->getChar() << " | ";
+        traverse(node->getRight());
     }
     cout << endl;
 }
-void BST::search(BSTNode* root,char character){
-    if (root == NULL){
+void BST::search(BSTNode* node,char character){
+    if (node == NULL){
         return ;
     }
-    if (root->getChar() == character){
-        cout << root->getMcode() << endl;
+    if (node->getChar() == character){
+        cout << node->getMcode() << endl;
         return;
     }
-    if (root->getLeft()){
-        traverse(root->getLeft());
+    if (node->getLeft()){
+        traverse(node->getLeft());
     }
-    if (root->getRight()){
-        traverse(root->getRight());
+    if (node->getRight()){
+        traverse(node->getRight());
     }
 }
 void BST::setTest(){
     string boolean;
     cout << "test or not test: ";
     cin >> boolean;
-    test = (boolean=="true")?false:true;
+    this->test = (boolean=="true")?false:true;
 }
 BSTNode* BST::getRoot(){
-    return root;
+    return this->root;
 }
 BST::~BST(){
 

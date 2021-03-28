@@ -9,6 +9,7 @@ class BSTNode{
     private:
         BSTNode* pLeft;
         BSTNode* pRight;
+        BSTNode* parent;
         char character;
         string Mcode;
     public:
@@ -18,6 +19,7 @@ class BSTNode{
         void setMcode(string code);
         BSTNode* getLeft();
         BSTNode* getRight();
+        BSTNode* getParent();
         char getChar();
         string getMcode();
         ~BSTNode();
@@ -30,7 +32,7 @@ class BST{
     public:
         BST();
         void parseFile(ifstream &file);
-        void insert(BSTNode* root,char character,string line);
+        BSTNode* insert(BSTNode* root,char character,string line);
         void printBST();
         void traverse(BSTNode* root);
         void traverse(char path);
