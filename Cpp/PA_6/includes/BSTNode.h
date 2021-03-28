@@ -6,14 +6,13 @@ using namespace std;
 using std::vector;
 
 class BSTNode{
-    // private:
-    //     BSTNode* pLeft=NULL;
-    //     BSTNode* pRight=NULL;
+    private:
+        BSTNode* pLeft;
+        BSTNode* pRight;
+        char character;
+        string Mcode;
     public:
-        BSTNode* pLeft=NULL;
-        BSTNode* pRight=NULL;
-        char character=' ';
-        string Mcode=" ";
+        BSTNode();
         BSTNode(char text,string code);
         BSTNode* getLeft();
         BSTNode* getRight();
@@ -24,7 +23,8 @@ class BSTNode{
 
 class BST{
     private:
-        BSTNode* root=NULL;
+        BSTNode* root;
+        string test;
     public:
         BST();
         void parseFile(ifstream &file);
@@ -33,6 +33,7 @@ class BST{
         void traverse(BSTNode* root);
         void traverse(char path);
         void search(BSTNode* root,char charcter);
+        void setTest();
         BSTNode* getRoot();
         ~BST();
 };

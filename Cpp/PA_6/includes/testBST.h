@@ -10,6 +10,9 @@ class testBST{
     public:
         testBST();
         bool testReadFile();
+        bool accessTest();
+        bool testPrintTree();
+        bool testSearch();
         ~testBST();
 };
 

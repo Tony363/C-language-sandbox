@@ -14,17 +14,42 @@ int main (void){
 
 void test_functions(){
     testBST test;
-    assert(test.testReadFile()==true);
+    // assert(test.testReadFile()==true);
+    // assert(test.accessTest()==true);
+    // assert(test.testPrintTree()==true);
+    assert(test.testSearch()==true);
 }
 testBST::testBST(){
 
 }
 bool testBST::testReadFile(){
     BST test = BST();
-    cout << "File read" << endl;
-    // test.printBST();
+    test.setTest();
+    cout << "Test read File: PASSED" << endl;
     return true;
 } 
+bool testBST::accessTest(){
+    BST test = BST();
+    test.setTest();
+    cout << test.getRoot()->getChar() << test.getRoot()->getMcode() << endl;
+    cout << test.getRoot()->getLeft() << test.getRoot()->getRight() << endl;
+    cout << "Testing class object access rights: PASSED" << endl;
+    return true;
+}
+bool testBST::testPrintTree(){
+    BST test = BST();
+    test.setTest();
+    test.printBST();
+    cout << "Testing print tree: PASSED" << endl;
+    return true;
+}
+bool testBST::testSearch(){
+    BST test = BST();
+    test.setTest();
+    test.search(test.getRoot(),'A');
+    cout << "Testing Search tree: PASSED" << endl;
+    return true;
+}
 testBST::~testBST(){
 
 }
