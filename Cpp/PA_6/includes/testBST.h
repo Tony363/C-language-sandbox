@@ -13,6 +13,7 @@ class testBST{
         bool accessTest();
         bool testPrintTree();
         bool testSearch();
+        bool testPrintMword();
         ~testBST();
 };
 

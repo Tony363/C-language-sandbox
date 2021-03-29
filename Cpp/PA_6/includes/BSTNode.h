@@ -7,11 +7,11 @@ using std::vector;
 
 class BSTNode{
     private:
-        BSTNode* left;
-        BSTNode* right;
         char ascii;
         string code;
     public:
+        BSTNode* left;
+        BSTNode* right;
         BSTNode();
         BSTNode(char character,string Mcode);
         void setChar(char character);
@@ -40,7 +40,7 @@ class BST{
         void inorder(BSTNode* t);
         void insert(char character, string Mcode);
         void remove(char character);
-        void search(char character);
+        string search(char character);
         void display();
         void setTest();
         ~BST();

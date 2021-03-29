@@ -14,10 +14,11 @@ int main (void){
 
 void test_functions(){
     testBST test;
-    // assert(test.testReadFile()==true);
-    // assert(test.accessTest()==true);
+    assert(test.testReadFile()==true);
+    assert(test.accessTest()==true);
     assert(test.testPrintTree()==true);
-    // assert(test.testSearch()==true);
+    assert(test.testSearch()==true);
+    assert(test.testPrintMword()==true);
 }
 testBST::testBST(){
 
@@ -39,17 +40,33 @@ bool testBST::accessTest(){
 }
 bool testBST::testPrintTree(){
     BST test = BST();
-    // if (test.getRoot()->getLeft()==NULL || test.getRoot()->getRight()==NULL){
-    //     return false;
-    // }
+    if (test.getRoot()->getLeft()==NULL || test.getRoot()->getRight()==NULL){
+        return false;
+    }
     test.display();
     cout << "Testing print tree: PASSED" << endl;
     return true;
 }
 bool testBST::testSearch(){
     BST test = BST();
-    test.search('A');
-    cout << "Testing Search tree: PASSED" << endl;
+    if (test.getRoot()->getLeft()==NULL || test.getRoot()->getRight()==NULL){
+        return false;
+    }
+    cout << test.search('H') << endl;// << test.search('E') << test.search('L') << test.search('L') << test.search('O') << endl;
+    cout << "\nTesting Search tree: PASSED" << endl;
+    return true;
+}
+bool testBST::testPrintMword(){
+    BST test = BST();
+    string input;
+    cout << "Please Enter text to conver to Morse Code: ";
+    cin >> input;
+    cout << endl;
+    for (char& c:input){
+        cout << test.search(c) << " ";
+    }
+    cout << endl;
+    cout << "Testing print word to morse code: PASSED" << endl;
     return true;
 }
 testBST::~testBST(){
