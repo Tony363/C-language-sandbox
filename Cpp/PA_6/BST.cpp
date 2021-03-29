@@ -29,10 +29,10 @@ void BSTNode::setMcode(string Mcode){
     this->code = Mcode;
 }
 BSTNode* BSTNode::getLeft(){
-    return this->left;
+    return left;
 }
 BSTNode* BSTNode::getRight(){
-    return this->right;
+    return right;
 }
 char BSTNode::getChar(){
     return this->ascii;
@@ -71,23 +71,26 @@ void BST::parseFile(ifstream &file){
         //     insert(character,Mcode);
         //     continue;
         // }
+        cout << "wtf" << endl;
         insert(character,Mcode);
     }
     cout << endl;
 }
 void BST::insert(char character,string Mcode) {
-        this->root = insert(character,Mcode, this->root);
+    cout << "wtf" << endl;
+    this->root = insert(character,Mcode, this->root);
 }
 BSTNode* BST::insert(char character,string Mcode, BSTNode* t){
-        BSTNode* left = t->getLeft();
-        BSTNode* right = t->getRight();
+        cout << "wtf" << endl;
         if(t == NULL){
             t = new BSTNode(character,Mcode);
         }
         else if((int)character < (int)t->getChar()){
+            BSTNode* left = t->getLeft();
             left = insert(character,Mcode, left);
         }
         else if((int)character > (int)t->getChar()){
+            BSTNode* right = t->getRight();;
             right = insert(character,Mcode, right);
         }
         return t;
@@ -165,6 +168,7 @@ BSTNode* BST::find(BSTNode* t, char character) {
     }
 void BST::search(char character){
     root = find(root, character);
+    cout << root->getChar() << " | " << root->getMcode() << endl;
 }
 void BST::setTest(){
     string boolean;

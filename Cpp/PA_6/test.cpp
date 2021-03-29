@@ -39,16 +39,16 @@ bool testBST::accessTest(){
 }
 bool testBST::testPrintTree(){
     BST test = BST();
-    if (test.getRoot()->getLeft()==NULL || test.getRoot()->getRight()==NULL){
-        return false;
-    }
-    test.printBST();
+    // if (test.getRoot()->getLeft()==NULL || test.getRoot()->getRight()==NULL){
+    //     return false;
+    // }
+    test.display();
     cout << "Testing print tree: PASSED" << endl;
     return true;
 }
 bool testBST::testSearch(){
     BST test = BST();
-    test.search(test.getRoot(),'A');
+    test.search('A');
     cout << "Testing Search tree: PASSED" << endl;
     return true;
 }
