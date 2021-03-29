@@ -7,19 +7,17 @@ using std::vector;
 
 class BSTNode{
     private:
-        BSTNode* pLeft;
-        BSTNode* pRight;
-        BSTNode* parent;
-        char character;
-        string Mcode;
+        BSTNode* left;
+        BSTNode* right;
+        char ascii;
+        string code;
     public:
         BSTNode();
-        BSTNode(char text,string code);
-        void setChar(char text);
-        void setMcode(string code);
+        BSTNode(char character,string Mcode);
+        void setChar(char character);
+        void setMcode(string Mcode);
         BSTNode* getLeft();
         BSTNode* getRight();
-        BSTNode* getParent();
         char getChar();
         string getMcode();
         ~BSTNode();
@@ -31,14 +29,20 @@ class BST{
         bool test;
     public:
         BST();
-        void parseFile(ifstream &file);
-        BSTNode* insert(BSTNode* root,char character,string line);
-        void printBST();
-        void traverse(BSTNode* root);
-        void traverse(char path);
-        void search(BSTNode* root,char charcter);
-        void setTest();
+        BSTNode* makeEmpty(BSTNode* t);
+        BSTNode* insert(char character,string Mcode,BSTNode* t);
+        BSTNode* findMin(BSTNode* t);
+        BSTNode* findMax(BSTNode* t);
+        BSTNode* remove(char character, BSTNode* t);
+        BSTNode* find(BSTNode* t, char character);
         BSTNode* getRoot();
+        void parseFile(ifstream &file);
+        void inorder(BSTNode* t);
+        void insert(char character, string Mcode);
+        void remove(char character);
+        void search(char character);
+        void display();
+        void setTest();
         ~BST();
 };
 
