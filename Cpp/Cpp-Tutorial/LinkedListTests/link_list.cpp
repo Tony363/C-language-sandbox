@@ -1,5 +1,7 @@
 #include <iostream>
-
+#include <sstream>
+#include <assert.h>
+// #include </home/pysolver33/Desktop/my_repos/googletest/googletest/include/gtest/gtest.h>
 using namespace std;
 
 class Node{
@@ -26,10 +28,25 @@ class LinkedList {
     private:
         Node* head;
         Node* latestp;
+        int numNodes;
     public:
         LinkedList(){
             this->head = NULL;
             this->latestp = NULL;
+            numNodes = 0;
+        }
+        Node* getHead(){
+            return this->head;
+        }
+        Node* search(int value){
+            Node* temp = this->head;
+            while(temp!=NULL){
+                if (temp->val == value){
+                    return temp;
+                }
+                temp = temp->pnext;
+            }
+            return NULL;
         }
         void insert(int value){
             Node* newNode = new Node(value);
@@ -39,6 +56,7 @@ class LinkedList {
             }
             this->latestp->pnext = newNode;
             this->latestp = this->latestp->pnext;
+            this->numNodes++;
         }
         void Delete(int value){
             Node* temp = this->head;
@@ -59,13 +77,13 @@ class LinkedList {
             }
         }
         void reverse(){
-            Node* temp = NULL;
+            Node* temp;
             Node* prev = NULL;
-            while (this->head != NULL){
-                temp = this->head->pnext;
-                temp->pnext = prev;
-                prev = this->head;
-                this->head = temp;
+            while (head != NULL){
+                temp = head->pnext;
+                head->pnext = prev;
+                prev = head;
+                head = temp;
             }
             this->head = prev;
         }
@@ -76,8 +94,63 @@ class LinkedList {
             }
             cout << endl;
         }
+        int getNumNodes(){
+            return numNodes;
+        }
         ~LinkedList(){
 
         }
-
 };
+
+class testLinkedList{
+    private:
+        LinkedList test;
+    public:
+        testLinkedList(){
+            for (int i=0;i<10;i++){
+                this->test.insert(i);
+            }
+        }
+        bool testInsert(){
+            if (this->test.getNumNodes() == 10){
+                return true;
+            }
+            return false; 
+        }
+        bool testDelete(){
+            this->test.Delete(10);
+            if (this->test.search(10) == NULL){
+                return true;
+            }
+            return false;
+        }
+        bool testSearch(){
+            if ((this->test.search(3))->val == 3){
+                return true;
+            }
+            return false;
+        }
+        bool testReverse(){
+            this->test.reverse();
+            string out = "";
+            Node* temp = test.getHead();
+            while (temp!=NULL){
+                stringstream s;
+                s << temp->val;
+                out += s.str();
+                temp = temp->pnext;
+            }
+            if (out == "9876543210"){
+                return true;
+            }
+            return false;
+        }
+};
+
+int main(void){
+    testLinkedList test;
+    assert(test.testInsert()==true);
+    assert(test.testSearch()==true);
+    assert(test.testReverse()==true);
+    assert(test.testDelete()==true);
+}   
