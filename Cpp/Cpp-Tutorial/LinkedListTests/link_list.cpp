@@ -113,21 +113,27 @@ class testLinkedList{
         }
         bool testInsert(){
             if (this->test.getNumNodes() == 10){
+                cout << "Testing Insert: PASSED" << endl;
                 return true;
             }
+            cout << "Testing Insert: FAILED" << endl;
             return false; 
         }
         bool testDelete(){
             this->test.Delete(10);
             if (this->test.search(10) == NULL){
+                cout << "Testing Delete: PASSED" << endl;
                 return true;
             }
+            cout << "Testing Delete: FAILED" << endl;
             return false;
         }
         bool testSearch(){
             if ((this->test.search(3))->val == 3){
+                cout << "Testing Search: PASSED" << endl;
                 return true;
             }
+            cout << "Testing Search: FAILED" << endl;
             return false;
         }
         bool testReverse(){
@@ -141,8 +147,10 @@ class testLinkedList{
                 temp = temp->pnext;
             }
             if (out == "9876543210"){
+                cout << "Testing reverse LinkedList: PASSED" << endl;
                 return true;
             }
+            cout << "Testing reverse LinkedList: FAILED" << endl;
             return false;
         }
 };
