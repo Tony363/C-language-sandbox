@@ -1,8 +1,47 @@
-#ifndef LINK_LIST_H
-#define LINK_LIST_H
+#ifndef LINKLIST_H
+#define LINKLIST_H
 #include <iostream>
-#include </home/pysolver33/Desktop/my_repos/googletest/googletest/include/gtest/gtest.h>
 
 using namespace std;
+class Node{
+    private:
+        
+    public:
+        Node* pnext;
+        int val;
+        Node(int value);
+        int getVal();
+        Node* getNext();
+        ~Node();
+};
+
+class LinkedList {
+    private:
+        Node* head;
+        Node* latestp;
+        int numNodes;
+    public:
+        LinkedList();
+        Node* getHead();
+        Node* search(int value);
+        void insert(int value);
+        void Delete(int value);
+        void reverse();
+        void print();
+        int getNumNodes();
+        ~LinkedList();
+};
+
+class testLinkedList{
+    private:
+        LinkedList test;
+    public:
+        testLinkedList();
+        bool testInsert();
+        bool testDelete();
+        bool testSearch();
+        bool testReverse();
+        ~testLinkedList();
+};
 
 #endif
