@@ -87,6 +87,9 @@ class Data:public Node<INT,STR>{
             strftime(buffer,80,"%D",getTimeNow());
             this->datesOfAbsence = new Stack<INT,STR>(buffer);
         }
+        Node<INT,STR>*getNext(){
+            return this->pnext;
+        }
         ~Data(){
             cout << "Data destroyed" << endl;
         }
@@ -111,8 +114,9 @@ class List{
         }
         void addList(INT record,INT ID,INT AUcredit,STR Name,STR Email,STR Program,STR Level){
             Data<INT,STR>* data = new Data<INT,STR>(record,ID,AUcredit,Name,Email,Program,Level);
-            this->tail->pnext = data;
-            this->tail = this->tail->pnext;
+            
+            this->tail->getNext() = data;
+            this->tail = this->tail->getNext();
         }
         ~List(){
             cout << "Master List destroyed" << endl;
@@ -140,6 +144,7 @@ class Menu{
             if (infile.is_open()){
                 string line,recordN,ID,name,email,credits,program,level;
                 bool firstline = true;
+                List<int,string>* master = NULL;
                 while(getline(infile,line)){
                     stringstream ss;
                     ss << line;
@@ -151,10 +156,11 @@ class Menu{
                     getline(ss,program,',');
                     getline(ss,level,',');
                     if (firstline){
-                        List<int,string>* master = new List<int,string>(recordN,ID,credits,name,email,program,level);
+                        // List<int,string> master()
+                        List<int,string>* master = new List<int,string>(stoi(recordN),stoi(ID),stoi(credits),name,email,program,level);
                         firstline = false;
                     }
-                    master->addList(recordN,ID,credits,name,email,program,level);
+                    master->addList(stoi(recordN),stoi(ID),stoi(credits),name,email,program,level);
                 }
                 infile.close();
                 return true;
@@ -163,6 +169,9 @@ class Menu{
                 infile.close();
                 return false;
             }
+        }
+        ~Menu(){
+            cout << "exiting program....." << endl;
         }
         void Options(int option){
             switch(option){
@@ -174,11 +183,8 @@ class Menu{
                 case 5:
                 case 6:
                 case 7:
-                    ~Menu();
+                    exit(1);
             }
-        }
-        ~Menu(){
-            cout << "exiting program....." << endl;
         }
 };
 
