@@ -12,52 +12,58 @@ tm* getTimeNow(){
     return localtm;
 }
 
-template <class INT,class STR>
-class Node{
-    INT recordNumber, IDnumber,credits;
-    STR name,email,program,level;
-    Node* pnext;
+
+class Data{
+    string recordNumber, IDnumber,credits,name,email,program,level;
+    Stack* datesOfAbsence;
     private:
-        STR dates;
-        INT Nabsences;
     public:
-        Node(){
+        Data(){
             cout << "class template Node data filled" << endl;
         }
-        Node(STR date){
-            this->dates = dates;
-            this->Nabsences = 0;
+        Data(string record,string ID,string AUcredit,string Name,string Email,string Program,string Level){
+            this->recordNumber = record;
+            this->IDnumber = ID;
+            this->credits = AUcredit;
+            this->name = Name;
+            this->email = Email;
+            this->program = Program;
+            this->level = Level;
+            char buffer[80];
+            strftime(buffer,80,"%D",getTimeNow());
+            this->datesOfAbsence = new Stack(buffer);
         }
-        STR getDate(){
-            return dates;
-        }
-        ~Node(){
+        ~Data(){
             cout << "class template Node destroyed" << endl;
         }
 };
-template <class INT,class STR>
+
 class Stack{
-    Node<INT,STR>* head=NULL;
-    Node<INT,STR>* prev=NULL;
-    Node<INT,STR>* tail=NULL;
+    Node<string>* head;
+    Node<string>* tail;
+    string dates;
+    int Nabsences;
     public:
-        Stack(STR date){
-            this->head = new Node<INT,STR>(date);
-            this->tail = this->head;
-            this->prev = NULL;
+        Stack(){
+            this->head=nullptr;
+            this->tail=nullptr;
         }
-        void push(STR date){
-            this->tail->pnext = new Node<INT,STR>(date);
-            this->prev = this->tail;
+        Stack(string date){
+            this->head = new Node<string>(date);
+            this->tail = this->head;
+        }
+        void push(string date){
+            this->tail->pnext = new Node<string>(date);
+            // this->prev = this->tail;
             this->tail = this->tail->pnext;
         }
-        Node<INT,STR>* pop(){
-            Node<INT,STR>* temp = this->tail;
-            this->tail = this->prev;
+        Node<string>* pop(){
+            Node<string>* temp = this->tail;
+            this->tail = this->tail->pprev;
             return temp;
         }
-        STR peek(){
-            return this->tail->getDate();
+        string peek(){
+            return this->tail->getData();
         }
         bool isEmpty(){
             if(head==NULL || tail==NULL){
@@ -70,35 +76,29 @@ class Stack{
         }
 };
 
-template<class INT,class STR>
-class Data:public Node<INT,STR>{
-    Stack<INT,STR>* datesOfAbsence;
+template<class T>
+class Node{
+    T Data;
     public:
-        Data(INT record,INT ID,INT AUcredit,STR Name,STR Email,STR Program,STR Level){
-            this->recordNumber = record;
-            this->IDnumber = ID;
-            this->credits = AUcredit;
-            this->name = Name;
-            this->email = Email;
-            this->program = Program;
-            this->level = Level;
-            this->pnext = NULL;
-            char buffer[80];
-            strftime(buffer,80,"%D",getTimeNow());
-            this->datesOfAbsence = new Stack<INT,STR>(buffer);
+        Node<T>* pprev;
+        Node<T>* pnext;
+        Node(T data){
+            this->Data = data;
+            this->pprev = nullptr;
+            this->pnext = nullptr;
         }
-        Node<INT,STR>*getNext(){
-            return this->pnext;
+        T getData(){
+            return this->Data;
         }
-        ~Data(){
+        ~Node(){
             cout << "Data destroyed" << endl;
         }
 };
 
-template<class INT,class STR>
+template<class T>
 class List{
-    Data<INT,STR>* head;
-    Data<INT,STR>* tail;
+    Node<T>* head;
+    Node<T>* tail;
     public:
         // List(){
         //     cout << "Master List instantiated" << endl;
@@ -107,16 +107,16 @@ class List{
         //     this->head = NULL;
         //     this->tail = NULL;
         // }
-        List(INT record,INT ID,INT AUcredit,STR Name,STR Email,STR Program,STR Level){
-            Data<INT,STR>* Head = new Data<INT,STR>(record,ID,AUcredit,Name,Email,Program,Level);
+        List(T record,T ID,T AUcredit,T Name,T Email,T Program,T Level){
+            Node<T>* Head = new Node<T>(record,ID,AUcredit,Name,Email,Program,Level);
             this->head = Head;  
             this->tail = this->head; 
         }
-        void addList(INT record,INT ID,INT AUcredit,STR Name,STR Email,STR Program,STR Level){
-            Data<INT,STR>* data = new Data<INT,STR>(record,ID,AUcredit,Name,Email,Program,Level);
+        void addList(T record,T ID,T AUcredit,T Name,T Email,T Program,T Level){
+            Node<T>* data = new Node<T>(record,ID,AUcredit,Name,Email,Program,Level);
             
-            this->tail->getNext() = data;
-            this->tail = this->tail->getNext();
+            this->tail->pnext = data;
+            this->tail = this->tail->pnext;
         }
         ~List(){
             cout << "Master List destroyed" << endl;
@@ -144,7 +144,7 @@ class Menu{
             if (infile.is_open()){
                 string line,recordN,ID,name,email,credits,program,level;
                 bool firstline = true;
-                List<int,string>* master = NULL;
+                List<string>* master = NULL;
                 while(getline(infile,line)){
                     stringstream ss;
                     ss << line;
@@ -157,10 +157,10 @@ class Menu{
                     getline(ss,level,',');
                     if (firstline){
                         // List<int,string> master()
-                        List<int,string>* master = new List<int,string>(stoi(recordN),stoi(ID),stoi(credits),name,email,program,level);
+                        List<string>* master = new List<string>(recordN,ID,credits,name,email,program,level);
                         firstline = false;
                     }
-                    master->addList(stoi(recordN),stoi(ID),stoi(credits),name,email,program,level);
+                    master->addList(recordN,ID,credits,name,email,program,level);
                 }
                 infile.close();
                 return true;
@@ -212,5 +212,6 @@ void test_suit(){
 }
 int main(void){
     test_suit();
+    // Node<Data> node;
     return 0;
 }
