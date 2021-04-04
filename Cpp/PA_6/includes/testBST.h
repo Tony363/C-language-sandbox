@@ -17,4 +17,14 @@ class testBST{
         ~testBST();
 };
 
+class testHash{
+    private:
+    public:
+        testHash();
+        bool testReadtoHashMap();
+        bool testSearchHashMap();
+        bool testRemoveFromHashMap();
+        ~testHash();
+};
+
 #endif

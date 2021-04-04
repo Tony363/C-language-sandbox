@@ -1,7 +1,14 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cassert>
+#include <string>
 #include <assert.h>
+#include <ctype.h>
 #include <testBST.h>
 #include <BSTNode.h>
+#include <HashTable.h>
+
 
 using namespace std;
 
@@ -13,13 +20,20 @@ int main (void){
 }
 
 void test_functions(){
-    testBST test;
-    assert(test.testReadFile()==true);
-    assert(test.accessTest()==true);
-    assert(test.testPrintTree()==true);
-    assert(test.testSearch()==true);
-    assert(test.testPrintMword()==true);
+    testBST testBST; testHash testHash;
+    assert(testBST.testReadFile()==true);
+    assert(testBST.accessTest()==true);
+    assert(testBST.testPrintTree()==true);
+    assert(testBST.testSearch()==true);
+    assert(testBST.testPrintMword()==true);
+    assert(testHash.testReadtoHashMap()==true);
+    assert(testHash.testSearchHashMap()==true);
+    assert(testHash.testRemoveFromHashMap()==true);
+    cout << "wtf" << endl; 
 }
+//================================================================
+// BST tests
+//================================================================
 testBST::testBST(){
 
 }
@@ -61,14 +75,99 @@ bool testBST::testPrintMword(){
     string input;
     cout << "Please Enter text to conver to Morse Code: ";
     cin >> input;
+    // input.erase(remove_if(input.begin(), input.end(), ::isspace), input.end());
+    
+    cout << input << endl;
     cout << endl;
     for (char& c:input){
-        cout << test.search(c) << " ";
+        if (c == ' ') {
+            cout << "  ";
+        }
+        cout << test.search(toupper(c)) << " ";
     }
     cout << endl;
     cout << "Testing print word to morse code: PASSED" << endl;
     return true;
 }
 testBST::~testBST(){
+
+}
+// =================================================================
+// Hash Map tests
+// =================================================================
+testHash::testHash(){
+
+}
+bool testHash::testReadtoHashMap(){
+    ifstream file("morseCode.txt");
+    HashMapTable hash;
+    if (file.is_open()){
+        string line,Mcode;
+        while(getline(file,line)){
+            char character = line[0];
+            stringstream ss;
+            ss << line;
+            getline (ss,Mcode,character);
+            getline (ss,Mcode,character);
+            hash.Insert(character,Mcode);
+        }
+    }else {
+        cout << "Unable to Read file" << endl;
+        return false;
+    }
+    cout << "Testing insertion to HashMap: PASSED" << endl;
+    return true;
+}
+bool testHash::testSearchHashMap(){
+    ifstream file("morseCode.txt");
+    HashMapTable hash;
+    if (file.is_open()){
+        string line,Mcode;
+        while(getline(file,line)){
+            char character = line[0];
+            stringstream ss;
+            ss << line;
+            getline (ss,Mcode,character);
+            getline (ss,Mcode,character);
+            hash.Insert(character,Mcode);
+        }
+    }else {
+        cout << "Unable to Read file" << endl;
+        return false;
+    }
+    char SearchKey;
+    cout << "Please enter testing search character from file: ";
+    cin >> SearchKey;
+    cout << hash.SearchKey(SearchKey) << endl;
+    cout << "Testing insertion to HashMap: PASSED" << endl;
+    return true;
+}
+bool testHash::testRemoveFromHashMap(){
+    ifstream file("morseCode.txt");
+    HashMapTable hash;
+    if (file.is_open()){
+        string line,Mcode;
+        while(getline(file,line)){
+            char character = line[0];
+            stringstream ss;
+            ss << line;
+            getline (ss,Mcode,character);
+            getline (ss,Mcode,character);
+            hash.Insert(character,Mcode);
+        }
+    }else {
+        cout << "Unable to Read file" << endl;
+        return false;
+    }
+    char charR;
+    cout << "Please enter Char to remove from HashMap: ";
+    cin >> charR;
+    hash.Remove(charR);
+    if (hash.SearchKey(charR) == "NONE"){
+        return true;
+    }
+    return false;
+}
+testHash::~testHash(){
 
 }

@@ -179,12 +179,11 @@ BSTNode* BST::find(BSTNode* t, char character) {
 string BST::search(char character){
     BSTNode* temp = root;
     temp = find(temp, character);
-    // cout <<  root->getMcode();;
     return temp->getMcode();
 }
 void BST::setTest(){
     string boolean;
-    cout << "test or not test: ";
+    cout << "Output Test Details:[True/False] ";
     cin >> boolean;
     this->test = (boolean=="true")?false:true;
 }
