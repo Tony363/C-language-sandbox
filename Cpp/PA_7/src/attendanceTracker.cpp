@@ -12,12 +12,31 @@ tm* getTimeNow(){
     return localtm;
 }
 
-class Stack{
-    Node<string>* head;
-    Node<string>* tail;
-    string dates;
-    int Nabsences;
+template<class T>
+class Node{
+    T Data;
     public:
+        Node<T>* pprev;
+        Node<T>* pnext;
+        Node(T data){
+            this->Data = data;
+            this->pprev = nullptr;
+            this->pnext = nullptr;
+        }
+        T getData(){
+            return this->Data;
+        }
+        ~Node(){
+            cout << "Data destroyed" << endl;
+        }
+};
+
+class Stack{
+    public:
+        Node<string>* head;
+        Node<string>* tail;
+        string dates;
+        int Nabsences;
         Stack(){
             this->head=nullptr;
             this->tail=nullptr;
@@ -39,7 +58,7 @@ class Stack{
             return this->tail->getData();
         }
         bool isEmpty(){
-            if(head==NULL || tail==NULL){
+            if(this->head==nullptr || this->tail==nullptr){
                 return true;
             }
             return true;
@@ -71,25 +90,6 @@ class Data{
         }
         ~Data(){
             cout << "class template Node destroyed" << endl;
-        }
-};
-
-template<class T>
-class Node{
-    T Data;
-    public:
-        Node<T>* pprev;
-        Node<T>* pnext;
-        Node(T data){
-            this->Data = data;
-            this->pprev = nullptr;
-            this->pnext = nullptr;
-        }
-        T getData(){
-            return this->Data;
-        }
-        ~Node(){
-            cout << "Data destroyed" << endl;
         }
 };
 
