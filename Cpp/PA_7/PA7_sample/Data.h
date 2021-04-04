@@ -56,3 +56,4 @@ private:
 
 //function overloading
 ostream& operator<< (ofstream& lhs, const Data& rhs);
+ostream& operator<< (ostream& lhs, const Data& rhs)

@@ -12,32 +12,6 @@ tm* getTimeNow(){
     return localtm;
 }
 
-
-class Data{
-    string recordNumber, IDnumber,credits,name,email,program,level;
-    Stack* datesOfAbsence;
-    private:
-    public:
-        Data(){
-            cout << "class template Node data filled" << endl;
-        }
-        Data(string record,string ID,string AUcredit,string Name,string Email,string Program,string Level){
-            this->recordNumber = record;
-            this->IDnumber = ID;
-            this->credits = AUcredit;
-            this->name = Name;
-            this->email = Email;
-            this->program = Program;
-            this->level = Level;
-            char buffer[80];
-            strftime(buffer,80,"%D",getTimeNow());
-            this->datesOfAbsence = new Stack(buffer);
-        }
-        ~Data(){
-            cout << "class template Node destroyed" << endl;
-        }
-};
-
 class Stack{
     Node<string>* head;
     Node<string>* tail;
@@ -76,6 +50,31 @@ class Stack{
         }
 };
 
+class Data{
+    string recordNumber, IDnumber,credits,name,email,program,level;
+    Stack* datesOfAbsence;
+    private:
+    public:
+        Data(){
+            cout << "class template Node data filled" << endl;
+        }
+        Data(string record,string ID,string AUcredit,string Name,string Email,string Program,string Level){
+            this->recordNumber = record;
+            this->IDnumber = ID;
+            this->credits = AUcredit;
+            this->name = Name;
+            this->email = Email;
+            this->program = Program;
+            this->level = Level;
+            char buffer[80];
+            strftime(buffer,80,"%D",getTimeNow());
+            this->datesOfAbsence = new Stack(buffer);
+        }
+        ~Data(){
+            cout << "class template Node destroyed" << endl;
+        }
+};
+
 template<class T>
 class Node{
     T Data;
@@ -100,21 +99,19 @@ class List{
     Node<T>* head;
     Node<T>* tail;
     public:
-        // List(){
-        //     cout << "Master List instantiated" << endl;
-        // }
-        // List(){
-        //     this->head = NULL;
-        //     this->tail = NULL;
-        // }
-        List(T record,T ID,T AUcredit,T Name,T Email,T Program,T Level){
-            Node<T>* Head = new Node<T>(record,ID,AUcredit,Name,Email,Program,Level);
-            this->head = Head;  
+        List(){
+            cout << "Master List instantiated" << endl;
+        }
+        List(){
+            this->head = NULL;
+            this->tail = NULL;
+        }
+        List(T data){
+            this->head = new Node<T>(data);;  
             this->tail = this->head; 
         }
-        void addList(T record,T ID,T AUcredit,T Name,T Email,T Program,T Level){
-            Node<T>* data = new Node<T>(record,ID,AUcredit,Name,Email,Program,Level);
-            
+        void addList(T data){
+            Node<T>* data = new Node<T>(data);
             this->tail->pnext = data;
             this->tail = this->tail->pnext;
         }
@@ -156,7 +153,6 @@ class Menu{
                     getline(ss,program,',');
                     getline(ss,level,',');
                     if (firstline){
-                        // List<int,string> master()
                         List<string>* master = new List<string>(recordN,ID,credits,name,email,program,level);
                         firstline = false;
                     }
