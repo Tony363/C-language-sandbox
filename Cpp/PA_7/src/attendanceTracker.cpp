@@ -28,7 +28,6 @@ class Stack{
         }
         void push(string date){
             this->tail->pnext = new Node<string>(date);
-            // this->prev = this->tail;
             this->tail = this->tail->pnext;
         }
         Node<string>* pop(){
@@ -96,12 +95,9 @@ class Node{
 
 template<class T>
 class List{
-    Node<T>* head;
-    Node<T>* tail;
     public:
-        List(){
-            cout << "Master List instantiated" << endl;
-        }
+        Node<T>* head;
+        Node<T>* tail;
         List(){
             this->head = NULL;
             this->tail = NULL;
@@ -111,8 +107,7 @@ class List{
             this->tail = this->head; 
         }
         void addList(T data){
-            Node<T>* data = new Node<T>(data);
-            this->tail->pnext = data;
+            this->tail->pnext = new Node<T>(data);
             this->tail = this->tail->pnext;
         }
         ~List(){
@@ -141,7 +136,7 @@ class Menu{
             if (infile.is_open()){
                 string line,recordN,ID,name,email,credits,program,level;
                 bool firstline = true;
-                List<string>* master = NULL;
+                List<Data>* master = NULL;
                 while(getline(infile,line)){
                     stringstream ss;
                     ss << line;
@@ -152,11 +147,12 @@ class Menu{
                     getline(ss,credits,',');
                     getline(ss,program,',');
                     getline(ss,level,',');
+                    Data* data = new Data(recordN,ID,credits,name,email,program,level);
                     if (firstline){
-                        List<string>* master = new List<string>(recordN,ID,credits,name,email,program,level);
+                        List<Data>* master = new List<Data>(*data);
                         firstline = false;
                     }
-                    master->addList(recordN,ID,credits,name,email,program,level);
+                    master->addList(*data);
                 }
                 infile.close();
                 return true;
