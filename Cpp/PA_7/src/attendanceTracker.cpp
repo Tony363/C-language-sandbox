@@ -150,14 +150,40 @@ class List{
         }
         void markAbsent(Node<T>* curr,string absent){
             cout << curr->Data.name << " absent? [Y/N]" << endl;
-            if (absent == "Y"){
-                curr->Data.absent();
-            }else if (absent == "N"){
-                cout << "";
-            }else{
-                cout << "Please answer [Y/N]" << endl;
-                markAbsent(curr);
+            curr->Data.absent();
+          
+        }
+        void getReports(int type,int threshold=1){
+            ofstream outfile;
+            if (type == 1){
+                outfile.open("../report1.txt",ios::out|ios::app);
+            }else if (type == 2){
+                outfile.open("../report2.txt",ios::out|ios::app);
+                if (threshold != 1){
+                    cout << "Please enter absences threshold: ";
+                    cin >> threshold;
+                }
+            }else {
+                cout << "Please enter correct type of report: [1/2] ";
+                cin >> type;
+                getReports(type,999);
+                return;
             }
+            Node<T>* temp = head->pnext;
+            string student;
+            while(temp!=NULL){
+                if (type == 1){
+                    student = temp->Data.name;
+                    int absentTimes = temp->Data.datesOfAbsence->Nabsences;
+                    string recentAbsent = temp->Data.datesOfAbsence->peek();
+                    outfile << student << " " << absentTimes << " " <<  recentAbsent << endl;
+                }else if (type == 2 && temp->Data.datesOfAbsence->Nabsences == threshold){
+                    student = temp->Data.name;
+                    outfile << student << endl;
+                }
+                temp = temp->pnext;
+            }
+            outfile.close();
         }
         ~List(){
             // cout << "Master List destroyed" << endl;
@@ -227,9 +253,17 @@ class Menu{
         }
         void markAbsentStudents(){
             if (this->test){
-                this->master->AbsentStudents(test);
+                this->master->AbsentStudents(this->test);
             }else{
                 this->master->AbsentStudents();
+            }
+        }
+        void generateReports(){
+            if (this->test){
+                this->master->getReports(1);
+                this->master->getReports(2);
+            }else{
+                this->master->getReports(999);
             }
         }
         ~Menu(){
@@ -247,6 +281,8 @@ class Menu{
                     break;
                 case 5:
                 case 6:
+                    generateReports();
+                    break;
                 case 7:
                     exit(1);
             }
@@ -279,6 +315,13 @@ class Tests{
             cout << "Test Mark Absent Student: FAILED" << endl;
             return false;
         }
+        bool testGenerateReport(){
+            this->menu->Options(4);
+            this->menu->Options(4);
+            this->menu->Options(6);
+            cout << "Test Mark Generate Report: PASSED" << endl;
+            return true;
+        }
         ~Tests(){
 
         }
@@ -288,6 +331,7 @@ void test_suit(){
     Tests test;
     assert(test.testReadFile()==true);
     assert(test.testMarkStudentAbsence()==true);
+    assert(test.testGenerateReport()==true);
 }
 int main(void){
     test_suit();
