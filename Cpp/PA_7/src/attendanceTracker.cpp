@@ -14,8 +14,8 @@ tm* getTimeNow(){
 
 template<class T>
 class Node{
-    T Data;
     public:
+        T Data;
         Node<T>* pprev;
         Node<T>* pnext;
         Node(T data){
@@ -27,7 +27,7 @@ class Node{
             return this->Data;
         }
         ~Node(){
-            cout << "Data destroyed" << endl;
+            // cout << "Data destroyed" << endl;
         }
 };
 
@@ -59,7 +59,7 @@ class Stack{
             return temp;
         }
         string peek(){
-            return this->tail->getData();
+            return this->tail->Data;
         }
         bool isEmpty(){
             if(this->head==NULL || this->tail==NULL){
@@ -68,17 +68,17 @@ class Stack{
             return true;
         }
         ~Stack(){
-            cout << "stack of dates destroyed" << endl;
+            // cout << "stack of dates destroyed" << endl;
         }
 };
 
 class Data{
-    string recordNumber, IDnumber,credits,name,email,program,level;
-    Stack* datesOfAbsence=NULL;
     private:
     public:
+        string recordNumber, IDnumber,credits,name,email,program,level;
+        Stack* datesOfAbsence=NULL;
         Data(){
-            cout << "class template Node data filled" << endl;
+            // cout << "class template Node data filled" << endl;
         }
         Data(string record,string ID,string AUcredit,string Name,string Email,string Program,string Level){
             this->recordNumber = record;
@@ -99,7 +99,7 @@ class Data{
             this->datesOfAbsence = new Stack(date);
         }
         ~Data(){
-            cout << "class template Node destroyed" << endl;
+            // cout << "class template Node destroyed" << endl;
         }
 };
 
@@ -108,6 +108,7 @@ class List{
     public:
         Node<T>* head;
         Node<T>* tail;
+        bool test;
         List(){
             Node<T>* head=NULL;
             Node<T>* tail=NULL;
@@ -120,35 +121,53 @@ class List{
             this->tail->pnext = new Node<T>(data);
             this->tail = this->tail->pnext;
         }
-        void markAbsentStudents(){
-            Node<T>* temp = head;
-            string absent;
-            while (temp!=head){
+        void AbsentStudents(){
+            Node<T>* temp = head->pnext;
+            while (temp!=NULL){
                 markAbsent(temp);
-                temp = temp->next;
+                temp = temp->pnext;
+            }
+        }
+        void AbsentStudents(bool test){
+            Node<T>* temp = head->pnext;
+            while (temp!=NULL){
+                markAbsent(temp,"Y");
+                temp = temp->pnext;
             }
         }
         void markAbsent(Node<T>* curr){
-            cout << curr->name << "absent?[Y/N]" << endl;
+            string absent;
+            cout << curr->Data.name << " absent?[Y/N]" << endl;
             cin >> absent;
             if (absent == "Y"){
-                curr->absent();
+                curr->Data.absent();
             }else if (absent == "N"){
-                continue ;
+                cout << "";
+            }else{
+                cout << "Please answer [Y/N]" << endl;
+                markAbsent(curr);
+            }
+        }
+        void markAbsent(Node<T>* curr,string absent){
+            cout << curr->Data.name << " absent? [Y/N]" << endl;
+            if (absent == "Y"){
+                curr->Data.absent();
+            }else if (absent == "N"){
+                cout << "";
             }else{
                 cout << "Please answer [Y/N]" << endl;
                 markAbsent(curr);
             }
         }
         ~List(){
-            cout << "Master List destroyed" << endl;
+            // cout << "Master List destroyed" << endl;
         }
 };
-
 class Menu{
     public:
         int option;
         List<Data>* master;
+        bool test;
         Menu(){
             cout << "Option 1: Reads the .csv course file and overwrites the master list\n"
                 << "Option 2: Populates the master list with previous nodes from master.txt\n"
@@ -160,9 +179,23 @@ class Menu{
                 << endl;
             cin >> option;
             this->master = NULL;
+            this->test = false;
             Options(option);
         }
-        bool readCSV(){
+        Menu(int option){
+            cout << "Option 1: Reads the .csv course file and overwrites the master list\n"
+                << "Option 2: Populates the master list with previous nodes from master.txt\n"
+                << "Option 3: Stores the contents of the master list's nodes to master.txt\n"
+                << "Option 4: Runs through the master list, displays each student's name and prompts if he/she was absent for the current day.\n"
+                << "Option 5: Prompts for an ID number or name of student to edit. Prompts for the date of absence to edit\n"
+                << "Option 6: Leads to submenu ->\n\t1. Generate report for all students;\n\tshowing only the most recent absence for each student.\n\t2.Generate report for students with absences that match for exceeed(int prompt by user)\n"
+                << "Option 7: Exit the program\n"
+                << endl;
+            this->master = NULL;
+            this->test = true;
+            Options(option);
+        }
+        void readCSV(){
             ifstream infile;
             infile.open("../classList.csv");
             if (infile.is_open()){
@@ -187,23 +220,31 @@ class Menu{
                     }
                 }
                 infile.close();
-                return true;
             }else{
                 cout << "Unable to open file" << endl;
                 infile.close();
-                return false;
+            }
+        }
+        void markAbsentStudents(){
+            if (this->test){
+                this->master->AbsentStudents(test);
+            }else{
+                this->master->AbsentStudents();
             }
         }
         ~Menu(){
-            cout << "exiting program....." << endl;
+            // cout << "exiting program....." << endl;
         }
         void Options(int option){
             switch(option){
                 case 1:
                     readCSV();
+                    break;
                 case 2:
                 case 3:
                 case 4:
+                    markAbsentStudents();
+                    break;
                 case 5:
                 case 6:
                 case 7:
@@ -215,12 +256,12 @@ class Menu{
 class Tests{
     private:
     public:
-        Menu *menu;
+        Menu* menu;
         Tests(){
-            this->menu = new Menu();
+            this->menu = new Menu(1);
         }
         bool testReadFile(){
-            if (this->menu->readCSV()){
+            if (this->menu->master->tail != NULL){
                 cout << "Test Read CSV: PASSED" << endl;
                 return true;
             }
@@ -228,9 +269,13 @@ class Tests{
             return false;
         }
         bool testMarkStudentAbsence(){
-            this->menu->readCSV();
-            this->menu->master->markAbsentStudents();
-            this->menu->master->markAbsentStudents();
+            this->menu->Options(4);
+            this->menu->Options(4);
+            this->menu->Options(4);
+            if ((this->menu->master->tail->Data.datesOfAbsence->Nabsences) > 1){
+                cout << "Test Mark Absent Student: PASSED" << endl;
+                return true;
+            }
             cout << "Test Mark Absent Student: FAILED" << endl;
             return false;
         }
