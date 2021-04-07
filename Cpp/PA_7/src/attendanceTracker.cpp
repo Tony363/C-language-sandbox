@@ -149,17 +149,15 @@ class List{
             }
         }
         void markAbsent(Node<T>* curr,string absent){
-            cout << curr->Data.name << " absent? [Y/N]" << endl;
             curr->Data.absent();
-          
         }
-        void getReports(int type,int threshold=1){
+        void getReports(int type,int threshold=6){
             ofstream outfile;
             if (type == 1){
-                outfile.open("../report1.txt",ios::out|ios::app);
+                outfile.open("../report1.txt");
             }else if (type == 2){
-                outfile.open("../report2.txt",ios::out|ios::app);
-                if (threshold != 1){
+                outfile.open("../report2.txt");//,ios::out|ios::app
+                if (threshold != 6){
                     cout << "Please enter absences threshold: ";
                     cin >> threshold;
                 }
@@ -172,14 +170,17 @@ class List{
             Node<T>* temp = head->pnext;
             string student;
             while(temp!=NULL){
+                // cout << temp->Data.datesOfAbsence->Nabsences << endl;
                 if (type == 1){
                     student = temp->Data.name;
                     int absentTimes = temp->Data.datesOfAbsence->Nabsences;
                     string recentAbsent = temp->Data.datesOfAbsence->peek();
                     outfile << student << " " << absentTimes << " " <<  recentAbsent << endl;
+                    // cout << student << endl;
                 }else if (type == 2 && temp->Data.datesOfAbsence->Nabsences == threshold){
                     student = temp->Data.name;
                     outfile << student << endl;
+                    // cout << student << endl;
                 }
                 temp = temp->pnext;
             }
@@ -316,6 +317,7 @@ class Tests{
             return false;
         }
         bool testGenerateReport(){
+            this->menu->Options(4);
             this->menu->Options(4);
             this->menu->Options(4);
             this->menu->Options(6);
