@@ -279,8 +279,6 @@ class Menu{
                         this->levelArr->addList(level);
                     }
                     this->loadtoMasterCount ++;
-                    
-                    cout << "WTF" << endl;
                 }
                 infile.close();
             }else{
@@ -422,8 +420,8 @@ class Tests{
 void test_suit(){
     Tests test;
     assert(test.testReadFile()==true);
-    // assert(test.testMarkStudentAbsence()==true);
-    // assert(test.testGenerateReport()==true);
+    assert(test.testMarkStudentAbsence()==true);
+    assert(test.testGenerateReport()==true);
 }
 int main(void){
     test_suit();
