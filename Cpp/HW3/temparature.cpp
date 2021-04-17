@@ -25,13 +25,16 @@ class Temperature{
             this->degressKelvin = this->constant;
         }
         inline double getTempKelvin(){
-            return this->degressKelvin;
+            double kelvin = this->degressKelvin;
+            return kelvin;
         }
-        inline double getCelsius(){
-            return this->degressKelvin - 273.15; 
+        inline double getTempCelsius(){
+            double celsius = this->degressKelvin - 273.15;
+            return celsius; 
         }
         inline double getTempFahrenheit(){
-            return ((this->degressKelvin - 273.15)/((double)5/(double)9))+32;
+            double fahrenheit = ((this->degressKelvin - 273.15)/((double)5/(double)9))+32;
+            return fahrenheit;
         }
         ~Temperature(){
 
@@ -39,6 +42,12 @@ class Temperature{
 };
 
 int main (void){
-
+    Temperature temp;
+    temp.setTempKelvin(100);
+    cout << "Kelvin Input: " << temp.getTempKelvin() << endl;
+    temp.setTempFahrenheit(100);
+    cout << "Fahrenheit Input: " << temp.getTempFahrenheit() << endl;
+    temp.setTempCelsius(100);
+    cout << "Celsius Input: " << temp.getTempCelsius() << endl;
     return 0;
 }

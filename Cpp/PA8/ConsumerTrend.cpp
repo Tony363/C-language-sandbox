@@ -165,7 +165,7 @@ class DataAnalysis{
             // user inOrderTraversal to display tree
             string line,units,type,transaction;;
             while(getline(this->mCsvStream,line)){
-                string row[3] = {'\0'};
+                string row[3] = {0};
                 lineParser(line,&units,&type,&transaction);
                 row[0] = units; row[1] = type; row[2] = transaction;
                 compareFields(row[2],row[0],row[1]);
