@@ -65,6 +65,8 @@ class TransactionNode:public Node{
 class BST{
     private:
         TransactionNode* mpRoot;
+        TransactionNode* pmost;
+        TransactionNode* pleast;
         void destroyTree(){
             //visit each node in post order to destroy tree
         }
@@ -89,20 +91,31 @@ class BST{
             // each node's printData should be called
             // contents should be printed on a separate line
             if (root == nullptr){
-                return;
+                return;// may not be necessary
             }
             if (root->getLeft() != nullptr){
                 inOrderTraversal((TransactionNode*)root->getLeft());
             }
-            cout << root->getUnits() << root->getData() << endl;
-            
+            memoize(root);
+            root->printData();
             if (root->getRight() != nullptr){
                 inOrderTraversal((TransactionNode*)root->getRight());
+            }
+            return;
+        }
+        void memoize(TransactionNode* node){
+            if (node->getUnits() > this->pmost->getUnits()){
+                this->pmost = node;
+            }
+            if (node->getUnits() < this->pleast->getUnits()){
+                this->pleast = node;
             }
         }
     public:
         BST(){
             this->mpRoot = nullptr;
+            this->pmost = nullptr;
+            this->pleast = nullptr;
         }
         ~BST(){
             destroyTree();
@@ -122,13 +135,15 @@ class BST{
             if (this->mpRoot == nullptr){
                 return;
             }
-            inOrderTraversal(this->mpRoot);
+            inOrderTraversal((TransactionNode*)(this->mpRoot->getLeft()));
+            this->mpRoot->printData();
+            inOrderTraversal((TransactionNode*)(this->mpRoot->getRight()));
         }
         TransactionNode*& findSmallest(){
-            return ;
+            return this->pleast;
         }
         TransactionNode*& findLargest(){
-            return ;
+            return this->pmost;
         }
 };
 
@@ -176,7 +191,11 @@ class DataAnalysis{
             }
         }
         void seeTrend(){
-
+            cout << mTreePurchased.findSmallest()->getUnits() 
+                << mTreePurchased.findSmallest()->getData()
+                << mTreeSold.findSmallest()->getUnits()
+                << mTreeSold.findLargest()->getData()
+                << endl; 
         }
         public:
             void runAnalysis(){
