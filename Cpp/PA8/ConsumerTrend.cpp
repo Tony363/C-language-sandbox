@@ -3,18 +3,21 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <assert.h>
+#include <string.h>
 using namespace std;
 
 class Node{
     protected:
         string mData;
-        Node* mpLeft; 
-        Node* mpRight;
+        void* mpLeft; 
+        void* mpRight;
     public:
         // Node(){}
         Node(string data){
             this->mpLeft = nullptr;
             this->mpRight = nullptr;
+            this->mData = data;
         }
         void setMdata(string data){
             this->mData = data;
@@ -25,16 +28,14 @@ class Node{
         void setRight(Node* node){
             this->mpRight = node;
         }
-        string getData(){
+        string getData(){//inline
             return this->mData;
         }
-        Node**& getLeft(){
-            Node** left = &(this->mpLeft);
-            return left;
+        void*& getLeft(){
+            return this->mpLeft;
         }
-        Node**& getRight(){
-            Node** right = &(this->mpRight);
-            return right;
+        void*& getRight(){
+            return this->mpRight;
         }
         virtual void printData() = 0;
         ~Node(){}
@@ -70,17 +71,20 @@ class BST{
         void destroyTree(){
             //visit each node in post order to destroy tree
         }
-        TransactionNode*& insert(string units,string type, TransactionNode* root){
+        TransactionNode* insert(string units,string type, TransactionNode* root){
             // dynamically allocates a TransactionNode and inserts recusively
             // in the correct subtree based on mUnits
             // should pass in a reference to a pointer
             if (root == NULL){
-                root = new TransactionNode(type,stoi(units));
+                int Units = stoi(units);
+                root = new TransactionNode(type,Units);
                 return root;
             }else if(stoi(units) < root->getUnits()){
-                *(root->getLeft()) = insert(units,type,(TransactionNode*)root->getLeft());
+                TransactionNode* left = (TransactionNode*)root->getLeft();
+                left = insert(units,type,left);
             }else if (stoi(units) > root->getUnits()){
-                *(root->getRight()) = insert(units,type,(TransactionNode*)root->getLeft());
+                TransactionNode* right = (TransactionNode*)root->getRight();
+                right = insert(units,type,right);
             }
             return root;
             // inOrderTraversal(units,type,root);
@@ -163,30 +167,33 @@ class DataAnalysis{
         }
         void readCSV(){
             // user inOrderTraversal to display tree
-            string line,units,type,transaction;;
+            string line,units,type,transaction;
+            string* row = NULL;
             while(getline(this->mCsvStream,line)){
-                string row[3] = {0};
-                lineParser(line,&units,&type,&transaction);
-                row[0] = units; row[1] = type; row[2] = transaction;
+                row = lineParser(line,&units,&type,&transaction);// <- FIX ME
                 compareFields(row[2],row[0],row[1]);
             }
             this->mTreePurchased.inOrderTraversal();
             this->mTreeSold.inOrderTraversal();
         }
-        void lineParser(string line,string* units,string* type,string* transaction){
+        string* lineParser(string line,string* units,string* type,string* transaction){
             stringstream ss;
             ss << line;
             getline(ss,*units,',');
             getline(ss,*type,',');
             getline(ss,*transaction,',');
+            string* row = new string[3];
+            row[0] = *units; row[1] = *type; row[2] = *transaction;
+            return row;
         }
         void compareFields(string transaction,string unit,string type){
             // compares transaction field and inserts the mUnits
             // and type into the appropriate tree (mTreeSold or mTreePurchased)
-            // Trees should be fairly balanced  
-            if (transaction == "Purchased"){
+            // Trees should be fairly balanced 
+
+            if (transaction.compare("Purchased\r")==0){
                 this->mTreePurchased.insert(unit,type);
-            } else if (transaction == "Sold"){
+            } else if (transaction.compare("Sold\r")==0){
                 this->mTreeSold.insert(unit,type);
             }
         }
@@ -209,6 +216,26 @@ class DataAnalysis{
                 this->mCsvStream.close();
             }
 };
+class TestBST{
+    private:
+        DataAnalysis* Analysis = NULL;
+    public:
+        
+        TestBST(){
+            this->Analysis = new DataAnalysis();
+        }
+        ~TestBST(){}
+        bool TestRunAnalysis(){
+            this->Analysis->runAnalysis(); 
+            return true;  
+        }
+};
+
+void test_suite(){
+    TestBST test;
+    assert(test.TestRunAnalysis() == true);
+}
 int main (void){
+    test_suite();
     return 0;
 }
