@@ -6,35 +6,42 @@
 #include <assert.h>
 #include <string.h>
 using namespace std;
-
+class TransactionNode;
 class Node{
     protected:
         string mData;
-        void* mpLeft; 
-        void* mpRight;
+        TransactionNode* mpLeft; 
+        TransactionNode* mpRight;
+        // define a void mutator to assign left right nodes
+    friend class BST;
     public:
-        // Node(){}
-        Node(string data){
+        // Node(){
+        //     this->mpLeft = nullptr;
+        //     this->mpRight = nullptr;   
+        // }
+        Node(string data):mData(data),mpLeft(nullptr),mpRight(nullptr){
+            // this->mpLeft = nullptr;
+            // this->mpRight = nullptr;
+            // this->mData = data;
+        }
+        void setLeft(TransactionNode* node){
             this->mpLeft = nullptr;
-            this->mpRight = nullptr;
-            this->mData = data;
+            this->mpLeft = node;
+        }
+        void setRight(TransactionNode* node){
+            this->mpRight = nullptr;   
+            this->mpRight = node;
         }
         void setMdata(string data){
             this->mData = data;
         }
-        void setLeft(Node* node){
-            this->mpLeft = node;
-        }
-        void setRight(Node* node){
-            this->mpRight = node;
-        }
         string getData(){//inline
             return this->mData;
         }
-        void*& getLeft(){
+        TransactionNode*& getLeft(){
             return this->mpLeft;
         }
-        void*& getRight(){
+        TransactionNode*& getRight(){
             return this->mpRight;
         }
         virtual void printData() = 0;
@@ -45,13 +52,18 @@ class TransactionNode:public Node{
     protected:
         int mUnits;
     public:
-        // TransactionNode(){}
+        // TransactionNode(){
+        //     this->mUnits = 0;
+        // }
         TransactionNode(string data,int units):Node(data){
+            // this->mpLeft = nullptr;
+            // this->mpRight = nullptr;
             this->mUnits = units;
         }
         ~TransactionNode(){}
         int getUnits(){
-            return this->mUnits;
+            int units = this->mUnits;
+            return units;
         }
         void setUnits(int unit){
             this->mUnits = unit;
@@ -80,15 +92,16 @@ class BST{
                 root = new TransactionNode(type,Units);
                 return root;
             }else if(stoi(units) < root->getUnits()){
-                TransactionNode* left = (TransactionNode*)root->getLeft();
-                left = insert(units,type,left);
+                // TransactionNode* left = insert(units,type,left);
+                root->setLeft(insert(units,type,root->getRight()));
             }else if (stoi(units) > root->getUnits()){
-                TransactionNode* right = (TransactionNode*)root->getRight();
-                right = insert(units,type,right);
+                // TransactionNode* right = insert(units,type,right);
+                root->setRight(insert(units,type,root->getRight()));
+                
             }
             return root;
-            // inOrderTraversal(units,type,root);
         }
+
         void inOrderTraversal(TransactionNode* root){
             // recursively visits and prints the contents
             // (mData and mUnits) of each node in the tree in order
@@ -220,7 +233,6 @@ class TestBST{
     private:
         DataAnalysis* Analysis = NULL;
     public:
-        
         TestBST(){
             this->Analysis = new DataAnalysis();
         }
@@ -229,10 +241,15 @@ class TestBST{
             this->Analysis->runAnalysis(); 
             return true;  
         }
+        bool TestNode(){
+            TransactionNode* test = new TransactionNode("test",10);
+            return true;
+        }
 };
 
 void test_suite(){
     TestBST test;
+    assert(test.TestNode()==true);
     assert(test.TestRunAnalysis() == true);
 }
 int main (void){
