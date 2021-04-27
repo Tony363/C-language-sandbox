@@ -22,12 +22,12 @@ class TNode {
 };
 
 TNode::~TNode() {
-    if (this->getLeft()!=0) {
+    // if (this->getLeft()!=0) {
 	delete this->getLeft();
-    }
-    if (this->getRight()!=0) {
+    // }
+    // if (this->getRight()!=0) {
 	delete this->getRight();
-    }
+    // }
 }
 
 void TNode::insert(int v) {
@@ -70,9 +70,10 @@ class BST {
 };
 
 BST::~BST() {
-    if (this->getRoot()!=0) {
-	delete this->getRoot();
-    }
+    // if (this->getRoot()!=0) {
+	// 	cout << "wtf" << endl;
+		delete this->getRoot();
+    // }
 }
 
 void BST::insert(int v) {

@@ -10,26 +10,17 @@ class TransactionNode;
 class Node{
     protected:
         string mData;
-        TransactionNode* mpLeft; 
-        TransactionNode* mpRight;
+        Node* mpLeft; 
+        Node* mpRight;
         // define a void mutator to assign left right nodes
+        
     friend class BST;
     public:
-        // Node(){
-        //     this->mpLeft = nullptr;
-        //     this->mpRight = nullptr;   
-        // }
-        Node(string data):mData(data),mpLeft(nullptr),mpRight(nullptr){
-            // this->mpLeft = nullptr;
-            // this->mpRight = nullptr;
-            // this->mData = data;
-        }
-        void setLeft(TransactionNode* node){
-            this->mpLeft = nullptr;
+        Node(string data):mData(data),mpLeft(nullptr),mpRight(nullptr){}
+        void setLeft(Node* node){
             this->mpLeft = node;
         }
-        void setRight(TransactionNode* node){
-            this->mpRight = nullptr;   
+        void setRight(Node* node){
             this->mpRight = node;
         }
         void setMdata(string data){
@@ -38,26 +29,29 @@ class Node{
         string getData(){//inline
             return this->mData;
         }
-        TransactionNode*& getLeft(){
+        Node*& getLeft(){
             return this->mpLeft;
         }
-        TransactionNode*& getRight(){
+        Node*& getRight(){
             return this->mpRight;
         }
         virtual void printData() = 0;
-        ~Node(){}
+        ~Node(){
+            // if (this->mpLeft != nullptr){
+                delete this->mpLeft;
+            // }
+            // if (this->mpRight != nullptr){
+                delete this->mpRight;
+            // }
+            cout << this->mData << endl;
+        }
 };
 
 class TransactionNode:public Node{
     protected:
         int mUnits;
     public:
-        // TransactionNode(){
-        //     this->mUnits = 0;
-        // }
         TransactionNode(string data,int units):Node(data){
-            // this->mpLeft = nullptr;
-            // this->mpRight = nullptr;
             this->mUnits = units;
         }
         ~TransactionNode(){}
@@ -80,9 +74,12 @@ class BST{
         TransactionNode* mpRoot;
         TransactionNode* pmost;
         TransactionNode* pleast;
-        void destroyTree(){
-            //visit each node in post order to destroy tree
-        }
+        // void destroyTree(){
+        //     //visit each node in post order to destroy tree
+        //     if (this->getRoot()!=0){
+        //         delete this->getRoot();
+        //     }
+        // }
         TransactionNode* insert(string units,string type, TransactionNode* root){
             // dynamically allocates a TransactionNode and inserts recusively
             // in the correct subtree based on mUnits
@@ -92,16 +89,20 @@ class BST{
                 root = new TransactionNode(type,Units);
                 return root;
             }else if(stoi(units) < root->getUnits()){
-                // TransactionNode* left = insert(units,type,left);
-                root->setLeft(insert(units,type,root->getRight()));
+                root->setLeft((Node*)insert(units,type,(TransactionNode*)root->getLeft()));
             }else if (stoi(units) > root->getUnits()){
-                // TransactionNode* right = insert(units,type,right);
-                root->setRight(insert(units,type,root->getRight()));
-                
+                root->setRight((Node*)insert(units,type,(TransactionNode*)root->getRight()));
             }
             return root;
         }
-
+        void memoize(TransactionNode* node){
+            if (node->getUnits() > this->pmost->getUnits()){
+                this->pmost = node;
+            }
+            if (node->getUnits() < this->pleast->getUnits()){
+                this->pleast = node;
+            }
+        }
         void inOrderTraversal(TransactionNode* root){
             // recursively visits and prints the contents
             // (mData and mUnits) of each node in the tree in order
@@ -120,22 +121,16 @@ class BST{
             }
             return;
         }
-        void memoize(TransactionNode* node){
-            if (node->getUnits() > this->pmost->getUnits()){
-                this->pmost = node;
-            }
-            if (node->getUnits() < this->pleast->getUnits()){
-                this->pleast = node;
-            }
-        }
     public:
         BST(){
             this->mpRoot = nullptr;
-            this->pmost = nullptr;
-            this->pleast = nullptr;
+            this->pmost = new TransactionNode("most",0);
+            this->pleast = new TransactionNode("least",0);
         }
         ~BST(){
-            destroyTree();
+            delete this->mpRoot;
+            // cout << "wtf" << endl;
+            // postOrderTraversal(this->mpRoot);
         }
         void setRoot(TransactionNode* root){
             this->mpRoot = root;
@@ -183,10 +178,11 @@ class DataAnalysis{
             string line,units,type,transaction;
             string* row = NULL;
             while(getline(this->mCsvStream,line)){
-                row = lineParser(line,&units,&type,&transaction);// <- FIX ME
+                row = lineParser(line,&units,&type,&transaction);
                 compareFields(row[2],row[0],row[1]);
             }
             this->mTreePurchased.inOrderTraversal();
+            cout << endl;
             this->mTreeSold.inOrderTraversal();
         }
         string* lineParser(string line,string* units,string* type,string* transaction){
@@ -211,15 +207,36 @@ class DataAnalysis{
             }
         }
         void seeTrend(){
-            cout << mTreePurchased.findSmallest()->getUnits() 
-                << mTreePurchased.findSmallest()->getData()
-                << mTreeSold.findSmallest()->getUnits()
-                << mTreeSold.findLargest()->getData()
+            cout << "Purchased:\n " 
+                << "\tLeast:\n"
+                << "\tUnits: "
+                << mTreePurchased.findSmallest()->getUnits() << "\n"
+                << "\tProduct: "
+                << mTreePurchased.findSmallest()->getData() << "\n"
+                << "\n\tMost:\n"
+                << "\tUnits: "
+                << mTreePurchased.findLargest()->getUnits() << "\n"
+                << "\tProduct: "
+                << mTreePurchased.findLargest()->getData() << "\n"
+                << "Sold:\n"
+                << "\tLeast:\n"
+                << "\tUnits: "
+                << mTreeSold.findSmallest()->getUnits() << "\n"
+                << "\tProduct: "
+                << mTreeSold.findSmallest()->getData() << "\n"
+                << "\n\tMost:\n"
+                << "\tUnits: "
+                << mTreeSold.findLargest()->getUnits() << "\n"
+                << "\tProduct: "
+                << mTreeSold.findLargest()->getData() << "\n"
                 << endl; 
         }
         public:
             void runAnalysis(){
                 openCSV();
+            }
+            void results(){
+                seeTrend();
             }
             DataAnalysis(){
                 this->mTreeSold = BST();
@@ -227,6 +244,7 @@ class DataAnalysis{
             }
             ~DataAnalysis(){
                 this->mCsvStream.close();
+
             }
 };
 class TestBST{
@@ -236,7 +254,9 @@ class TestBST{
         TestBST(){
             this->Analysis = new DataAnalysis();
         }
-        ~TestBST(){}
+        ~TestBST(){
+            delete this->Analysis;
+        }
         bool TestRunAnalysis(){
             this->Analysis->runAnalysis(); 
             return true;  
@@ -245,12 +265,17 @@ class TestBST{
             TransactionNode* test = new TransactionNode("test",10);
             return true;
         }
+        bool TestTrend(){
+            this->Analysis->results();
+            return true;
+        }
 };
 
 void test_suite(){
     TestBST test;
     assert(test.TestNode()==true);
     assert(test.TestRunAnalysis() == true);
+    assert(test.TestTrend()==true);
 }
 int main (void){
     test_suite();
