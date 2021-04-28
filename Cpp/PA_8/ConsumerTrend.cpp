@@ -74,12 +74,6 @@ class BST{
         TransactionNode* mpRoot;
         TransactionNode* pmost;
         TransactionNode* pleast;
-        // void destroyTree(){
-        //     //visit each node in post order to destroy tree
-        //     if (this->getRoot()!=0){
-        //         delete this->getRoot();
-        //     }
-        // }
         TransactionNode* insert(string units,string type, TransactionNode* root){
             // dynamically allocates a TransactionNode and inserts recusively
             // in the correct subtree based on mUnits
