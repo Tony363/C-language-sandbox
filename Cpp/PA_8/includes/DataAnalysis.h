@@ -14,11 +14,11 @@ class DataAnalysis{
         string* lineParser(string line,string* units,string* type,string* transaction);
         void compareFields(string transaction,string unit,string type);
         void seeTrend();
-        public:
-            void runAnalysis();
-            void results();
-            DataAnalysis();
-            ~DataAnalysis();
+    public:
+        void runAnalysis();
+        void results();
+        DataAnalysis();
+        ~DataAnalysis();
 };
 class TestBST{
     private:
