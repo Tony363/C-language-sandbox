@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <typeinfo>
 using namespace std;
 
 class student{
@@ -24,9 +25,12 @@ class student{
         double getGDP(){return this->gdp;}
 
         bool operator==(student& s){
-            return (s.getID()==this->getID()) 
-                && (s.getName()==this->getName())  
+            if (typeid(s)==typeid(student)){
+                return (s.getID()==this->getID())
+                 && (s.getName()==this->getName())  
                 && (s.getGDP()==this->getGDP());
+            }
+            return false;
         }
 };
 
