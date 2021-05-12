@@ -14,7 +14,7 @@ class Node{
         Node* mpRight;
         // define a void mutator to assign left right nodes
         
-    friend class BST;
+    // friend class BST;
     public:
         Node(string data):mData(data),mpLeft(nullptr),mpRight(nullptr){}
         void setLeft(Node* node){
