@@ -3,10 +3,11 @@
 #include <typeinfo>
 using namespace std;
 
+class object{};
+
 class circle{
     private:
         double pi,r;
-
     public:
         circle(){
             this->pi=M_PI;
@@ -24,7 +25,30 @@ class circle{
             temp.r = this->r + c.getR();
             return temp;
         }
-        bool operator>(circle c){return this->Area() > c.Area();}
+
+        circle (const object& o){}
+        circle& operator=(const object& o){return *this;}
+        operator object(){return object();}
+
+        circle operator+(object& c){
+            if (typeid(c)==typeid(circle)){
+                circle C = c;
+                C.r = this->r + C.getR();
+                return C;
+            }
+            cout << "invalid type" << endl;
+            return *this;
+        }
+
+        bool operator>(object& c){
+            if(typeid(c)==typeid(circle)){
+                circle C = c;
+                return (C.Area() > this->Area());
+            }
+            cout << "invalid type" << endl;
+            return false;
+        }
+        bool operator>(circle& c){return this->Area() > c.Area();}
 };
 
 class rect{
@@ -44,11 +68,34 @@ class rect{
         double getH(){return this->height;}
         double getB(){return this->breadth;}
         double Area(){return (this->breadth)*(this->height);}
+
+        rect (const object& o){}
+        rect& operator=(const object& o){return *this;}
+        operator object(){return object();}
+        
         rect operator+(rect& r){
             rect temp;
             temp.height = this->height + r.getH();
             temp.breadth = this-> breadth + r.getB();
             return temp;
+        }
+        rect operator+(object& r){
+            if (typeid(r)==typeid(rect)){
+                rect R = r;
+                R.height = this->height + R.getH();
+                R.breadth = this-> breadth + R.getB();
+                return R;
+            }
+            cout << "invalid type" << endl;
+            return *this;
+        }
+        bool operator<(object& r){
+            if (typeid(r)==typeid(rect)){
+                rect R = r;
+                return this->Area() < R.Area();
+            }
+            cout << "invalid type" << endl;
+            return false;
         }
         bool operator<(rect r){return (this->Area() < r.Area());}
 };
@@ -89,6 +136,39 @@ class Time{
             temp.seconds = this->seconds + (total - total/3600 - ((total - total/3600) - total/60));
             return temp;
         }
+        Time operator+(object& t){
+            if (typeid(t)==typeid(Time)){
+                Time T = t;
+                int Thours = T.getH() * 3600,Tminutes = T.getM() * 60;
+                int Shours = this->getH() * 3600, Sminutes = this->getM() * 60;
+                int total = Thours + Tminutes + T.getS() + Shours + Sminutes + this->getS();
+
+                T.hours = this->hours + (double)total/3600;// edge cases
+                T.minutes = this->minutes + (double)((total - total/3600)/60);
+                T.seconds = this->seconds + (total - total/3600 - ((total - total/3600) - total/60));
+                return T;
+            }
+            cout << "invalid type" << endl;
+            return *this;
+        }
+        
+        Time (const object& o){}
+        Time& operator=(const object& o){return *this;}
+        operator object(){return object();}
+
+        bool operator<(object t){
+            if (typeid(t)==typeid(Time)){
+                Time T = t;
+                int Thours = T.getH() * 3600,Tminutes = T.getM() * 60;
+                int Shours = this->getH() * 3600, Sminutes = this->getM() * 60;
+                int Ttotal = Thours + Tminutes + T.getS() ;
+                int Stotal = Shours + Sminutes + this->getS();
+                return (Ttotal < Stotal);
+            }
+            cout << "invalid type" << endl;
+            return false;
+        }
+
         bool operator<(Time t){
             int Thours = t.getH() * 3600,Tminutes = t.getM() * 60;
             int Shours = this->getH() * 3600, Sminutes = this->getM() * 60;
@@ -100,26 +180,26 @@ class Time{
 void test_circle(){
     circle b(5);circle a(4);
     bool compare = a > b;
-    cout << compare << endl;
+    cout << boolalpha << compare << endl;
     circle c = b + a;
     compare = c > a;
-    cout << compare << endl;
+    cout  << boolalpha<< compare << endl;
 }
 void test_rect(){
     rect a(2,2);rect b(3,3);
     bool compare = a < b;
-    cout << compare << endl;
+    cout << boolalpha << compare << endl;
     rect c = b + a;
     compare = c < a;
-    cout << compare << endl;
+    cout << boolalpha << compare << endl;
 }
 void test_time(){
     Time math(6,0,0); Time java(2,0,0); Time Cpp(4,0,0);
     bool compare = math < Cpp;
-    cout << compare << endl;
+    cout<< boolalpha << compare << endl;
     Time programming = java + Cpp;
     compare = math < programming;
-    cout << compare << endl;
+    cout << boolalpha << compare << endl;
 }
 int main(void){
     test_circle();
