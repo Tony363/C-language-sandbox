@@ -1,5 +1,6 @@
 #ifndef BST_H
 #define BST_H
+#pragma once
 #include <iostream>
 using namespace std;
 class Node{
