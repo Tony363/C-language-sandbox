@@ -1,5 +1,6 @@
 #ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <BST.h>

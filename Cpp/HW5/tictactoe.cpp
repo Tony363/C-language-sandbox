@@ -37,14 +37,11 @@ class Board{
         void printBoard();
 };
 bool Board::checkBoard(int h,int w){
-    if (this->board[h][w] == ' '){
-        return true;
-    }
-    cout << "Coordinate space [" 
-            << h << "] [" 
-            << w << "] filled"
-            << endl;
-    return false;
+    return this->board[h][w] == ' ';
+    // if (this->board[h][w] == ' '){
+    //     return true;
+    // }
+    // return false;
 }
 bool Board::checkWin(char c){
     for (auto cond : this->winningCondition){
@@ -90,12 +87,14 @@ void Game::run(){
         this->printBoard();
         if (this->checkWin(get<1>(this->players[flip]))){
             cout << get<0>(this->players[flip]) << " won!" << endl;
+            this->printPlayerMoveHistory();
             return;
         }
         flip = 1 - flip;
     }
     this->printBoard();
     cout << "draw" << endl;
+    this->printPlayerMoveHistory();
 }
 void Game::setP1(){
     cout << "Please Enter P1 Name & character:\n" << endl;
@@ -112,6 +111,11 @@ void Game::inputPmove(tuple<string,char> p){
         this->playerMoveHistory.push_back( make_tuple(this->h,this->w,get<0>(p)));
         this->setMove(get<1>(p),this->h,this->w);
         return;
+    }else{
+        cout << "Coordinate space [" 
+            << h << "] [" 
+            << w << "] filled"
+            << endl;
     }
     return this->inputPmove(p);
 }  
