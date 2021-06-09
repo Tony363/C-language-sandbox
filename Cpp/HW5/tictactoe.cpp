@@ -32,17 +32,11 @@ class Board{
         }
         ~Board(){}
         void setMove(char p,int h,int w){this->board[h][w] = p;};
-        bool checkBoard(int h,int w);
+        bool checkBoard(int h,int w){return this->board[h][w] == ' ';};
         bool checkWin(char c);
         void printBoard();
 };
-bool Board::checkBoard(int h,int w){
-    return this->board[h][w] == ' ';
-    // if (this->board[h][w] == ' '){
-    //     return true;
-    // }
-    // return false;
-}
+
 bool Board::checkWin(char c){
     for (auto cond : this->winningCondition){
         if (this->board[cond[0][0]][cond[0][1]] == c 
@@ -92,8 +86,7 @@ void Game::run(){
         }
         flip = 1 - flip;
     }
-    this->printBoard();
-    cout << "draw" << endl;
+    cout << "----DRAW----" << endl;
     this->printPlayerMoveHistory();
 }
 void Game::setP1(){
@@ -111,7 +104,7 @@ void Game::inputPmove(tuple<string,char> p){
         this->playerMoveHistory.push_back( make_tuple(this->h,this->w,get<0>(p)));
         this->setMove(get<1>(p),this->h,this->w);
         return;
-    }else{
+    }else {
         cout << "Coordinate space [" 
             << h << "] [" 
             << w << "] filled"
