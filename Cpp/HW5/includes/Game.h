@@ -1,34 +1,28 @@
 #ifndef GAME_H
 #define GAME_H
-// #pragma Once
+#pragma Once
 #include <iostream>
 #include <Board.h>
-#include <test.h>
 #include <vector>
 #include <tuple>
-#include <test.h>
 #include <sstream>
 using namespace std;
 
-class Game:public Board,public TestRun{
+class Game:public Board{
     private:
         bool test;
         int h,w,totalMoveCount;
         tuple<string,char>players[2];
         vector<tuple<int,int,string>> playerMoveHistory;
-        // vector<istringstream> iss;
+        streambuf* cinbuf;
     public: 
         Game();
+        Game(bool test, istringstream& line);
         ~Game(){}
-        void setTestBool(bool test){this->test=test;}
-        // void setTestInput(vector iss);
-        void setPmove(tuple<string,char> p);
+        void inputPmove(tuple<string,char> p);
         void setP1();
         void setP2();
         void printPlayerMoveHistory();
         void run();
-        void PlayerInput();
-        void PlayerInput(int w,int h);
-    // friend class TestGame;
 };
 #endif

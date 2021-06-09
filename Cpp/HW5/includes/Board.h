@@ -1,6 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
-// #pragma Once
+#pragma Once
 #include <iostream>
 #include <cstdio>
 #include <cstring>
@@ -24,7 +24,7 @@ class Board{
         Board();
         ~Board(){}
         void setMove(char p,int h,int w){this->board[h][w] = p;};
-        inline bool checkBoard(int h,int w){return this->board[h][w] == ' ';};
+        bool checkBoard(int h,int w){return this->board[h][w] == ' ';};
         bool checkWin(char c);
         void printBoard();
 };
