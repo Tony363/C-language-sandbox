@@ -9,6 +9,7 @@
 #include <future>
 #include <queue>
 #include <cRWLock.h>
+#include <fstream>
 using namespace std;
 
 mutex shared ;
@@ -24,7 +25,7 @@ void producer(int owner, int start, int end){
             lock_guard<mutex> guard(shared) ;
             msgQueue.push( x ) ;
         }
-        printf("    Producer : %d  -->  %2d \n",owner,  x) ;
+        printf("Producer : %d  -->  %2d \n",owner,  x) ;
         condvar.notify_all( ) ;
     }
 }
@@ -41,10 +42,10 @@ void consumer( int owner, int demand){
     }
 }
 
-void func(cRWLock &rw, int i){
+void func(cRWLock &rw,int i){
     if(i % 2 == 0){
         rw.writeLock();
-        result += 1;
+        result ++;
         rw.writeUnlock();
         rw.readLock();
         rw.readUnlock();
@@ -64,13 +65,42 @@ void not_safe(int i){
         result += 2;
     }
 }
+class ThreadWriter{
+public:
+    ThreadWriter(const string& path): path(path){
+        this->ofile.open(path);
+    }
+    void write(const string& dataToWrite){
+        lock_guard<mutex> lock(this->writerMutex);
+        this->ofile << dataToWrite;
+    }
+private:
+    string path;
+    ofstream ofile;
+    mutex writerMutex;
+};
 
-int main( ){
+class Writer{
+public:
+    Writer(shared_ptr<ThreadWriter> sf): sf(sf){};
+    void writeToFile(){
+        // cout << "is this working?" << endl;
+        this->sf->write("logging...\n");
+    }
+private:
+    shared_ptr<ThreadWriter> sf;
+};
+int main(){
+    auto ofile = make_shared<ThreadWriter>("./testLogging1.txt");
+    Writer writer1(ofile);
+    Writer writer2(ofile);
     cRWLock rw ;
     vector<thread> threads ;
-    for(int i = 0; i < 1000; i++){
-        threads.push_back(std::thread(func, ref(rw), i));
-        //threads.push_back(std::thread(not_safe, i));
+    for(int i = 0; i < 100000000; i++){
+        // threads.push_back(thread(func, ref(rw), i));
+        // threads.push_back(thread(not_safe, i));
+        writer1.writeToFile();
+        writer2.writeToFile();
     }
     for(int i = 0; i < threads.size() ; i++){
         threads[i].join();
