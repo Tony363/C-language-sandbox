@@ -14,13 +14,17 @@ using namespace std;
 
 class cRWLock{
     public:
-    cRWLock( ) ;
-        bool noWriter( ) ;
-        bool noAccessor( ) ;
-        void readLock( ) ;
-        void readUnlock( ) ;
-        void writeLock( ) ;
-        void writeUnlock( ) ;
+        cRWLock( ){};
+        cRWLock(int mActiveReaders,int mWaitingWriters,int mActiveWriters): 
+            mActiveReaders(mActiveReaders),
+            mWaitingWriters(mWaitingWriters),
+            mActiveWriters(mActiveWriters){};
+            bool noWriter( ) ;
+            bool noAccessor( ) ;
+            void readLock( ) ;
+            void readUnlock( ) ;
+            void writeLock( ) ;
+            void writeUnlock( ) ;
 
 //******************************************************
 //        void producer(int owner, int start, int end)   ;
@@ -35,8 +39,8 @@ class cRWLock{
         int                   mActiveReaders ;
         int                   mWaitingWriters ;
         int                   mActiveWriters ;
-//        std::condition_variable    condvar ;
-//        std::queue<int>                   msgQueue ;
+//      condition_variable    condvar ;
+//      queue<int>                   msgQueue ;
 } ;
 
 #endif

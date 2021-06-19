@@ -66,29 +66,29 @@ void not_safe(int i){
     }
 }
 class ThreadWriter{
-public:
-    ThreadWriter(const string& path): path(path){
-        this->ofile.open(path);
-    }
-    void write(const string& dataToWrite){
-        lock_guard<mutex> lock(this->writerMutex);
-        this->ofile << dataToWrite;
-    }
-private:
-    string path;
-    ofstream ofile;
-    mutex writerMutex;
+    public:
+        ThreadWriter(const string& path): path(path){
+            this->ofile.open(path);
+        }
+        void write(const string& dataToWrite){
+            cout << "is this working?" << endl;
+            lock_guard<mutex> lock(this->writerMutex);
+            this->ofile << dataToWrite;
+        }
+    private:
+        string path;
+        ofstream ofile;
+        mutex writerMutex;
 };
 
 class Writer{
-public:
-    Writer(shared_ptr<ThreadWriter> sf): sf(sf){};
-    void writeToFile(){
-        // cout << "is this working?" << endl;
-        this->sf->write("logging...\n");
-    }
-private:
-    shared_ptr<ThreadWriter> sf;
+    public:
+        Writer(shared_ptr<ThreadWriter> sf): sf(sf){};
+        void writeToFile(){
+            this->sf->write("logging...\n");
+        }
+    private:
+        shared_ptr<ThreadWriter> sf;
 };
 int main(){
     auto ofile = make_shared<ThreadWriter>("./testLogging1.txt");
@@ -96,7 +96,7 @@ int main(){
     Writer writer2(ofile);
     cRWLock rw ;
     vector<thread> threads ;
-    for(int i = 0; i < 100000000; i++){
+    for(int i = 0; i < 100000; i++){
         // threads.push_back(thread(func, ref(rw), i));
         // threads.push_back(thread(not_safe, i));
         writer1.writeToFile();

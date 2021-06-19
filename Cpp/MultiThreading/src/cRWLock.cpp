@@ -11,12 +11,6 @@
 #include <cRWLock.h>
 using namespace std;
 
-cRWLock::cRWLock( ): mShared( ), mReaderQ( ), mWriterQ( ){
-    mActiveReaders = 0 ;
-    mWaitingWriters = 0 ;
-    mActiveWriters = 0 ;
-}
-
 bool cRWLock::noWriter( ){
     return mActiveReaders > 0 || mActiveWriters == 0;
 }
@@ -26,7 +20,7 @@ bool cRWLock::noAccessor( ){
 }
 
 void cRWLock::readLock( ){
-    unique_lock<std::mutex> lk(mShared);
+    unique_lock<mutex> lk(mShared);
     mReaderQ.wait(lk, bind(&cRWLock::noWriter, this)) ;
     ++mActiveReaders;
     lk.unlock( ) ;
@@ -52,7 +46,7 @@ void cRWLock::writeLock( ){
 
 
 void cRWLock::writeUnlock( ){
-    unique_lock<std::mutex> lk(mShared);
+    unique_lock<mutex> lk(mShared);
     --mActiveWriters;
     if(mWaitingWriters > 0)
         mWriterQ.notify_one();
