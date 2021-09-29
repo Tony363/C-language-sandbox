@@ -3,7 +3,13 @@
 #include <string.h>
 #include "includes/hashmap.h"
 
-int iterate_unsafe(double *array);
+typedef struct _Frac
+{
+    double frac_val;
+    char *frac;
+} Frac;
+
+int iterate_unsafe(Frac *array);
 
 double readFraction(const char *str)
 {
@@ -12,7 +18,7 @@ double readFraction(const char *str)
     return a / b;
 }
 
-char *readFractionFile(FILE *in)
+Frac *readFractionFile(FILE *in)
 {
     if (in == NULL)
     {
@@ -21,42 +27,46 @@ char *readFractionFile(FILE *in)
     }
     char str[30];
     double val = 0;
-    char *strings[] = (double *)malloc(100 * sizeof(double));
+    Frac *fractions = (Frac *)malloc(30 * sizeof(Frac));
     int count = 0;
     while (fgets(str, 30, in) != NULL)
     {
         str[strcspn(str, "\n")] = 0;
-        val = readFraction(str);
-        insert(str, val);
-        *(strings + count) = str;
+        char *temp = (char *)malloc(30 * sizeof(char));
+        strcpy(temp, str);
+        Frac new_frac = {.frac_val = readFraction(str), .frac = temp};
+
+        *(fractions + count) = new_frac;
         count++;
     }
-    return strings;
+    Frac new_frac = {.frac_val = 0, .frac = NULL};
+    *(fractions + count) = new_frac;
+    return fractions;
 }
 
-void writeFile(FILE *out, double *arr)
+void writeFile(FILE *out, Frac *arr)
 {
-    for (int i = 0; *(arr + i) != 0; i++)
+    for (int i = 0; (arr + i)->frac != NULL; i++)
     {
-        printf("%lf\n", *(arr + i));
-        fprintf(out, "%lf\n", *(arr + i));
+        printf("%lf\n", (arr + i)->frac_val);
+        fprintf(out, "%s\n", (arr + i)->frac);
     }
 }
 
-int iterate_unsafe(double *array)
+int iterate_unsafe(Frac *array)
 {
-    int i;
-    for (i = 0; *(array + i) != 0; i++)
-        printf("%lf", *(array + i));
+    int i = 0;
+    while ((array + i)->frac != NULL)
+        i++;
     return i;
 }
 
 // the compare function for double values
 static int compare(const void *a, const void *b)
 {
-    if (*(double *)a > *(double *)b)
+    if (((Frac *)a)->frac_val > ((Frac *)b)->frac_val)
         return 1;
-    else if (*(double *)a < *(double *)b)
+    else if (((Frac *)a)->frac_val < ((Frac *)b)->frac_val)
         return -1;
     else
         return 0;
@@ -64,16 +74,12 @@ static int compare(const void *a, const void *b)
 
 int main(void)
 {
-    dummyItem = (struct DataItem *)malloc(sizeof(struct DataItem));
-    dummyItem->data = 0;
-    strcpy(dummyItem->key, "");
-
     FILE *in = fopen("../Texts/fraction.txt", "r");
     FILE *out = fopen("../Texts/fractionConverted.txt", "w");
-    double *arr = readFractionFile(in);
+    Frac *arr = readFractionFile(in);
     int arr_len = iterate_unsafe(arr);
 
-    qsort(arr, arr_len, sizeof(double), compare);
+    qsort(arr, arr_len, sizeof(Frac), compare);
     writeFile(out, arr);
     fclose(in);
     return 0;
