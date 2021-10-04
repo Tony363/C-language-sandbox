@@ -61,7 +61,7 @@ void insert(const char *key, double data)
     //get the hash
     int hashIndex = hash(key);
     //move in array until an empty or deleted cell
-    while (hashArray[hashIndex] != NULL && hashArray[hashIndex]->key != "")
+    while (hashArray[hashIndex] != NULL && strcmp(hashArray[hashIndex]->key, "") != 0)
     {
         //go to next cell
         ++hashIndex;
