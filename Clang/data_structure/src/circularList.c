@@ -1,10 +1,5 @@
 #include <stdio.h>
-
-typedef struct Node
-{
-    int data;
-    struct Node *next;
-} Node;
+#include "../includes/linklist.h"
 
 Node *circularList(int data[], int len)
 {
@@ -35,38 +30,33 @@ void printCircular(Node *head)
     printf("]\n");
 }
 
-Node *insertCircular(Node *head, int index, int data)
-{
-    Node *temp = createNode(data);
-    Node *cur = head;
-    int len = length(head);
-    if (index == 0)
-    {
-        temp->next = head;
-        return temp;
-    }
-    int i = 0;
-    while ((index > 0 && i <= index) || ((index < 0) && (len + index) >= index))
-    {
-        if (!cur)
-        {
-            printf("Index out of bound\n");
-            return head;
-        }
-        if ((index > 0 && i == index) || ((index < 0) && ((len + index) == i)))
-        {
-            Node *afterInsert = cur->next;
-            cur->next = temp;
-            temp->next = afterInsert;
-            break;
-        }
-        cur = cur->next;
-        i++;
-    }
-    return head;
-}
-
-int main(void)
-{
-    return 0;
-}
+// Node *insertCircular(Node *head, int index, int data)
+// {
+//     Node *temp = createNode(data);
+//     Node *cur = head;
+//     int len = length(head);
+//     if (index == 0)
+//     {
+//         temp->next = head;
+//         return temp;
+//     }
+//     int i = 0;
+//     while ((index > 0 && i <= index) || ((index < 0) && (len + index) >= index))
+//     {
+//         if (!cur)
+//         {
+//             printf("Index out of bound\n");
+//             return head;
+//         }
+//         if ((index > 0 && i == index) || ((index < 0) && ((len + index) == i)))
+//         {
+//             Node *afterInsert = cur->next;
+//             cur->next = temp;
+//             temp->next = afterInsert;
+//             break;
+//         }
+//         cur = cur->next;
+//         i++;
+//     }
+//     return head;
+// }
