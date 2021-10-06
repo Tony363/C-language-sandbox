@@ -148,5 +148,5 @@ Node *freeList(Node *head)
         freeNode(cur);
         cur = temp;
     }
-    return head;
+    return NULL;
 }
