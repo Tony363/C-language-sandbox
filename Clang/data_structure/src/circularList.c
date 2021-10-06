@@ -1,5 +1,31 @@
 #include <stdio.h>
-#include "../includes/linklist.h"
+// #include "../includes/linklist.h"
+
+typedef struct Node
+{
+    int data;
+    struct Node *next;
+} Node;
+
+int length(Node *linkList)
+{
+    int len = 0;
+    Node *node = linkList;
+    while (node)
+    {
+        len++;
+        node = node->next;
+    }
+    return len;
+}
+
+Node *createNode(int data)
+{
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
 
 Node *circularList(int data[], int len)
 {
