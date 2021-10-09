@@ -8,11 +8,10 @@ typedef struct Node
 } Node;
 
 Node *createNode(int data);
-Node *insertCircular(Node *head, int index, int data);
-Node *circularList(int data[], int len);
-Node *getCirNode(Node *head, int data);
-Node *add(Node *head, int data);
-Node *Remove(Node *head, int data);
+Node *insertNode(Node *head, int data);
+Node *createDoubleList(int arr[], int len);
+Node *GetCircular(Node *head, int data);
+void removeDouble(Node *head, int val);
+void print_double_list(Node *head);
 Node *freeCircular(Node *head);
-void printCircular(Node *head);
 #endif
