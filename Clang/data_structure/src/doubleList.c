@@ -52,28 +52,114 @@ Node *createDoubleList(int arr[], int len)
         i++;
     }
     cur->next = NULL;
-    return cur;
+    return head;
+}
+
+Node *GetCircular(Node *head, int data)
+{
+    Node *temp = head;
+    int next = 0, prev = 0;
+    if (temp->next)
+        next = 1;
+    else
+        prev = 1;
+
+    while (temp)
+    {
+        if (temp->data == data)
+        {
+            return temp;
+        }
+        if (next == 1)
+            temp = temp->next;
+        else
+            temp = temp->prev;
+    }
+    return NULL;
+}
+
+void removeDouble(Node *head, int val)
+{
+    Node *temp = head;
+    int next = 0, prev = 0;
+    if (temp->next)
+        next = 1;
+    else
+        prev = 1;
+    while (temp)
+    {
+        if (temp->data == val)
+        {
+            if (temp->prev)
+            {
+                temp->prev->next = temp->next;
+            }
+            if (temp->next)
+            {
+                temp->next->prev = temp->prev;
+            }
+            free(temp);
+        }
+        if (next == 1)
+            temp = temp->next;
+        else
+            temp = temp->prev;
+    }
 }
 
 void print_double_list(Node *head)
 {
     Node *temp = head;
-    int prev_val = 0;
+    int next = 0, prev = 0;
+    if (temp && temp->next)
+        next = 1;
+    else
+        prev = 1;
+
+    printf("[");
     while (temp)
     {
-        if (temp->next != NULL && prev_val != temp->data)
+        if (next == 1)
         {
-            printf("%d", temp->data);
-            prev_val = temp->data;
+            printf("%d,", temp->data);
             temp = temp->next;
         }
         else
         {
-            printf("%d", temp->data);
-            prev_val = temp->data;
+            printf("%d,", temp->data);
             temp = temp->prev;
         }
     }
+    printf("]\n");
+}
+
+Node *freeCircular(Node *head)
+{
+    Node *cur = head;
+    Node *temp;
+    int next = 0, prev = 0;
+    if (cur->next)
+        next = 1;
+    else
+        prev = 1;
+    while (cur)
+    {
+        // printf("%d ", cur->data);
+
+        if (next == 1)
+        {
+            temp = cur;
+            cur = cur->next;
+            free(temp);
+        }
+        else
+        {
+            temp = cur;
+            cur = cur->prev;
+            free(temp);
+        }
+    }
+    return NULL;
 }
 
 int main(int argc, char **argv)
@@ -92,6 +178,14 @@ int main(int argc, char **argv)
     };
     int len = sizeof(arr) / sizeof(arr[0]);
     Node *head = createDoubleList(arr, len);
+    print_double_list(head);
+    Node *five = GetCircular(head, 5);
+    printf("%d\n", (five) ? five->data : 9999);
+    head = insertNode(head, 999);
+    print_double_list(head);
+    removeDouble(head, 999);
+    print_double_list(head);
+    head = freeCircular(head);
     print_double_list(head);
     return 0;
 }
