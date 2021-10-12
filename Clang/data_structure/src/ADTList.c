@@ -1,6 +1,7 @@
 // C program for generic linked list
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* A linked list node */
 struct Node
@@ -24,9 +25,10 @@ void push(struct Node **head_ref, void *new_data, size_t data_size)
 
     // Copy contents of new_data to newly allocated memory.
     // Assumption: char takes 1 byte.
-    int i;
-    for (i = 0; i < data_size; i++)
-        *(char *)(new_node->data + i) = *(char *)(new_data + i);
+    memcpy(new_node->data, new_data, data_size);
+    // int i;// HAVE NO IDEA WHATS HAPPENING HERE
+    // for (i = 0; i < data_size; i++)
+    //     *(char *)(new_node->data + i) = *(char *)(new_data + i);
 
     // Change head pointer as new node is added at the beginning
     (*head_ref) = new_node;
