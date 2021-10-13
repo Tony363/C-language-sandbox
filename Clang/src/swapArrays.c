@@ -129,6 +129,9 @@ int main(int argc, char *argv[])
     swapDataBlocks(fa1, fa2, sizeof(double), 3, swapDoubleData);
     printArray(ia1, 3);
     printArray(ia2, 3);
+    // printDouble(fa1, 3);
+    // printDouble(fa2, 3);
+    swapDataBlocksCOPILOT(fa1, fa2, sizeof(double));
     printDouble(fa1, 3);
     printDouble(fa2, 3);
     return 0;
