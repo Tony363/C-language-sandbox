@@ -59,6 +59,9 @@ Node *insert_node(Node *linkedList, int index, int data)
 {
     Node *temp = createNode(data);
     Node *head = linkedList;
+    if (!head)
+        return temp;
+
     int len = length(linkedList);
     if (index == 0)
     {
@@ -90,9 +93,12 @@ Node *get_data(Node *linkedList, int data)
 {
     Node *temp = linkedList;
     while (temp && temp->data != data)
+    {
+        if (temp->data == data)
+            return temp;
         temp = temp->next;
-    if (temp && temp->data == data)
-        return temp;
+    }
+    (!temp) ? printf("element not found\n") : printf("%d\n", temp->data);
     return NULL;
 }
 
@@ -121,6 +127,9 @@ Node *delete_node(Node *linkedList, int data)
 Node *reverse_list(Node *linkedList)
 {
     Node *current = linkedList;
+    if (!current)
+        return NULL;
+
     Node *prev = NULL, *temp = NULL;
     while (current)
     {
@@ -137,7 +146,6 @@ void freeNode(Node *node)
     free(node);
 }
 
-/*FIX ME have no idea how to completely free a node*/
 Node *freeList(Node *head)
 {
     Node *temp = NULL;
@@ -149,4 +157,32 @@ Node *freeList(Node *head)
         cur = temp;
     }
     return NULL;
+}
+
+int getValueIl(int *head, int index, int *status_code)
+{
+    int i;
+    Node *cur = head;
+    if (!head || index < 0)
+    {
+        // invalid index return
+        if (status_code)
+            *status_code = -1;
+        return 0;
+    }
+    for (i = 0; i < index; i++)
+    {
+        if (!cur && i != index)
+            break;
+        cur = cur->next;
+    }
+    if (i < index)
+    {
+        if (status_code)
+            *status_code = -1;
+        return 0;
+    }
+    if (status_code)
+        *status_code = 0;
+    return cur->data;
 }

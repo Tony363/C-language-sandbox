@@ -36,7 +36,7 @@ static GenListNode *genLisNewNode(void *data, unsigned int dataSize)
     {
         return NULL;
     }
-    node = malloc(sizeof(*node));
+    node = malloc(sizeof(GenListNode));
     if (!node)
     {
         return NULL;
@@ -65,12 +65,12 @@ static GenListError genListDestroyNode(GenListNode *node)
 GenList *genListNew(unsigned int dataSize, Compare cmp)
 {
     GenList *list = NULL;
-    list = malloc(sizeof(*list));
+    list = malloc(sizeof(GenList)); // malloc size of GenList "list" structure
     if (!list)
     {
         return NULL;
     }
-    memset(list, 0, sizeof(*list));
+    memset(list, 0, sizeof(GenList));
     list->dataSize = dataSize;
     if (cmp)
     {

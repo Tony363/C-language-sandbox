@@ -5,18 +5,18 @@
 
 GenListError compare(void *dataIn, void *dataOut)
 {
-    return *(int *)dataIn == *(int *)dataOut ? GEN_LIST_MATCH : GEN_LIST_NO_MATCH;
+    return *(char *)dataIn == *(char *)dataOut ? GEN_LIST_MATCH : GEN_LIST_NO_MATCH;
 }
 
 int main(void)
 {
     GenListError status = GEN_LIST_NO_ERR;
     GenList *list = NULL;
-    unsigned int buf[MAX_NODES] = {1, 2, 3, 4, 5};
+    char buf[MAX_NODES] = {'a', 'e', 'i', 'o', 'u'};
     unsigned int i = 0, size = 0, value = 0;
 
     printf("\nInitialize the list.");
-    list = genListNew(sizeof(int), compare);
+    list = genListNew(sizeof(char), compare);
     if (!list)
     {
         printf("\ngenListNew failed.");
@@ -25,7 +25,7 @@ int main(void)
     printf("\nPush %d nodes:", MAX_NODES);
     for (i = 0; i < MAX_NODES; i++)
     {
-        printf("\nPush value: %d.", buf[i]);
+        printf("\nPush value: %c.", buf[i]);
         status = genListPushHead(list, &buf[i]);
         if (status != GEN_LIST_NO_ERR)
         {
@@ -42,7 +42,7 @@ int main(void)
             printf("\ngenListGetIndex() error: %d", (int)status);
             return 1;
         }
-        printf("\nGot value: %d.", value);
+        printf("\nGot value: %c.", value);
     }
     status = genListGetSize(list, &size);
     if (status != GEN_LIST_NO_ERR)
@@ -53,14 +53,14 @@ int main(void)
     printf("\nPushed %d nodes.", size);
     for (i = 0; i < MAX_NODES; i++)
     {
-        printf("\nFind value: %d.", buf[i]);
+        printf("\nFind value: %c.", buf[i]);
         status = genListSearchNode(list, &buf[i], &value, sizeof(int));
         if (status != GEN_LIST_NO_ERR)
         {
             printf("\ngenListSearchNode() error: %d", (int)status);
             return 1;
         }
-        printf("\nFound value: %d.", value);
+        printf("\nFound value: %c.", value);
     }
     for (i = 0; i < MAX_NODES; i++)
     {
@@ -71,7 +71,7 @@ int main(void)
             printf("\ngenListPopHead() error: %d", (int)status);
             return 1;
         }
-        printf("\nPoped value: %d.", value);
+        printf("\nPoped value: %c.", value);
         status = genListGetSize(list, &size);
         if (status != GEN_LIST_NO_ERR)
         {

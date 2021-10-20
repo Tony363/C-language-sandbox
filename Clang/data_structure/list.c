@@ -10,11 +10,9 @@ int main(void)
     head = insert_node(head, 0, 999);
     print_list(head);
     Node *ninety = get_data(head, 999);
-    (!ninety) ? printf("element not found\n") : printf("%d\n", ninety->data);
     head = delete_node(head, 999);
     print_list(head);
     ninety = get_data(head, 999);
-    (!ninety) ? printf("element not found\n") : printf("%d\n", ninety->data);
     head = reverse_list(head);
     print_list(head);
     head = freeList(head);
