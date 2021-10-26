@@ -1,141 +1,147 @@
-// C program to convert infix expression to postfix
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-// Stack type
-struct Stack
+typedef struct _Node
 {
-    int top;
-    unsigned capacity;
-    int *array;
-};
+    int data;
+    struct _Node *next;
+} Node;
 
-// Stack Operations
-struct Stack *createStack(unsigned capacity)
+typedef struct _Stack
 {
-    struct Stack *stack = (struct Stack *)
-        malloc(sizeof(struct Stack));
+    Node *head;
+    char status_code[20];
+} Stack;
 
-    if (!stack)
+Node *createNode(int data)
+{
+    if (!data)
         return NULL;
-
-    stack->top = -1;
-    stack->capacity = capacity;
-
-    stack->array = (int *)malloc(stack->capacity *
-                                 sizeof(int));
-
-    return stack;
-}
-int isEmpty(struct Stack *stack)
-{
-    return stack->top == -1;
-}
-char peek(struct Stack *stack)
-{
-    return stack->array[stack->top];
-}
-char pop(struct Stack *stack)
-{
-    if (!isEmpty(stack))
-        return stack->array[stack->top--];
-    return '$';
-}
-void push(struct Stack *stack, char op)
-{
-    stack->array[++stack->top] = op;
+    Node *new = (Node *)malloc(sizeof(Node));
+    new->data = data;
+    new->next = NULL;
+    return new;
 }
 
-// A utility function to check if
-// the given character is operand
-int isOperand(char ch)
+void push(Stack *stack, int data)
 {
-    return (ch >= 'a' && ch <= 'z') ||
-           (ch >= 'A' && ch <= 'Z');
+    Node *new = createNode(data);
+    if (stack->head)
+        new->next = stack->head;
+    stack->head = new;
 }
 
-// A utility function to return
-// precedence of a given operator
-// Higher returned value means
-// higher precedence
-int Prec(char ch)
+int isEmpty(Node *head, Stack *stack)
 {
-    switch (ch)
+    if (!head)
     {
-    case '+':
-    case '-':
+        strcpy(stack->status_code, "Empty");
         return 1;
-
-    case '*':
-    case '/':
-        return 2;
-
-    case '^':
-        return 3;
     }
-    return -1;
+    strcpy(stack->status_code, "Not Empty");
+    return 0;
 }
 
-// The main function that
-// converts given infix expression
-// to postfix expression.
-int infixToPostfix(char *exp)
+int pop(Stack *stack)
 {
-    int i, k;
-
-    // Create a stack of capacity
-    // equal to expression size
-    struct Stack *stack = createStack(strlen(exp));
-    if (!stack) // See if stack was created successfully
+    Node *cur = stack->head;
+    if (isEmpty(stack->head, stack))
         return -1;
 
-    for (i = 0, k = -1; exp[i]; ++i)
-    {
-
-        // If the scanned character is
-        // an operand, add it to output.
-        if (isOperand(exp[i]))
-            exp[++k] = exp[i];
-
-        // If the scanned character is an
-        // ‘(‘, push it to the stack.
-        else if (exp[i] == '(')
-            push(stack, exp[i]);
-
-        // If the scanned character is an ‘)’,
-        // pop and output from the stack
-        // until an ‘(‘ is encountered.
-        else if (exp[i] == ')')
-        {
-            while (!isEmpty(stack) && peek(stack) != '(')
-                exp[++k] = pop(stack);
-            if (!isEmpty(stack) && peek(stack) != '(')
-                return -1; // invalid expression
-            else
-                pop(stack);
-        }
-        else // an operator is encountered
-        {
-            while (!isEmpty(stack) &&
-                   Prec(exp[i]) <= Prec(peek(stack)))
-                exp[++k] = pop(stack);
-            push(stack, exp[i]);
-        }
-    }
-
-    // pop all the operators from the stack
-    while (!isEmpty(stack))
-        exp[++k] = pop(stack);
-
-    exp[++k] = '\0';
-    printf("%s", exp);
+    int val = cur->data;
+    stack->head = cur->next;
+    free(cur);
+    return val;
 }
 
-// Driver program to test above functions
-int main()
+Stack *createStack(int *arr, int len)
 {
-    char exp[] = "(7-3)*(9-8)/4";
-    infixToPostfix(exp);
+    if (!arr)
+        return NULL;
+    Stack *stack = (Stack *)malloc(sizeof(Stack));
+    int i = 0;
+    while (i < len)
+    {
+        push(stack, arr[i]);
+        i++;
+    }
+    char *notEmpty = "Not Empty";
+    strcpy(stack->status_code, notEmpty);
+    return stack;
+}
+
+int getLen(Node *head)
+{
+    int i = 0;
+    while (head)
+    {
+        i++;
+        head = head->next;
+    }
+    return i;
+}
+
+int peek(Node *head)
+{
+    if (!head)
+    {
+        return 9999;
+    }
+    while (head->next)
+        head = head->next;
+    return head->data;
+}
+
+void printStack(Stack *stack)
+{
+    Node *cur = stack->head;
+    printf("[");
+    while (cur)
+    {
+        printf("%d ", cur->data);
+        cur = cur->next;
+    }
+    printf("]\n");
+}
+
+Node *freeStack(Node *head)
+{
+    Node *temp;
+    while (head->next)
+    {
+        temp = head->next;
+        free(head);
+        head = temp;
+    }
+    return NULL;
+}
+
+int main(int argc, char **argv)
+{
+    char *status_code = "";
+    int stackLen = 5;
+    int arr[] = {1, 2, 3, 4, 5};
+    Stack *stack = createStack(arr, stackLen);
+    printf("%s\n", stack->status_code);
+    printStack(stack);
+    for (int i = 0; i < stackLen; i++)
+    {
+        printf("popped %d\n", pop(stack));
+    }
+    printStack(stack);
+    // push(head, 6);
+    // push(head, 7);
+    // push(head, 8);
+    // push(head, 9);
+    // push(head, 10);
+
+    // printStack(head);
+    // stackLen = getLen(head);
+
+    // head = createStack(arr, 5);
+    // printStack(head);
+    // head = freeStack(head);
+
     return 0;
 }
