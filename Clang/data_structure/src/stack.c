@@ -71,26 +71,23 @@ Stack *createStack(int *arr, int len)
     return stack;
 }
 
-int getLen(Node *head)
+int getLen(Stack *stack)
 {
+    Node *cur = stack->head;
     int i = 0;
-    while (head)
+    while (cur)
     {
+        cur = cur->next;
         i++;
-        head = head->next;
     }
     return i;
 }
 
-int peek(Node *head)
+int peek(Stack *stack)
 {
-    if (!head)
-    {
+    if (!(stack->head))
         return 9999;
-    }
-    while (head->next)
-        head = head->next;
-    return head->data;
+    return stack->head->data;
 }
 
 void printStack(Stack *stack)
@@ -108,7 +105,7 @@ void printStack(Stack *stack)
 Node *freeStack(Node *head)
 {
     Node *temp;
-    while (head->next)
+    while (head && head->next)
     {
         temp = head->next;
         free(head);
@@ -124,12 +121,14 @@ int main(int argc, char **argv)
     int arr[] = {1, 2, 3, 4, 5};
     Stack *stack = createStack(arr, stackLen);
     printf("%s\n", stack->status_code);
+    printf("Peek: %d\n", peek(stack));
     printStack(stack);
     for (int i = 0; i < stackLen; i++)
     {
         printf("popped %d\n", pop(stack));
     }
     printStack(stack);
+    freeStack(stack->head);
     // push(head, 6);
     // push(head, 7);
     // push(head, 8);
