@@ -1,4 +1,4 @@
-#include "../includes/AdtIntList.h"
+#include "../includes/intlist.h"
 #include <stdlib.h>
 #include <stdio.h>
 

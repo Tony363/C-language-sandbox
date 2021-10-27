@@ -1,5 +1,5 @@
-#ifndef _intlist_h
-#define _intlist_h
+#ifndef ADTINTLIST_h
+#define ADTINTLIST_h
 
 typedef struct _IntList
 {

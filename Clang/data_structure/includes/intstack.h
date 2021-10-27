@@ -1,6 +1,6 @@
 #ifndef _intstack_h
 #define _intstack_h
-#include "../ADT_sample/intlist.h"
+#include "AdtIntList.h"
 
 typedef IntList IntStack;
 IntStack createStackIS(IntStack *stack, int value);

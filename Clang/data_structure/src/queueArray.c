@@ -10,6 +10,19 @@ int isEmpty(int front, int rear)
         return 0;
 }
 
+int peek(int front, int rear, int *queue, int size)
+{
+    if (isEmpty(front, rear))
+    {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    else
+    {
+        return queue[front];
+    }
+}
+
 int *enqueue(int arr[], int *front, int *rear, int maxsize, int item)
 {
     if (isEmpty((*rear + 1) % maxsize, *front))
@@ -42,6 +55,8 @@ int *dequeue(int arr[], int *front, int *rear, int *dvalue, int maxsize)
 
 void printQueue(int arr[], int front, int maxsize, int rear)
 {
+    if (arr == NULL)
+        return;
     int i;
     if (isEmpty(front, rear))
         printf("Queue is Empty\n");
@@ -61,5 +76,6 @@ int main(int argc, char **argv)
     memcpy(arr, dequeue(arr, &front, &rear, &value, size), sizeof(int) * size);
     printf("dequeued value: %d\n", value);
     printQueue(arr, front, size, rear);
+    printf("remaining value: %d\n", peek(front, rear, arr, size));
     return 0;
 }

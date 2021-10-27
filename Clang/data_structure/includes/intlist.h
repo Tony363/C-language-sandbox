@@ -1,7 +1,8 @@
-#ifndef _intlist_h
-#define _intlist_h
+#ifndef _INTLIST_h
+#define _INTLIST_h
 
-typedef struct _IntNode {
+typedef struct _IntNode
+{
     int value;
     struct _IntNode *next;
 } IntNode;
