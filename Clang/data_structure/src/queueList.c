@@ -9,7 +9,7 @@ typedef struct _QueueList
     IntNode *rear;
 } QueueList;
 
-int isEmpty(QueueList *queue)
+int QisEmpty(QueueList *queue)
 {
     return queue->front == NULL;
 }
@@ -26,7 +26,7 @@ void enqueue(QueueList *queue, int value)
 {
     IntNode *node = (IntNode *)malloc(sizeof(IntNode));
     node = createNodeIL(value);
-    if (isEmpty(queue))
+    if (QisEmpty(queue))
     {
         queue->front = node;
         queue->rear = node;
@@ -40,7 +40,7 @@ void enqueue(QueueList *queue, int value)
 
 int dequeue(QueueList *queue)
 {
-    if (isEmpty(queue))
+    if (QisEmpty(queue))
     {
         printf("Queue is empty\n");
         return -1;
@@ -65,12 +65,22 @@ void printQueue(QueueList *queue)
 
 void freeQueue(QueueList *queue)
 {
-    while (!isEmpty(queue))
+    while (!QisEmpty(queue))
     {
         printf("%d ", dequeue(queue));
     }
     free(queue);
     printf("\n%p\n", queue);
+}
+
+int peekQ(QueueList *queue)
+{
+    if (QisEmpty(queue))
+    {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    return queue->front->value;
 }
 
 int main(int argc, char **argv)
@@ -80,7 +90,7 @@ int main(int argc, char **argv)
     enqueue(queue, 2);
     enqueue(queue, 3);
     enqueue(queue, 4);
-
+    printf("Peeking: %d\n", peekQ(queue));
     printQueue(queue);
     freeQueue(queue);
     return 0;

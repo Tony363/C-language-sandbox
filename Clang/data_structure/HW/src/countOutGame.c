@@ -19,6 +19,11 @@ void printChildren(Child *first)
         printf("Children: [ ]\n");
         return;
     }
+    else if (first && first->next == NULL)
+    {
+        printf("Children: [ 0 ]\n");
+        return;
+    }
     else if (first && first->next == first)
     {
         printf("Children: [ %d ]\n", first->id);
@@ -44,6 +49,19 @@ Child *countOut(Child *first, int m)
 {
     if (first == NULL || (first != NULL && first->next == first) || m < 0)
         return first;
+    // Child *cur = first;
+    // Child *prev = NULL;
+    // Child *prevP = NULL;
+    // while (m != 0)
+    // {
+    //     prevP = prev;
+    //     prev = cur;
+    //     cur = cur->next;
+    //     m--;
+    // }
+    // prevP->next = cur;
+    // free(prev);
+    // return cur;
     if (m == 2)
     {
         Child *tmp = first->next->next;
@@ -88,8 +106,8 @@ Child *linkChildren(int nChild)
 
 int main(int argc, char **argv)
 {
-    Child *first = linkChildren(10);
-    first = countOut(first, 100);
+    Child *first = linkChildren(1);
+    first = countOut(first, 5);
     printChildren(first);
     return 0;
 }
