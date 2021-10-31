@@ -6,8 +6,6 @@ typedef struct _IntList
     void *head;
 } IntList;
 
-// NodeIL *insertNode(NodeIL *head, int value);
-// NodeIL *deleteNode(NodeIL *head, int value);
 IntList *createIntList();
 int sizeIL(IntList *list);
 int removeHeadIL(IntList *list, int *status);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct _Child
 {
@@ -17,16 +18,6 @@ void printChildren(Child *first)
     if (!first)
     {
         printf("Children: [ ]\n");
-        return;
-    }
-    else if (first && first->next == NULL)
-    {
-        printf("Children: [ 0 ]\n");
-        return;
-    }
-    else if (first && first->next == first)
-    {
-        printf("Children: [ %d ]\n", first->id);
         return;
     }
     Child *cur = first->next;
@@ -47,29 +38,54 @@ void printChildren(Child *first)
  */
 Child *countOut(Child *first, int m)
 {
-    if (first == NULL || (first != NULL && first->next == first) || m < 0)
+    if (first == NULL || (first != NULL && first->next == first))
+        return NULL;
+    else if (m == 0)
         return first;
-    // Child *cur = first;
-    // Child *prev = NULL;
-    // Child *prevP = NULL;
-    // while (m != 0)
-    // {
-    //     prevP = prev;
-    //     prev = cur;
-    //     cur = cur->next;
-    //     m--;
-    // }
-    // prevP->next = cur;
-    // free(prev);
-    // return cur;
-    if (m == 2)
+    else if (m == 1)
     {
-        Child *tmp = first->next->next;
-        free(first->next);
-        first->next = tmp;
+        Child *tmp = first;
+        while (tmp->next != first)
+            tmp = tmp->next;
+        tmp->next = first->next;
+        return first->next;
+    }
+    Child *cur = first;
+    Child *prev = NULL;
+    int length = 1;
+    while (cur->next != first)
+    {
+        if (m == length)
+        {
+            Child *tmp = cur->next;
+            prev->next = cur->next;
+            free(cur);
+            return tmp;
+        }
+        prev = cur;
+        cur = cur->next;
+        length++;
+    }
+    if (m == length && cur->next == first)
+    {
+        Child *tmp = cur->next;
+        prev->next = cur->next;
+        free(cur);
         return tmp;
     }
-    return countOut(first->next, m - 1);
+    length = (m - length) % length;
+    printf("%d\n", length);
+    printChildren(first);
+    while (length > 0)
+    {
+        prev = cur;
+        cur = cur->next;
+        length--;
+    }
+    Child *tmp = cur->next;
+    prev->next = cur->next;
+    free(cur);
+    return tmp;
 }
 
 Child *linkChildren(int nChild)
@@ -106,8 +122,8 @@ Child *linkChildren(int nChild)
 
 int main(int argc, char **argv)
 {
-    Child *first = linkChildren(1);
-    first = countOut(first, 5);
+    Child *first = linkChildren(4);
+    first = countOut(first, 100);
     printChildren(first);
     return 0;
 }
