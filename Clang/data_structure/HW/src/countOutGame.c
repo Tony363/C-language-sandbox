@@ -39,9 +39,14 @@ void printChildren(Child *first)
 Child *countOut(Child *first, int m)
 {
     if (first == NULL || (first != NULL && first->next == first))
+    {
+        free(first);
         return NULL;
+    }
     else if (m == 0)
+    {
         return first;
+    }
     else if (m == 1)
     {
         Child *tmp = first;
@@ -74,8 +79,6 @@ Child *countOut(Child *first, int m)
         return tmp;
     }
     length = (m - length) % length;
-    printf("%d\n", length);
-    printChildren(first);
     while (length > 0)
     {
         prev = cur;
