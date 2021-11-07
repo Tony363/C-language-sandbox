@@ -66,9 +66,7 @@ Queue *enqueue(Queue *q, char c)
 Queue *dequeue(Queue *q)
 {
     if (q->front == NULL)
-    {
         return NULL;
-    }
     Cnode *temp = q->front;
     q->front = q->front->next;
     free(temp);
@@ -139,16 +137,17 @@ void print(Output *list)
 
 int isOperand(char c)
 {
-    if (c == '+' || c == '-' || c == '*' || c == '/' || '(' || ')')
-        return 0;
-    return 1;
+    return !(
+        c == '+' || c == '-' ||
+        c == '*' || c == '/' ||
+        c == '(' || c == ')');
 }
 
 int isEmpty(Output *output)
 {
     if (output->type == '1')
         return (output->QorS).operandQ->front == NULL;
-    else if (output->type == '2')
+    else if (output->type == '0')
         return (output->QorS).operatorS->head == NULL;
     return 0;
 }
@@ -162,21 +161,28 @@ int checkPrecedence(char c)
     return 0;
 }
 
-void toPostfix(char *str)
+char *toPostfix(char *str)
 {
-    Output *operandQ = (Output *)malloc(sizeof(Queue));
-    operandQ->type = '1';
-    operandQ->QorS.operandQ = (Queue *)malloc(sizeof(Queue));
-    Output *operatorS = (Output *)malloc(sizeof(Stack));
+    Output *operatorS = (Output *)malloc(sizeof(Output));
     operatorS->type = '0';
     operatorS->QorS.operatorS = (Stack *)malloc(sizeof(Stack));
 
     int i = 0;
+    size_t size = 0;
     char tmp;
+    char *postfix = NULL;
     while (*(str + i) != '\0')
     {
-        if (isOperand(*(str + i)))
+        if (*(str + i) == ' ')
         {
+            i++;
+            continue;
+        }
+        else if (isOperand(*(str + i)))
+        {
+            size = i + 1;
+            postfix = (char *)realloc(postfix, size);
+            *(postfix + i) = *(str + i);
             printf("%c", *(str + i));
         }
         else if (*(str + i) == '(')
@@ -185,39 +191,100 @@ void toPostfix(char *str)
         }
         else if (*(str + i) == ')')
         {
-            while (peek(operatorS) != '(')
+            char p;
+            while (p = pop(operatorS))
             {
-                printf("%c", pop(operatorS));
+                if (p == '(')
+                    break;
+                size = i + 1;
+                postfix = (char *)realloc(postfix, size);
+                *(postfix + i) = p;
+                printf("%c", p);
             }
         }
-        else if (!isOperand(*(str + i)))
+        else
         {
-            while (peek(operatorS) != ' ' && peek(operatorS) != '(' && (checkPrecedence(*(str + i)) >= checkPrecedence(peek(operatorS))))
+            while (!isEmpty(operatorS) && peek(operatorS) != '(' && (checkPrecedence(*(str + i)) <= checkPrecedence(peek(operatorS))))
             {
-                printf("%c", pop(operatorS));
+                size = i + 1;
+                postfix = (char *)realloc(postfix, size);
+                *(postfix + i) = pop(operatorS);
+                printf("%c", *(postfix + i));
             }
             (operatorS->QorS).operatorS = push((operatorS->QorS).operatorS, *(str + i));
         }
         i++;
     }
-    // print(output->operandQ);
-    // print(output->operatorS);
+    while (!isEmpty(operatorS))
+    {
+        if (peek(operatorS) == '(' || peek(operatorS) == ')')
+            pop(operatorS);
+        size = i + 1;
+        postfix = (char *)realloc(postfix, size);
+        *(postfix + i) = pop(operatorS);
+        printf("%c", *(postfix + i));
+    }
+    size = i + 1;
+    postfix = (char *)realloc(postfix, size);
+    *(postfix + i++) = '\0';
+    return postfix;
+}
+
+char eval(Output *stack, char operator)
+{
+    int op1 = pop(stack) - '0';
+    int op2 = pop(stack) - '0';
+    int result = 0;
+    switch (operator)
+    {
+    case '+':
+        result = op1 + op2;
+        break;
+    case '-':
+        result = op2 - op1;
+        break;
+    case '*':
+        result = op1 * op2;
+        break;
+    case '/':
+        result = op2 / op1;
+        break;
+    }
+    printf("result: %d%c%d=%d\n", op1, operator, op2, result);
+    return result + '0';
+}
+
+int evaluatePostfix(char *expr)
+{
+    Output *operatorS = (Output *)malloc(sizeof(Output));
+    operatorS->type = '0';
+    operatorS->QorS.operatorS = (Stack *)malloc(sizeof(Stack));
+
+    int i = 0;
+    while (*(expr + i) != '\0')
+    {
+        if (isOperand(*(expr + i)))
+        {
+            printf("pushing: %c\n", *(expr + i));
+            operatorS->QorS.operatorS = push(operatorS->QorS.operatorS, *(expr + i));
+        }
+        else
+        {
+            char result = eval(operatorS, *(expr + i));
+            printf("pushing: %c\n", result);
+            operatorS->QorS.operatorS = push(operatorS->QorS.operatorS, result);
+        }
+        i++;
+    }
+    return pop(operatorS) - '0';
 }
 
 int main(int argc, char **argv)
 {
-    char *str = "1 + 2";
-    // Queue *q = toQueue(str);
-    // print(q);
-    toPostfix(str);
-    // Output *output = (Output *)malloc(sizeof(Output));
-    // output->operandQ = (Queue *)malloc(sizeof(Queue));
-    // output->operatorS = (Stack *)malloc(sizeof(Stack));
-    // output->operatorS = push(output->operatorS, '(');
-    // output->operatorS = push(output->operatorS, '1');
-    // output->operatorS = push(output->operatorS, '+');
-    // output->operatorS = push(output->operatorS, '1');
-    // output->operatorS = push(output->operatorS, ')');
-    // print(output->operatorS);
+    char *str = "(7 - 3) * (9 - 8) / 4";
+    char *postfix = toPostfix(str);
+    // printf("%c\n", *(postfix + 0));
+    char *expr = "73-98-*4/";
+    printf("%d\n", evaluatePostfix(expr));
     return 0;
 }

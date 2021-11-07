@@ -1,0 +1,11 @@
+Currently logging to "gdb.txt".
+Logs will be appended to the log file.
+Output will be logged and displayed.
+Breakpoint 1 at 0x16b5: file inPostfix.c, line 194.
+Breakpoint 2 at 0x16fc: file inPostfix.c, line 203.
+Starting program: /home/pysolver33/Desktop/my_repos/C-language-sandbox/Clang/data_structure/infixPostfix/inPostfix 
+
+Breakpoint 2, toPostfix (str=0x555555556004 "A / (B + C) - D") at inPostfix.c:203
+$1 = 47 '/'
+$2 = 32 ' '
+$3 = 32 ' '
