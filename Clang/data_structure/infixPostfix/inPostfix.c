@@ -160,17 +160,23 @@ int checkPrecedence(char c)
         return 2;
     return 0;
 }
-
-char *toPostfix(char *str)
+/*
+write string to  bin file then read from bin, side byte size,convert to string, eval
+output is queue
+1*2+3
+*/
+Output *toPostfix(char *str)
 {
     Output *operatorS = (Output *)malloc(sizeof(Output));
     operatorS->type = '0';
     operatorS->QorS.operatorS = (Stack *)malloc(sizeof(Stack));
+    Output *operandQ = (Output *)malloc(sizeof(Output));
+    operandQ->type = '1';
+    operandQ->QorS.operandQ = (Queue *)malloc(sizeof(Queue));
 
     int i = 0;
     size_t size = 0;
-    char tmp;
-    char *postfix = NULL;
+    char p;
     while (*(str + i) != '\0')
     {
         if (*(str + i) == ' ')
@@ -180,9 +186,7 @@ char *toPostfix(char *str)
         }
         else if (isOperand(*(str + i)))
         {
-            size = i + 1;
-            postfix = (char *)realloc(postfix, size);
-            *(postfix + i) = *(str + i);
+            (operandQ->QorS).operandQ = enqueue(operandQ->QorS.operandQ, *(str + i));
             printf("%c", *(str + i));
         }
         else if (*(str + i) == '(')
@@ -191,14 +195,12 @@ char *toPostfix(char *str)
         }
         else if (*(str + i) == ')')
         {
-            char p;
+
             while (p = pop(operatorS))
             {
                 if (p == '(')
                     break;
-                size = i + 1;
-                postfix = (char *)realloc(postfix, size);
-                *(postfix + i) = p;
+                (operandQ->QorS).operandQ = enqueue(operandQ->QorS.operandQ, p);
                 printf("%c", p);
             }
         }
@@ -206,10 +208,9 @@ char *toPostfix(char *str)
         {
             while (!isEmpty(operatorS) && peek(operatorS) != '(' && (checkPrecedence(*(str + i)) <= checkPrecedence(peek(operatorS))))
             {
-                size = i + 1;
-                postfix = (char *)realloc(postfix, size);
-                *(postfix + i) = pop(operatorS);
-                printf("%c", *(postfix + i));
+                p = pop(operatorS);
+                (operandQ->QorS).operandQ = enqueue(operandQ->QorS.operandQ, p);
+                printf("%c", p);
             }
             (operatorS->QorS).operatorS = push((operatorS->QorS).operatorS, *(str + i));
         }
@@ -219,15 +220,11 @@ char *toPostfix(char *str)
     {
         if (peek(operatorS) == '(' || peek(operatorS) == ')')
             pop(operatorS);
-        size = i + 1;
-        postfix = (char *)realloc(postfix, size);
-        *(postfix + i) = pop(operatorS);
-        printf("%c", *(postfix + i));
+        p = pop(operatorS);
+        (operandQ->QorS).operandQ = enqueue(operandQ->QorS.operandQ, p);
+        printf("%c", p);
     }
-    size = i + 1;
-    postfix = (char *)realloc(postfix, size);
-    *(postfix + i++) = '\0';
-    return postfix;
+    return operandQ;
 }
 
 char eval(Output *stack, char operator)
@@ -254,37 +251,40 @@ char eval(Output *stack, char operator)
     return result + '0';
 }
 
-int evaluatePostfix(char *expr)
+char evaluatePostfix(Output *expr)
 {
     Output *operatorS = (Output *)malloc(sizeof(Output));
     operatorS->type = '0';
     operatorS->QorS.operatorS = (Stack *)malloc(sizeof(Stack));
 
     int i = 0;
-    while (*(expr + i) != '\0')
+    while ((expr->QorS).operandQ)
     {
-        if (isOperand(*(expr + i)))
+        if (isOperand(peek(expr)))
         {
-            printf("pushing: %c\n", *(expr + i));
-            operatorS->QorS.operatorS = push(operatorS->QorS.operatorS, *(expr + i));
+            printf("pushing: %c\n", peek(expr));
+            operatorS->QorS.operatorS = push(operatorS->QorS.operatorS, peek(expr));
         }
         else
         {
-            char result = eval(operatorS, *(expr + i));
+            char result = eval(operatorS, peek(expr));
             printf("pushing: %c\n", result);
             operatorS->QorS.operatorS = push(operatorS->QorS.operatorS, result);
         }
-        i++;
+        (expr->QorS).operandQ = dequeue((expr->QorS).operandQ);
     }
-    return pop(operatorS) - '0';
+    pop(operatorS);
+
+    return pop(operatorS);
 }
 
 int main(int argc, char **argv)
 {
     char *str = "(7 - 3) * (9 - 8) / 4";
-    char *postfix = toPostfix(str);
-    // printf("%c\n", *(postfix + 0));
+    Output *postfix = toPostfix(str);
+    printf("\n");
+    print(postfix);
     char *expr = "73-98-*4/";
-    printf("%d\n", evaluatePostfix(expr));
+    printf("%c\n", evaluatePostfix(postfix));
     return 0;
 }
