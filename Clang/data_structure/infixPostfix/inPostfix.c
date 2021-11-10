@@ -129,10 +129,10 @@ void print(Output *list)
         temp = (list->QorS).operatorS->head;
     while (temp != NULL)
     {
-        printf("%c", temp->c);
+        printf("PRINT: %c\n", temp->c);
         temp = temp->next;
     }
-    printf("\n");
+    printf("\n\n");
 }
 
 int isOperand(char c)
@@ -258,8 +258,9 @@ char evaluatePostfix(Output *expr)
     operatorS->QorS.operatorS = (Stack *)malloc(sizeof(Stack));
 
     int i = 0;
-    while ((expr->QorS).operandQ)
+    while (!isEmpty(expr))
     {
+        // printf("%c\n", (expr->QorS).operandQ->front->c);
         if (isOperand(peek(expr)))
         {
             printf("pushing: %c\n", peek(expr));
@@ -273,7 +274,6 @@ char evaluatePostfix(Output *expr)
         }
         (expr->QorS).operandQ = dequeue((expr->QorS).operandQ);
     }
-    pop(operatorS);
 
     return pop(operatorS);
 }

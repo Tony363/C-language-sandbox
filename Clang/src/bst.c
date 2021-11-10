@@ -47,59 +47,79 @@ int isInBST(TreeNodePtr root, double key)
 void printRoot(TreeNodePtr T)
 {
 	// if node itself is empty, end the procedure.
-	if(T==NULL) return;
+	if (T == NULL)
+		return;
 	// then print itself
-	else printf("%lf::", T->key);
+	else
+		printf("%lf::", T->key);
 	// print the left with recursive call
 	printRoot(T->left);
 	// print the right with recursive call
 	printRoot(T->right);
 }
 
-TreeNodePtr tranverseTree(TreeNodePtr T,TreeNodePtr prev,double key){
-	TreeNodePtr tmp=NULL;
-	if (T == NULL){
+TreeNodePtr tranverseTree(TreeNodePtr T, TreeNodePtr prev, double key)
+{
+	TreeNodePtr tmp = NULL;
+	if (T == NULL)
+	{
 		return T;
-	} else if (key < T->key){
+	}
+	else if (key < T->key)
+	{
 		prev = T;
 		tmp = T->left;
-		return tranverseTree(tmp,prev,key);
-	} else if (key > T->key){
+		return tranverseTree(tmp, prev, key);
+	}
+	else if (key > T->key)
+	{
 		prev = T;
 		tmp = T->right;
-		return tranverseTree(tmp,prev,key);
-	} else if (key == T->key) {
-		if (prev == NULL){
+		return tranverseTree(tmp, prev, key);
+	}
+	else if (key == T->key)
+	{
+		if (prev == NULL)
+		{
 			printf("invalid input\n");
 			exit(0);
 		}
-		if (prev->right != NULL){
-			if (T->right == NULL && T-> right == NULL){
+		if (prev->right != NULL)
+		{
+			if (T->right == NULL && T->right == NULL)
+			{
 				prev->right = NULL;
 			}
-			if (T->right != NULL){
+			if (T->right != NULL)
+			{
 				prev->right = T->right;
-			}   
-			if (T->left != NULL){
+			}
+			if (T->left != NULL)
+			{
 				prev->left = T->left;
 			}
-		} else if (prev->left != NULL ){
-			if (T->left == NULL && T-> right == NULL){
+		}
+		else if (prev->left != NULL)
+		{
+			if (T->left == NULL && T->right == NULL)
+			{
 				prev->left = NULL;
 			}
-			if (T->left != NULL){
+			if (T->left != NULL)
+			{
 				prev->left = T->left;
 			}
-			if (T->right != NULL){
+			if (T->right != NULL)
+			{
 				prev->right = T->right;
 			}
-		} 
+		}
 	}
 }
-TreeNodePtr deleteRoot(TreeNodePtr root,double key)
+TreeNodePtr deleteRoot(TreeNodePtr root, double key)
 {
-	TreeNodePtr prev=NULL;
-	tranverseTree(root,prev,key);
+	TreeNodePtr prev = NULL;
+	tranverseTree(root, prev, key);
 }
 
 // Allow a null pointer here.
@@ -162,7 +182,7 @@ TreeNodePtr addToBST(TreeNodePtr root, double key)
 // 	{
 // 		printf("Not Found \n");
 // 	}
-	
+
 // 	printf("Before:\n");
 // 	printRoot(root);
 // 	printf("\n");
