@@ -1,12 +1,72 @@
-#include <stdio.h>
+#include "intqueuea.h"
 #include <stdlib.h>
-#include "../includes/intqueuea.h"
 
-IntQueueA *createIntQueueA(int size);
-void freeIntQueueA(IntQueueA *queue);
-void enqueueIQA(IntQueueA *queue, int value, int *status)
+IntQueueA *createIntQueueA(int size) {
+    IntQueueA *q = (IntQueueA*)malloc(sizeof(IntQueueA));
+    q->head = -1;
+    q->tail = -1;
+    q->queueSize = size;
+    q->queueAry = (int*)malloc(sizeof(int)*size);
+    return q;
+}
 
-    int dequeueIQA(IntQueueA *queue, int *status);
-int peekIQA(IntQueueA *queue, int *status);
-int isEmptyIQA(IntQueueA *queue);
-int isFullIQA(IntQueueA *queue);
+void freeIntQueueA(IntQueueA *queue) {
+    free(queue->queueAry);
+    free(queue);
+}
+
+void enqueueIQA(IntQueueA *queue, int value, int *status) {
+    if (isFullIQA(queue)) {
+        if (status) { *status = -1; }
+        return;
+    }
+
+    if (isEmptyIQA(queue)) {
+        queue->head = queue->tail = 0;
+    } else {
+        queue->tail = (queue->tail+1)%queue->queueSize;
+    }
+    queue->queueAry[queue->tail] = value;
+    if (status) { *status = 0; }
+}
+
+int dequeueIQA(IntQueueA *queue, int *status) {
+    int value;
+
+    if (isEmptyIQA(queue)) {
+        if (status) { *status = -2; }
+        return 0;
+    }
+
+    value = queue->queueAry[queue->head];
+    if (queue->head==queue->tail) {
+        queue->head = queue->tail = -1;
+    } else {
+        queue->head = (queue->head+1)%queue->queueSize;
+    }
+
+    if (status) { *status = 0; }
+    return value;
+}
+
+int peekIQA(IntQueueA *queue, int *status) {
+    int value;
+
+    if (isEmptyIQA(queue)) {
+        if (status) { *status = -2; }
+        return 0;
+    }
+
+    value = queue->queueAry[queue->head];
+
+    if (status) { *status = 0; }
+    return value;
+}
+
+int isEmptyIQA(IntQueueA *queue) {
+    return queue->head==-1;
+}
+
+int isFullIQA(IntQueueA *queue) {
+    return (queue->tail+1)%queue->queueSize == queue->head;
+}
