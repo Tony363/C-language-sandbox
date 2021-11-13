@@ -17,5 +17,4 @@ TreeNodePtr createNode(int input);
 void preOrder(TreeNodePtr root, visit_func visit);
 void inOrder(TreeNodePtr root, visit_func visit);
 void postOrder(TreeNodePtr root, visit_func visit);
-void printTree(TreeNodePtr root, visit_func visit);
 #endif
