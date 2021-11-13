@@ -1,12 +1,11 @@
 #ifndef BST_H
 #define BST_H
 #include <stdio.h>
-
 #define NodeData char *
 
 typedef struct _TreeNode
 {
-    char *data;
+    NodeData data;
     struct _TreeNode *left, *right;
 } TreeNode, *TreeNodePtr;
 

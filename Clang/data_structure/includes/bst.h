@@ -1,9 +1,7 @@
 #ifndef BST_H
 #define BST_H
 #include <stdio.h>
-
 #define NodeData int
-
 typedef struct _TreeNode
 {
     NodeData data;

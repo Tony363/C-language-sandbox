@@ -3,15 +3,15 @@
 #include <string.h>
 #include "../includes/bstS.h"
 
+#define NodeData char *
+
 TreeNodePtr createNode(char *input)
 {
-    char *data = (char *)malloc(sizeof(char) * strlen(input));
     TreeNode *new = (TreeNode *)malloc(sizeof(TreeNode));
-    data = input;
-    new->data = data;
+    new->data = (char *)malloc(sizeof(char) * strlen(input) + 1);
+    strcpy(new->data, input);
     new->left = NULL;
     new->right = NULL;
-    printf("%s\n", new->data);
     return new;
 };
 
@@ -20,7 +20,6 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
     if (!root)
     {
         root = new;
-        printf("%s\n", root->data);
         return root;
     }
     if (strcmp(new->data, root->data) > 0)
@@ -32,18 +31,18 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
 
 TreeNode *buildTree(FILE *in)
 {
-    char str[4];
-    char *input = (char *)malloc(sizeof(char) * 4);
+    char input[4];
     TreeNode *root = NULL, *new = NULL;
-    if (fgets(str, 4, in))
+    if (fgets(input, 4, in))
     {
-        input = str;
+        input[strcspn(input, "\n")] = 0;
         root = createNode(input);
     }
 
-    while (fgets(str, 4, in))
+    while (fgets(input, 4, in))
     {
-        input = str;
+        input[strcspn(input, "\n")] = 0;
+        printf("%s\n", input);
         new = createNode(input);
         root = traverseTree(root, new);
     }
