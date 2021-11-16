@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../includes/bst.h"
+#define NodeData int
 
 TreeNodePtr createNode(int input)
 {
