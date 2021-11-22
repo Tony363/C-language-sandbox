@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     printf("%d\n", (five) ? five->data : 9999);
     head = insertNode(head, 999);
     print_double_list(head);
-    removeDouble(head, 999);
+    head = removeDouble(head, 0);
     print_double_list(head);
     head = freeCircular(head);
     print_double_list(head);

@@ -78,8 +78,23 @@ Node *GetCircular(Node *head, int data)
     return NULL;
 }
 
-void removeDouble(Node *head, int val)
+// need to counter for last node and first node
+Node *removeDouble(Node *head, int val)
 {
+    if (!head || !head->next)
+    {
+        return NULL;
+    }
+    else if (head->data == val)
+    {
+        Node *temp = head;
+        // printf("wtf: %d\n", head->data);
+        head = head->next;
+        head->prev = NULL;
+        // printf("wtf: %d\n", head->data);
+        free(temp);
+        return head;
+    }
     Node *temp = head;
     int next = 0, prev = 0;
     if (temp->next)
@@ -100,11 +115,12 @@ void removeDouble(Node *head, int val)
             }
             free(temp);
         }
-        if (next == 1)
+        if (next == 1) // going backwards or forwards
             temp = temp->next;
         else
             temp = temp->prev;
     }
+    return head;
 }
 
 void print_double_list(Node *head)

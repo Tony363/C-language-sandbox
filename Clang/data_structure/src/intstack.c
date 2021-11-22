@@ -1,4 +1,5 @@
 #include "../includes/intstack.h"
+#include "../includes/AdtIntList.h"
 
 IntStack *createIntStackIS()
 {

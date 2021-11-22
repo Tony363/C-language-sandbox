@@ -1,4 +1,4 @@
-#include "intlist.h"
+#include "includes/intstack.h"
 
 int main(int argc, char **argv)
 {

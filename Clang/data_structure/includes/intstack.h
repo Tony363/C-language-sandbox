@@ -3,8 +3,9 @@
 #include "AdtIntList.h"
 
 typedef IntList IntStack;
-IntStack createStackIS(IntStack *stack, int value);
+IntStack *createIntStackIS();
 int popIS(IntStack *stack, int *status);
 int peekIS(IntStack *stack, int *status);
 int isEmptyIS(IntStack *stack);
+void pushIS(IntStack *stack, int value);
 #endif

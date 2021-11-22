@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+void print(int *arr)
+{
+    printf("%d\n", sizeof(arr) / sizeof(arr[0]) - 1);
+}
+
 int main(int argc, char **argv)
 {
-    char *sample = "wtf, hello 12345";
-    char *str1, *str2;
-    int digits;
-    fscanf(sample, "%s", &str1);
-    fscanf(sample, "%s", &str2);
-    fscanf(sample, "%d", &digits);
+    int array[] = {1, 2, 3};
+    print(array);
     return 0;
 }

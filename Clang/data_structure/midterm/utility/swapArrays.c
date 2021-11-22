@@ -30,13 +30,14 @@ void swapDataBlocks(void *a1, void *a2, int elemSize, int elemCount, fp swapFunc
     for (i = 0; i < elemCount; i++)
     {
         swapFunc(a1, a2);
-        a1 += elemSize;
+        a1 += elemSize; // increment by N bytes because a1,a2 arrays taken as void * for pointer arithmetic
         a2 += elemSize;
         // a1 = (char *)a1 + elemSize;
         // a2 = (char *)a2 + elemSize;
     }
 }
 
+// utilizes memcpy to copy data from one array to another
 void swapDataBlocksCOPILOT(void *a, void *b, size_t size)
 {
     char *temp = (char *)malloc(size);

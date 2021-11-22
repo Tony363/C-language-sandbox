@@ -43,7 +43,7 @@ Child *countOut(Child *first, int m)
         free(first);
         return NULL;
     }
-    else if (m == 0)
+    else if (m < 1)
     {
         return first;
     }
@@ -102,8 +102,7 @@ Child *linkChildren(int nChild)
         first->next = first;
         return first;
     }
-    Child *first = NULL;
-    Child *last = NULL;
+    Child *first = NULL, *last = NULL;
     for (int i = 0; i < nChild; i++)
     {
         Child *newChild = (Child *)malloc(sizeof(Child));

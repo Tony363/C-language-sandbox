@@ -9,7 +9,13 @@ typedef struct _Frac
     char *frac;
 } Frac;
 
-int iterate_unsafe(Frac *array);
+int iterate_unsafe(Frac *array)
+{
+    int i = 0;
+    while ((array + i)->frac != NULL)
+        i++;
+    return i;
+}
 
 double readFraction(const char *str)
 {
@@ -27,19 +33,20 @@ Frac *readFractionFile(FILE *in)
     }
     char str[30];
     double val = 0;
-    Frac *fractions = (Frac *)malloc(30 * sizeof(Frac));
     int count = 0;
+    Frac *fractions = (Frac *)malloc(30 * sizeof(Frac));
     while (fgets(str, 30, in) != NULL)
     {
         str[strcspn(str, "\n")] = 0;
-        char *temp = (char *)malloc(30 * sizeof(char));
-        strcpy(temp, str);
-        Frac new_frac = {.frac_val = readFraction(str), .frac = temp};
+        Frac new_frac;
+        new_frac.frac = (char *)malloc(sizeof(char) * 30);
+        strcpy(new_frac.frac, str);
+        new_frac.frac_val = readFraction(str);
 
         *(fractions + count) = new_frac;
         count++;
     }
-    Frac new_frac = {.frac_val = 0, .frac = NULL};
+    Frac new_frac = {.frac_val = 0, .frac = NULL}; // set fraction array null equivalent terminator
     *(fractions + count) = new_frac;
     return fractions;
 }
@@ -48,17 +55,9 @@ void writeFile(FILE *out, Frac *arr)
 {
     for (int i = 0; (arr + i)->frac != NULL; i++)
     {
-        printf("%lf\n", (arr + i)->frac_val);
+        printf("fraction: %s\nvalue: %lf\n", (arr + i)->frac, (arr + i)->frac_val);
         fprintf(out, "%s\n", (arr + i)->frac);
     }
-}
-
-int iterate_unsafe(Frac *array)
-{
-    int i = 0;
-    while ((array + i)->frac != NULL)
-        i++;
-    return i;
 }
 
 // the compare function for double values

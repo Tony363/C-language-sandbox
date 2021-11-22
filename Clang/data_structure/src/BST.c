@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../includes/bst.h"
-#define NodeData int
+// #define NodeData int
 
-TreeNodePtr createNode(int input)
+TreeNode *createNode(int input)
 {
     TreeNode *new = (TreeNode *)malloc(sizeof(TreeNode));
     new->data = input;
@@ -27,6 +27,17 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
     return root;
 }
 
+TreeNode *insertNode(TreeNode *root, int inD)
+{
+    if (!root)
+    {
+        return NULL;
+    }
+    TreeNode *new = createNode(inD);
+    root = traverseTree(root, new);
+    return root;
+}
+
 TreeNode *buildTree(FILE *in)
 {
     char str[4];
@@ -41,11 +52,22 @@ TreeNode *buildTree(FILE *in)
     while (fgets(str, 4, in))
     {
         inD = atoi(str);
-        new = createNode(inD);
-        root = traverseTree(root, new);
+        root = insertNode(root, inD);
     }
     return root;
 };
+
+int searchNode(TreeNode *root, int val)
+{
+    if (!root)
+        return 0;
+    if (root->data == val)
+        return 1;
+    if (val > root->data)
+        return searchNode(root->right, val);
+    else
+        return searchNode(root->left, val);
+}
 
 void preOrder(TreeNodePtr root, visit_func visit)
 {
@@ -87,6 +109,10 @@ int main(int argc, char **argv)
     TreeNodePtr root = NULL;
     if (in)
         root = buildTree(in);
+    root = insertNode(root, 10);
+    root = insertNode(root, 9);
+    root = insertNode(root, 11);
+    printf("%s\n\n", searchNode(root, 99) ? "Found" : "Not Found");
     printf("preOrder printing\n");
     preOrder(root, iVisit);
     printf("\n");

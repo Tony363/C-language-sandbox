@@ -10,8 +10,9 @@ typedef struct _TreeNode
 
 typedef void (*visit_func)(TreeNodePtr node);
 
-TreeNodePtr buildTree(FILE *in);
-TreeNodePtr createNode(int input);
+TreeNode *buildTree(FILE *in);
+TreeNode *createNode(int input);
+TreeNode *insertNode(TreeNode *root, int inD);
 void preOrder(TreeNodePtr root, visit_func visit);
 void inOrder(TreeNodePtr root, visit_func visit);
 void postOrder(TreeNodePtr root, visit_func visit);

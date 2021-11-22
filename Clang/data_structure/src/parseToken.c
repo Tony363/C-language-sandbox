@@ -2,6 +2,8 @@
 #include <string.h>
 #include <ctype.h>
 #include "../includes/intstack.h"
+#include "../includes/AdtIntList.h"
+#include "../includes/intlist.h"
 
 typedef void (*token_handler)(const char *token);
 
@@ -35,7 +37,7 @@ IntStack *s;
 
 void infix_handler(const char *token)
 {
-    s = createIntStack();
+    s = createIntStackIS();
     if (isdigit(token[0]))
     {
         printf("%s ", token);
@@ -54,7 +56,7 @@ void infix_handler(const char *token)
     }
     else if (token[0] == '+' || token[0] == '-')
     {
-        while (!isEmpty(s) && peekIS(s, NULL) != ')')
+        while (!isEmptyIS(s) && peekIS(s, NULL) != ')')
         {
             printf("%c ", (char)(popIS(s, NULL)));
         }
@@ -62,7 +64,7 @@ void infix_handler(const char *token)
     }
     else
     {
-        while (!isEmpty(s) && peekIS(s, NULL) != '(')
+        while (!isEmptyIS(s) && peekIS(s, NULL) != '(')
         {
             printf("%c ", (char)(popIS(s, NULL)));
         }
@@ -87,7 +89,7 @@ int main(int argc, char **argv)
     // parseString(line, handler1);
     // printf("\n\n");
     // parseString(line, handler2);
-    s = createIntStack();
+    s = createIntStackIS();
     parseString(line, infix_handler);
     while (!isEmptyIS(s))
     {
@@ -97,3 +99,5 @@ int main(int argc, char **argv)
     return 0;
 }
 // gcc -o infix ../adt/instack.o ../adt/intlist.o parse_infix.o
+// TODO
+// figure why no compile
