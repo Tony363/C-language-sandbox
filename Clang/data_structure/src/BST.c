@@ -69,6 +69,51 @@ int searchNode(TreeNode *root, int val)
         return searchNode(root->left, val);
 }
 
+void deleteNode(TreeNode *root, int val)
+{
+    if (!root)
+        return;
+    if (root->data == val)
+    {
+        if (root->left && root->right)
+        {
+            TreeNode *temp = root->right;
+            while (temp->left)
+            {
+                temp = temp->left;
+            }
+            root->data = temp->data;
+            deleteNode(root->right, temp->data);
+        }
+        else if (root->left)
+        {
+            TreeNode *temp = root->left;
+            root->data = temp->data;
+            root->left = temp->left;
+            root->right = temp->right;
+        }
+        else if (root->right)
+        {
+            TreeNode *temp = root->right;
+            root->data = temp->data;
+            root->left = temp->left;
+            root->right = temp->right;
+        }
+        else
+        {
+            root = NULL;
+        }
+    }
+    else if (val > root->data)
+    {
+        deleteNode(root->right, val);
+    }
+    else
+    {
+        deleteNode(root->left, val);
+    }
+}
+
 void preOrder(TreeNodePtr root, visit_func visit)
 {
     if (!root)
@@ -112,7 +157,10 @@ int main(int argc, char **argv)
     root = insertNode(root, 10);
     root = insertNode(root, 9);
     root = insertNode(root, 11);
-    printf("%s\n\n", searchNode(root, 99) ? "Found" : "Not Found");
+    printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
+    deleteNode(root, 10);
+    printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
+
     printf("preOrder printing\n");
     preOrder(root, iVisit);
     printf("\n");
@@ -125,3 +173,5 @@ int main(int argc, char **argv)
     fclose(in);
     return 0;
 }
+// TODO: print bst like tree
+// https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
