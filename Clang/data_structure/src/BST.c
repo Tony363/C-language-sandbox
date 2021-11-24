@@ -22,13 +22,16 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
         root = new;
         return root;
     }
-    if (new->data > root->data)
+    if (new->data == root->data)
+        printf("Duplicate value found\n");
+    else if (new->data > root->data)
         root->right = traverseTree(root->right, new);
     else if (new->data < root->data)
         root->left = traverseTree(root->left, new);
     return root;
 }
 
+// case for empty
 TreeNode *insertNode(TreeNode *root, int inD)
 {
     if (!root)
@@ -65,50 +68,106 @@ int searchNode(TreeNode *root, int val)
         return searchNode(root->left, val);
 }
 
-void deleteNode(TreeNode *root, int val)
+void freeNode(TreeNode *root)
 {
     if (!root)
         return;
-    if (root->data == val)
-    {
-        if (root->left && root->right)
-        {
-            TreeNode *temp = root->right;
-            while (temp->left)
-            {
-                temp = temp->left;
-            }
-            root->data = temp->data;
-            deleteNode(root->right, temp->data);
-        }
-        else if (root->left)
-        {
-            TreeNode *temp = root->left;
-            root->data = temp->data;
-            root->left = temp->left;
-            root->right = temp->right;
-        }
-        else if (root->right)
-        {
-            TreeNode *temp = root->right;
-            root->data = temp->data;
-            root->left = temp->left;
-            root->right = temp->right;
-        }
-        else
-        {
-            root = NULL;
-        }
-    }
-    else if (val > root->data)
-    {
-        deleteNode(root->right, val);
-    }
+    freeNode(root->left);
+    freeNode(root->right);
+    free(root);
+}
+
+/* Given a non-empty binary search
+   tree, return the node
+   with minimum key value found in
+   that tree. Note that the
+   entire tree does not need to be searched. */
+TreeNode *minValueNode(TreeNode *node)
+{
+    TreeNode *current = node;
+
+    /* loop down to find the leftmost leaf */
+    while (current && current->left != NULL)
+        current = current->left;
+
+    return current;
+}
+
+TreeNode *deleteNode(TreeNode *root, int key)
+{
+    // base case
+    if (root == NULL)
+        return root;
+
+    // If the key to be deleted
+    // is smaller than the root's
+    // key, then it lies in left subtree
+    if (key < root->data)
+        root->left = deleteNode(root->left, key);
+
+    // If the key to be deleted
+    // is greater than the root's
+    // key, then it lies in right subtree
+    else if (key > root->data)
+        root->right = deleteNode(root->right, key);
+
+    // if key is same as root's key,
+    // then This is the node
+    // to be deleted
     else
     {
-        deleteNode(root->left, val);
+        // node with only one child or no child
+        if (root->left == NULL)
+        {
+            TreeNode *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            TreeNode *temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // node with two children:
+        // Get the inorder successor
+        // (smallest in the right subtree)
+        TreeNode *temp = minValueNode(root->right);
+
+        // Copy the inorder
+        // successor's content to this node
+        root->data = temp->data;
+
+        // Delete the inorder successor
+        root->right = deleteNode(root->right, temp->data);
     }
+    return root;
 }
+// void deleteNode(TreeNode *root, int val)
+// {
+//     if (!root)
+//         return;
+//     if (root->data == val)
+//     {
+//         if (root->left && !root->right)
+//         {
+
+//         }
+//         else if (root->right && !root->left)
+//         {
+
+//         }
+//         else if (root->left && root->right)
+//         {
+
+//         }
+//     }
+//     if (val > root->data)
+//         deleteNode(root->right, val);
+//     else
+//         deleteNode(root->left, val);
+// }
 
 void preOrder(TreeNodePtr root, visit_func visit)
 {
@@ -189,7 +248,9 @@ int main(int argc, char **argv)
     root = insertNode(root, 9);
     root = insertNode(root, 11);
     printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
-    deleteNode(root, 10);
+    root = deleteNode(root, 3);
+    root = deleteNode(root, 11);
+    root = deleteNode(root, 9);
     printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
 
     preOut = fopen("../Texts/preOrder.txt", "w");
@@ -212,5 +273,3 @@ int main(int argc, char **argv)
     fclose(inOut);
     return 0;
 }
-// TODO: print bst like tree
-// https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
