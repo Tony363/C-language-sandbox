@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../includes/bst.h"
-// #define NodeData int
+#define COUNT 5
+
+FILE *preOut, *inOut, *postOut;
 
 TreeNode *createNode(int input)
 {
@@ -30,9 +32,7 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
 TreeNode *insertNode(TreeNode *root, int inD)
 {
     if (!root)
-    {
         return NULL;
-    }
     TreeNode *new = createNode(inD);
     root = traverseTree(root, new);
     return root;
@@ -40,20 +40,16 @@ TreeNode *insertNode(TreeNode *root, int inD)
 
 TreeNode *buildTree(FILE *in)
 {
-    char str[4];
-    int inD;
-    TreeNode *root = NULL, *new = NULL;
-    if (fgets(str, 4, in))
-    {
-        inD = atoi(str);
-        root = createNode(inD);
-    }
-
-    while (fgets(str, 4, in))
-    {
-        inD = atoi(str);
-        root = insertNode(root, inD);
-    }
+    if (!in)
+        return NULL;
+    char c;
+    TreeNode *root = NULL;
+    if (c = fgetc(in))
+        root = createNode(c - '0');
+    else
+        return NULL;
+    while ((c = fgetc(in)) != EOF)
+        root = insertNode(root, c - '0');
     return root;
 };
 
@@ -118,7 +114,7 @@ void preOrder(TreeNodePtr root, visit_func visit)
 {
     if (!root)
         return;
-    visit(root);
+    visit(root, '0');
     preOrder(root->left, visit);
     preOrder(root->right, visit);
 };
@@ -128,7 +124,7 @@ void inOrder(TreeNodePtr root, visit_func visit)
     if (!root)
         return;
     inOrder(root->left, visit);
-    visit(root);
+    visit(root, '1');
     inOrder(root->right, visit);
 };
 
@@ -138,28 +134,67 @@ void postOrder(TreeNodePtr root, visit_func visit)
         return;
     postOrder(root->left, visit);
     postOrder(root->right, visit);
-    visit(root);
+    visit(root, '2');
 };
 
-void iVisit(TreeNode *root)
+void iVisit(TreeNode *root, char type)
 {
     printf("Root: %d\n", root->data);
-    if (root->left && root->right)
-        printf("[%d, %d]\n", root->left->data, root->right->data);
+    if (type == '0')
+        fprintf(preOut, "%d", root->data);
+    else if (type == '1')
+        fprintf(inOut, "%d", root->data);
+    else
+        fprintf(postOut, "%d", root->data);
+}
+
+// Function to print binary tree in 2D
+// It does reverse inorder traversal
+void print2DUtil(TreeNode *root, int space)
+{
+    // Base case
+    if (root == NULL)
+        return;
+
+    // Increase distance between levels
+    space += COUNT;
+
+    // Process right child first
+    print2DUtil(root->right, space);
+
+    // Print current node after space
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->data);
+
+    // Process left child
+    print2DUtil(root->left, space);
+}
+
+// Wrapper over print2DUtil()
+void print2D(TreeNode *root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
 }
 
 int main(int argc, char **argv)
 {
     FILE *in = fopen("../Texts/bst.txt", "r");
     TreeNodePtr root = NULL;
-    if (in)
-        root = buildTree(in);
+    root = buildTree(in);
     root = insertNode(root, 10);
     root = insertNode(root, 9);
     root = insertNode(root, 11);
     printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
     deleteNode(root, 10);
     printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
+
+    preOut = fopen("../Texts/preOrder.txt", "w");
+    inOut = fopen("../Texts/inOrder.txt", "w");
+    postOut = fopen("../Texts/postOrder.txt", "w");
 
     printf("preOrder printing\n");
     preOrder(root, iVisit);
@@ -170,7 +205,11 @@ int main(int argc, char **argv)
     printf("postOrder printing\n");
     postOrder(root, iVisit);
     printf("\n");
+    print2D(root);
     fclose(in);
+    fclose(preOut);
+    fclose(postOut);
+    fclose(inOut);
     return 0;
 }
 // TODO: print bst like tree

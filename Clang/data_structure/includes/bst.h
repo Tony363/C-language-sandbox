@@ -8,12 +8,19 @@ typedef struct _TreeNode
     struct _TreeNode *left, *right;
 } TreeNode, *TreeNodePtr;
 
-typedef void (*visit_func)(TreeNodePtr node);
+typedef void (*visit_func)(TreeNodePtr node, char type);
 
-TreeNode *buildTree(FILE *in);
 TreeNode *createNode(int input);
+TreeNode *traverseTree(TreeNode *root, TreeNode *new);
 TreeNode *insertNode(TreeNode *root, int inD);
-void preOrder(TreeNodePtr root, visit_func visit);
-void inOrder(TreeNodePtr root, visit_func visit);
-void postOrder(TreeNodePtr root, visit_func visit);
+TreeNode *buildTree(FILE *in);
+
+int searchNode(TreeNode *root, int val);
+void deleteNode(TreeNode *root, int inD);
+void preOrder(TreeNode *root, visit_func visit);
+void inOrder(TreeNode *root, visit_func visit);
+void postOrder(TreeNode *root, visit_func visit);
+
+void print2DUtil(TreeNode *root, int space);
+void print2D(TreeNode *root);
 #endif
