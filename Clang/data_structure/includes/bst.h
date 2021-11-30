@@ -2,6 +2,24 @@
 #define BST_H
 #include <stdio.h>
 #define NodeData int
+
+typedef struct _IntBinTreeNode
+{
+    int value;
+    struct _IntBinTreeNode *left, *right;
+} IntBinTreeNode;
+
+typedef struct _BinTree
+{
+    IntBinTreeNode *root;
+} IntBinTree;
+
+IntBinTree *createIntBinTree();
+void buildIntTree(IntBinTree *t, FILE *f);
+//  no need to make public only have programer create tree not create ndoe
+// IntBinTreeNode *createIntBinTreeNode(int v);
+
+/*********8*****************************************************/
 typedef struct _TreeNode
 {
     NodeData data;
