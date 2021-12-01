@@ -44,17 +44,16 @@ int isOperand(char c)
 int tokenize(const char *token)
 {
     int p = token[0];
-    char *toParse = (char *)malloc(sizeof(char) * 3);
-    strncpy(toParse, token, 3);
+    char *toParse = (char *)malloc(sizeof(char) * 4);
+    strncpy(toParse, token, 4);
     if (!strcmp(toParse, "**"))
     {
         p = '^';
     }
-    else if (strlen(token) > 1)
+    else if (strlen(token) > 0)
     {
         sscanf(token, "%d", &p);
     }
-    // printf("\nWTF: %d\n", p);
     free(toParse);
     return p;
 }

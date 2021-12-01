@@ -22,7 +22,7 @@ void buildIntTree(IntBinTree *t, FILE *f);
 int getNumNodesIT(IntBinTree *t);
 int getNumleavesIt(IntBinTree *t);
 int getHeightIT(IntBinTree *t);
-int isFullBinTree(IntBinTree *t);
+int isFullBinTreeIT(IntBinTree *t);
 void preOrderIT(IntBinTree *t, trav_func cb);
 void inOrderIT(IntBinTree *t, trav_func cb);
 void postOrderIT(IntBinTree *t, trav_func cb);
