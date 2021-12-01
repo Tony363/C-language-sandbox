@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 #include "../../includes/intstack.h"
 
 typedef void (*token_handler)(const char *token, IntStack *s);
@@ -21,40 +22,84 @@ void parse_infix(const char *s, token_handler handler, finalize_parsing flush_op
     flush_op_stack(opst);
 }
 
+int checkPrecedence(char c)
+{
+    if (c == '+' || c == '-')
+        return 1;
+    else if (c == '*' || c == '/')
+        return 2;
+    else if (c == '^')
+        return 3;
+    return 0;
+}
+
+int isOperand(char c)
+{
+    return !(
+        c == '+' || c == '-' ||
+        c == '*' || c == '/' ||
+        c == '(' || c == ')' || c == '^');
+}
+
+int tokenize(const char *token)
+{
+    int p = token[0];
+    char *toParse = (char *)malloc(sizeof(char) * 3);
+    strncpy(toParse, token, 3);
+    if (!strcmp(toParse, "**"))
+    {
+        p = '^';
+    }
+    else if (strlen(token) > 1)
+    {
+        sscanf(token, "%d", &p);
+    }
+    // printf("\nWTF: %d\n", p);
+    free(toParse);
+    return p;
+}
+
 void postfix_handler(const char *token, IntStack *s)
 {
+
+    char p = (char)tokenize(token);
     // TODO: exponential ^  & ** as ^
     // TODO: spacing
     // TODO: parentheses
-    char c;
-    if (token[0] == ' ')
+
+    if (p == ' ')
     {
         return;
     }
-    else if (isdigit(token[0]))
+    else if (isdigit(p))
     {
-        printf("%c ", token[0]);
+        printf("%c ", p);
     }
-    else if (token[0] == '(')
+    else if (isOperand(p))
     {
-        pushIS(s, token[0]);
+        printf("%d ", p);
     }
-    else if (token[0] == ')')
+    else if (p == '(')
     {
-        while (c = (char)popIS(s, NULL))
+        pushIS(s, p);
+    }
+    else if (p == ')')
+    {
+        while (!isEmptyIS(s))
         {
-            if (c == '(')
+            p = (char)popIS(s, NULL);
+            if (p == '(')
                 break;
-            printf("%c ", c);
+            printf("%c ", p);
         }
     }
     else
     {
-        while (!isEmptyIS(s) && (char)peekIS(s, NULL) != '(') // i had check precedence in other implementation
+        while (!isEmptyIS(s) && (char)peekIS(s, NULL) != '(' && (checkPrecedence(p) <= checkPrecedence((char)peekIS(s, NULL)))) // i had check precedence in other implementation
         {
             printf("%c ", (char)popIS(s, NULL));
         }
-        pushIS(s, token[0]);
+        pushIS(s, p);
     }
 }
 
@@ -72,11 +117,14 @@ void postfix_end(IntStack *s)
 
 int main(int argc, char **argv)
 {
-    char line[100];
-
-    printf("Input a line of infix expression: ");
-    fflush(stdout);
-    fgets(line, 100, stdin);
+    // char line[] = "20 ** ( 3 ^ 4 )";
+    char line[] = "20 ^ ( 3 / 4 )";
+    // char line[] = "20 + 3 + 4 ";
+    // char line[] = "( 7 - 3 ) * ( 9 - 8 ) / 4";
+    // char line[100];
+    // printf("Input a line of infix expression: ");
+    // fflush(stdout);
+    // fgets(line, 100, stdin);
     parse_infix(line, postfix_handler, postfix_end);
     return 0;
 }
