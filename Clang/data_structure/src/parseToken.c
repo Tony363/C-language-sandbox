@@ -2,8 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "../includes/intstack.h"
-#include "../includes/AdtIntList.h"
-#include "../includes/intlist.h"
 
 typedef void (*token_handler)(const char *token);
 
@@ -37,7 +35,6 @@ IntStack *s;
 
 void infix_handler(const char *token)
 {
-    s = createIntStackIS();
     if (isdigit(token[0]))
     {
         printf("%s ", token);
@@ -99,5 +96,4 @@ int main(int argc, char **argv)
     return 0;
 }
 // gcc -o infix ../adt/instack.o ../adt/intlist.o parse_infix.o
-// TODO
-// figure why no compile
+// managed to compile no understand errors
