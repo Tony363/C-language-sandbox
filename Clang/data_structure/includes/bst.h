@@ -26,7 +26,7 @@ int isFullBinTree(IntBinTree *t);
 void preOrderIT(IntBinTree *t, trav_func cb);
 void inOrderIT(IntBinTree *t, trav_func cb);
 void postOrderIT(IntBinTree *t, trav_func cb);
-
+// adt as public interface and have internal implementation
 //  no need to make public only have programer create tree not create ndoe
 // IntBinTreeNode *createIntBinTreeNode(int v);
 

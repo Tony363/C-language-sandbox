@@ -12,7 +12,7 @@ void parse_infix(const char *s, token_handler handler, finalize_parsing flush_op
     int n_chars, offset = 0;
     IntStack *opst;
 
-    opst = createIntStack();
+    opst = createIntStackIS();
     while (1 == sscanf(s + offset, "%s%n", word, &n_chars))
     {
         handler(word, opst);
@@ -23,67 +23,60 @@ void parse_infix(const char *s, token_handler handler, finalize_parsing flush_op
 
 void postfix_handler(const char *token, IntStack *s)
 {
+    // TODO: exponential ^  & ** as ^
+    // TODO: spacing
+    // TODO: parentheses
+    char c;
+    if (token[0] == ' ')
+    {
+        return;
+    }
+    else if (isdigit(token[0]))
+    {
+        printf("%c ", token[0]);
+    }
+    else if (token[0] == '(')
+    {
+        pushIS(s, token[0]);
+    }
+    else if (token[0] == ')')
+    {
+        while (c = (char)popIS(s, NULL))
+        {
+            if (c == '(')
+                break;
+            printf("%c ", c);
+        }
+    }
+    else
+    {
+        while (!isEmptyIS(s) && (char)peekIS(s, NULL) != '(') // i had check precedence in other implementation
+        {
+            printf("%c ", (char)popIS(s, NULL));
+        }
+        pushIS(s, token[0]);
+    }
 }
 
 void postfix_end(IntStack *s)
 {
-}
-
-IntStack *s;
-
-void infix_handler(const char *token)
-{
-    if (isdigit(token[0]))
+    char popped;
+    while (!isEmptyIS(s))
     {
-        printf("%s ", token);
-    }
-    else if (token[0] == '(')
-    {
-        pushIS(s, '(');
-    }
-    else if (token[0] == '*' || token[0] == '/')
-    {
-        while (!isEmptyIS(s) && (peekIS(s, NULL) == '*' || peekIS(s, NULL) == '/'))
-        {
-            printf("%c ", (char)popIS(s, NULL));
-        }
-        pushIS(s, token[0]);
-    }
-    else if (token[0] == '+' || token[0] == '-')
-    {
-        while (!isEmptyIS(s) && peekIS(s, NULL) != '(')
-        {
-            printf("%c ", (char)popIS(s, NULL));
-        }
-        pushIS(s, token[0]);
-    }
-    else
-    {
-        while (!isEmptyIS(s) && peekIS(s, NULL) != '(')
-        {
-            printf("%c ", (char)popIS(s, NULL));
-        }
-        popIS(s, NULL);
+        if ((char)peekIS(s, NULL) == '(' || (char)peekIS(s, NULL) == ')')
+            popIS(s, NULL);
+        popped = (char)popIS(s, NULL);
+        printf("%c ", popped);
     }
 }
 
 int main(int argc, char **argv)
 {
-    char line[1024];
-    int n_chars, ret;
-    char word[100];
+    char line[100];
 
     printf("Input a line of infix expression: ");
     fflush(stdout);
-    fgets(line, 1024, stdin);
-
-    IntStack *s = createIntStack();
-    parse_string(line, infix_handler);
-    while (!isEmptyIS(s))
-    {
-        printf("%c ", (char)popIS(s, NULL));
-    }
-    printf("\n");
-
+    fgets(line, 100, stdin);
+    parse_infix(line, postfix_handler, postfix_end);
     return 0;
 }

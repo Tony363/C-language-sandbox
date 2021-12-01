@@ -95,5 +95,4 @@ int main(int argc, char **argv)
     printf("\n");
     return 0;
 }
-// gcc -o infix ../adt/instack.o ../adt/intlist.o parse_infix.o
-// managed to compile no understand errors
+// gcc -g ../src/parseToken.c ../src/intstack.c ../src/AdtIntList.c -o parseToken
