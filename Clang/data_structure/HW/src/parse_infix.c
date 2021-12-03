@@ -33,56 +33,22 @@ int checkPrecedence(char c)
     return 0;
 }
 
-int isOperand(char c)
-{
-    return !(
-        c == '+' || c == '-' ||
-        c == '*' || c == '/' ||
-        c == '(' || c == ')' || c == '^');
-}
-
-int tokenize(const char *token)
-{
-    int p = token[0];
-    char *toParse = (char *)malloc(sizeof(char) * 4);
-    strncpy(toParse, token, 4);
-    if (!strcmp(toParse, "**"))
-    {
-        p = '^';
-    }
-    else if (strlen(token) > 0)
-    {
-        sscanf(token, "%d", &p);
-    }
-    free(toParse);
-    return p;
-}
-
 void postfix_handler(const char *token, IntStack *s)
 {
-
-    char p = (char)tokenize(token);
-    // TODO: exponential ^  & ** as ^
-    // TODO: spacing
-    // TODO: parentheses
-
-    if (p == ' ')
+    char p;
+    if (token[0] == ' ')
     {
         return;
     }
-    else if (isdigit(p))
+    else if (isdigit(token[0]))
     {
-        printf("%c ", p);
+        printf("%s ", token);
     }
-    else if (isOperand(p))
+    else if (token[0] == '(')
     {
-        printf("%d ", p);
+        pushIS(s, !(token[0] == '*' && token[1] == '*') ? token[0] : '^');
     }
-    else if (p == '(')
-    {
-        pushIS(s, p);
-    }
-    else if (p == ')')
+    else if (token[0] == ')')
     {
         while (!isEmptyIS(s))
         {
@@ -94,11 +60,11 @@ void postfix_handler(const char *token, IntStack *s)
     }
     else
     {
-        while (!isEmptyIS(s) && (char)peekIS(s, NULL) != '(' && (checkPrecedence(p) <= checkPrecedence((char)peekIS(s, NULL)))) // i had check precedence in other implementation
+        while (!isEmptyIS(s) && (char)peekIS(s, NULL) != '(' && (checkPrecedence(token[0]) <= checkPrecedence((char)peekIS(s, NULL)))) // i had check precedence in other implementation
         {
             printf("%c ", (char)popIS(s, NULL));
         }
-        pushIS(s, p);
+        pushIS(s, !(token[0] == '*' && token[1] == '*') ? token[0] : '^');
     }
 }
 
@@ -117,13 +83,13 @@ void postfix_end(IntStack *s)
 int main(int argc, char **argv)
 {
     // char line[] = "20 ** ( 3 ^ 4 )";
-    char line[] = "20 ^ ( 3 / 4 )";
+    // char line[] = "20 ^ ( 3 / 4 )";
     // char line[] = "20 + 3 + 4 ";
     // char line[] = "( 7 - 3 ) * ( 9 - 8 ) / 4";
-    // char line[100];
-    // printf("Input a line of infix expression: ");
-    // fflush(stdout);
-    // fgets(line, 100, stdin);
+    char line[100];
+    printf("Input a line of infix expression: ");
+    fflush(stdout);
+    fgets(line, 100, stdin);
     parse_infix(line, postfix_handler, postfix_end);
     return 0;
 }
