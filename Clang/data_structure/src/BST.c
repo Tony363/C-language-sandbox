@@ -32,16 +32,15 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
 }
 
 // case for empty
-TreeNode *insertNode(TreeNode *root, int inD)
+void insertNode(Tree *t, int inD)
 {
-    if (!root)
-        return NULL;
+    if (!t)
+        return;
     TreeNode *new = createNode(inD);
-    root = traverseTree(root, new);
-    return root;
+    t->root = traverseTree(t->root, new);
 }
 
-TreeNode *buildTree(FILE *in)
+Tree *buildTree(FILE *in)
 {
     if (!in)
         return NULL;
@@ -52,8 +51,13 @@ TreeNode *buildTree(FILE *in)
     else
         return NULL;
     while ((c = fgetc(in)) != EOF)
-        root = insertNode(root, c - '0');
-    return root;
+    {
+        TreeNode *new = createNode(c - '0');
+        root = traverseTree(root, new);
+    }
+    Tree *t = createIntBinTree();
+    t->root = root;
+    return t;
 };
 
 int searchNode(TreeNode *root, int val)
@@ -68,13 +72,14 @@ int searchNode(TreeNode *root, int val)
         return searchNode(root->left, val);
 }
 
-void freeNode(TreeNode *root)
+TreeNode *freeNode(TreeNode *root)
 {
     if (!root)
-        return;
+        return root;
     freeNode(root->left);
     freeNode(root->right);
     free(root);
+    return NULL;
 }
 
 /* Given a non-empty binary search
@@ -144,30 +149,13 @@ TreeNode *deleteNode(TreeNode *root, int key)
     }
     return root;
 }
-// void deleteNode(TreeNode *root, int val)
-// {
-//     if (!root)
-//         return;
-//     if (root->data == val)
-//     {
-//         if (root->left && !root->right)
-//         {
 
-//         }
-//         else if (root->right && !root->left)
-//         {
-
-//         }
-//         else if (root->left && root->right)
-//         {
-
-//         }
-//     }
-//     if (val > root->data)
-//         deleteNode(root->right, val);
-//     else
-//         deleteNode(root->left, val);
-// }
+void delete (Tree *t, int inD)
+{
+    if (!t)
+        return;
+    t->root = deleteNode(t->root, inD);
+}
 
 void preOrder(TreeNodePtr root, visit_func visit)
 {
@@ -242,31 +230,41 @@ void print2D(TreeNode *root)
 int main(int argc, char **argv)
 {
     FILE *in = fopen("../Texts/bst.txt", "r");
-    TreeNodePtr root = NULL;
-    root = buildTree(in);
-    root = insertNode(root, 10);
-    root = insertNode(root, 9);
-    root = insertNode(root, 11);
-    printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
-    root = deleteNode(root, 3);
-    root = deleteNode(root, 11);
-    root = deleteNode(root, 9);
-    printf("%s\n\n", searchNode(root, 10) ? "Found" : "Not Found");
+    Tree *t = buildTree(in);
+    print2D(t->root);
+    insertNode(t, 10);
+    insertNode(t, 9);
+    insertNode(t, 11);
+    print2D(t->root);
+    printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");
+    delete (t, 3);
+    delete (t, 11);
+    delete (t, 9);
+    print2D(t->root);
+    printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");
 
     preOut = fopen("../Texts/preOrder.txt", "w");
     inOut = fopen("../Texts/inOrder.txt", "w");
     postOut = fopen("../Texts/postOrder.txt", "w");
 
+    printf("Moment of the tree = %d\n", getNumNodesIT(t));
+    printf("Leaf(Leaves) of the tree = %d\n", getNumLeavesIT(t));
+    printf("Height of the tree = %d\n", getNumLeavesIT(t));
+    printf("is Full Binary tree? = %d\n", isFullBinTreeIT(t));
+    printf("\n");
+
     printf("preOrder printing\n");
-    preOrder(root, iVisit);
+    preOrder(t->root, iVisit);
     printf("\n");
     printf("inOrder printing\n");
-    inOrder(root, iVisit);
+    inOrder(t->root, iVisit);
     printf("\n");
     printf("postOrder printing\n");
-    postOrder(root, iVisit);
+    postOrder(t->root, iVisit);
     printf("\n");
-    print2D(root);
+    print2D(t->root);
+    t->root = freeNode(t->root);
+    print2D(t->root);
     fclose(in);
     fclose(preOut);
     fclose(postOut);

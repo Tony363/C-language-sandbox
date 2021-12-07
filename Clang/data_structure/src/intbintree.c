@@ -6,26 +6,27 @@ void print_node(int value, int depth)
     printf("%d(depth: %d) ", value, depth);
 }
 
-IntBinTree *createIntBinTree()
+Tree *createIntBinTree()
 {
-    IntBinTree *t = (IntBinTree *)malloc(sizeof(IntBinTree));
+    Tree *t = (Tree *)malloc(sizeof(Tree));
+    t->root = NULL;
     return t;
 }
 
-IntBinTreeNode *createIntBinTreeNode(int v)
+TreeNode *createIntBinTreeNode(int v)
 {
-    IntBinTreeNode *n = (IntBinTreeNode *)malloc(sizeof(IntBinTreeNode));
-    n->value = v;
+    TreeNode *n = (TreeNode *)malloc(sizeof(TreeNode));
+    n->data = v;
     n->left = NULL;
     n->right = NULL;
     return n;
 }
 
-IntBinTreeNode *_buildIntBinTree(FILE *f)
+TreeNode *_buildIntBinTree(FILE *f)
 {
     char word[100];
     int v;
-    IntBinTreeNode *n;
+    TreeNode *n;
 
     if (fscanf(f, "%s", word) != 1)
     {
@@ -42,12 +43,12 @@ IntBinTreeNode *_buildIntBinTree(FILE *f)
     return n;
 }
 
-void buildIntTree(IntBinTree *t, FILE *f)
+void buildIntTree(Tree *t, FILE *f)
 {
     t->root = _buildIntBinTree(f);
 }
 
-int _getNumLeavesIT(IntBinTreeNode *n)
+int _getNumLeavesIT(TreeNode *n)
 {
     if (n == NULL)
         return 0;
@@ -57,12 +58,12 @@ int _getNumLeavesIT(IntBinTreeNode *n)
         return 1;
 }
 
-int getNumLeavesIT(IntBinTree *t)
+int getNumLeavesIT(Tree *t)
 {
     return _getNumLeavesIT(t->root);
 }
 
-int _getNumNodesIT(IntBinTreeNode *n)
+int _getNumNodesIT(TreeNode *n)
 {
     if (n == NULL)
     {
@@ -71,12 +72,12 @@ int _getNumNodesIT(IntBinTreeNode *n)
     return _getNumNodesIT(n->left) + _getNumNodesIT(n->right) + 1;
 }
 
-int getNumNodesIT(IntBinTree *t)
+int getNumNodesIT(Tree *t)
 {
     return _getNumNodesIT(t->root);
 }
 
-int _getHeightIT(IntBinTreeNode *n)
+int _getHeightIT(TreeNode *n)
 {
     int h_l, h_r;
     if (n == NULL)
@@ -88,7 +89,12 @@ int _getHeightIT(IntBinTreeNode *n)
     return (h_l > h_r) ? h_l + 1 : h_r + 1;
 }
 
-int _isFullBinTreeIT(IntBinTreeNode *n)
+int getHeightIT(Tree *t)
+{
+    return _getHeightIT(t->root);
+}
+
+int _isFullBinTreeIT(TreeNode *n)
 {
     if (n == NULL)
     {
@@ -105,44 +111,44 @@ int _isFullBinTreeIT(IntBinTreeNode *n)
     return 0;
 }
 
-int isFullBinTreeIT(IntBinTree *t)
+int isFullBinTreeIT(Tree *t)
 {
     return _isFullBinTreeIT(t->root);
 }
 
-void _preOrderIT(IntBinTreeNode *n, trav_func cb, int depth)
+void _preOrderIT(TreeNode *n, trav_func cb, int depth)
 {
     if (n == NULL)
     {
         return;
     }
-    cb(n->value, depth);
+    cb(n->data, depth);
     _preOrderIT(n->left, cb, depth + 1);
     _preOrderIT(n->right, cb, depth + 1);
 }
 
-void preOrderIT(IntBinTree *t, trav_func cb)
+void preOrderIT(Tree *t, trav_func cb)
 {
     _preOrderIT(t->root, cb, 0);
 }
 
-void _inOrderIT(IntBinTreeNode *n, trav_func cb, int depth)
+void _inOrderIT(TreeNode *n, trav_func cb, int depth)
 {
     if (n == NULL)
     {
         return;
     }
     _inOrderIT(n->left, cb, depth + 1);
-    cb(n->value, depth);
+    cb(n->data, depth);
     _inOrderIT(n->right, cb, depth + 1);
 }
 
-void inOrderIT(IntBinTree *t, trav_func cb)
+void inOrderIT(Tree *t, trav_func cb)
 {
     _inOrderIT(t->root, cb, 0);
 }
 
-void _postOrderIT(IntBinTreeNode *n, trav_func cb, int depth)
+void _postOrderIT(TreeNode *n, trav_func cb, int depth)
 {
     if (n == NULL)
     {
@@ -150,41 +156,43 @@ void _postOrderIT(IntBinTreeNode *n, trav_func cb, int depth)
     }
     _postOrderIT(n->left, cb, depth + 1);
     _postOrderIT(n->right, cb, depth + 1);
-    cb(n->value, depth);
+    cb(n->data, depth);
 }
 
-void postOrderIT(IntBinTree *t, trav_func cb)
+void postOrderIT(Tree *t, trav_func cb)
 {
     _postOrderIT(t->root, cb, 0);
 }
 
-int main(int argc, char **argv)
-{
-    FILE *f = fopen(argv[1], "r");
-    if (!f)
-    {
-        perror("Data file Error");
-        return -2;
-    }
-    IntBinTree *t;
-    t = createIntBinTree();
-    printf("root pointer = %p\n", t->root);
-    buildIntTree(t, f);
-    printf("new root pointer = %p\n", t->root);
-    printf("Moment of the tree = %d\n", getNumNodesIT(t));
-    printf("Leaf(Leaves) of the tree = %d\n", getNumLeavesIT(t));
-    printf("Height of the tree = %d\n", getNumLeavesIT(t));
-    printf("is Full Binary tree? = %d\n", isFullBinTreeIT(t));
-    printf("Pre-Order:\n[");
-    preOrderIT(t, print_node);
-    printf("]\n");
+// int main(int argc, char **argv)
+// {
+//     FILE *f = fopen(argv[1], "r");
+//     if (!f)
+//     {
+//         perror("Data file Error");
+//         return -2;
+//     }
+//     Tree *t = createIntBinTree();
+//     printf("root pointer = %p\n", t->root);
 
-    printf("In-Order:\n[");
-    inOrderIT(t, print_node);
-    printf("]\n");
+//     buildIntTree(t, f);
+//     printf("new root pointer = %p\n", t->root);
+//     printf("Moment of the tree = %d\n", getNumNodesIT(t));
+//     printf("Leaf(Leaves) of the tree = %d\n", getNumLeavesIT(t));
+//     printf("Height of the tree = %d\n", getNumLeavesIT(t));
+//     printf("is Full Binary tree? = %d\n", isFullBinTreeIT(t));
 
-    printf("Post-Order:\n[");
-    postOrderIT(t, print_node);
-    printf("]\n");
-    return 0;
-}
+//     printf("Pre-Order:\n[");
+//     preOrderIT(t, print_node);
+//     printf("]\n");
+
+//     printf("In-Order:\n[");
+//     inOrderIT(t, print_node);
+//     printf("]\n");
+
+//     printf("Post-Order:\n[");
+//     postOrderIT(t, print_node);
+//     printf("]\n");
+//     fclose(f);
+//     return 0;
+// }
