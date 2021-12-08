@@ -91,7 +91,10 @@ TreeNode *minValueNode(TreeNode *node)
 {
     TreeNode *current = node;
 
-    /* loop down to find the leftmost leaf */
+    /*
+     loop down to find the leftmost leaf
+     (we determine the parent to leftmost node)?
+    */
     while (current && current->left != NULL)
         current = current->left;
 
@@ -136,7 +139,7 @@ TreeNode *deleteNode(TreeNode *root, int key)
         }
 
         // node with two children:
-        // Get the inorder successor
+        // Get the inorder successor, leftmost node
         // (smallest in the right subtree)
         TreeNode *temp = minValueNode(root->right);
 
@@ -145,6 +148,8 @@ TreeNode *deleteNode(TreeNode *root, int key)
         root->data = temp->data;
 
         // Delete the inorder successor
+        // Delete the node that is copied to location of root to be deleted
+        // since that specific node now should be with no children or single children case
         root->right = deleteNode(root->right, temp->data);
     }
     return root;
@@ -237,8 +242,8 @@ int main(int argc, char **argv)
     insertNode(t, 11);
     print2D(t->root);
     printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");
-    delete (t, 3);
-    delete (t, 11);
+    delete (t, 4);
+    delete (t, 10);
     delete (t, 9);
     print2D(t->root);
     printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");

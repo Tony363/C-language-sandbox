@@ -2,12 +2,14 @@
 
 /* copy the implemetaiton function from intbintree.c */
 TreeNode *createIntBinTreeNode(int v);
-typedef void (*trav_func)(int value, int depth);
+// typedef void (*trav_func)(int value, int depth);
+void print_node(int value, int depth);
 
 IntBST *createIntBST()
 {
     return createIntBinTree();
 };
+
 TreeNode *_addValueIB(TreeNode *root, int value)
 {
     if (root == NULL)
