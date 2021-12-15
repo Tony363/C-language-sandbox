@@ -5,6 +5,7 @@
 #include "includes/bubblesort.h"
 #include "includes/selectionsort.h"
 #include "includes/insertionsort.h"
+#include "includes/heapsort.h"
 
 int *gen_random(int n)
 {
@@ -50,7 +51,8 @@ int main(void)
     // bubbleSort(rand_arr, arr_size);
     // selectionSort(rand_arr, arr_size);
     // selectionSortRec(rand_arr, arr_size);
-    insertionSort(rand_arr, arr_size);
+    // insertionSort(rand_arr, arr_size);
+    heapSort(rand_arr, arr_size);
     printArray(rand_arr, arr_size);
 
     printf("\nplease enter threshold:");
