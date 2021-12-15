@@ -46,6 +46,8 @@ int main(void)
 {
     int threshold = 0, arr_size = 10;
     int *rand_arr = gen_random(arr_size);
+    int *rand_arr2 = NULL;
+    memcpy(rand_arr2, rand_arr);
     printArray(rand_arr, arr_size);
     // quickSort(rand_arr, 0, arr_size);
     // bubbleSort(rand_arr, arr_size);
@@ -55,6 +57,11 @@ int main(void)
     heapSort(rand_arr, arr_size);
     printArray(rand_arr, arr_size);
 
+    int test[10]; // each time expand processing range of predetermined array, call sift up
+    for (int i = 0; i < arr_size; i++)
+    {
+        siftup(rand_arr, i, arr_size);
+    }
     printf("\nplease enter threshold:");
     scanf("%d", &threshold);
     printf("\n");

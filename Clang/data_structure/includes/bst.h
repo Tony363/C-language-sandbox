@@ -48,4 +48,6 @@ TreeNode *deleteNode(TreeNode *root, int inD);
 TreeNode *freeNode(TreeNode *root);
 void print2DUtil(TreeNode *root, int space);
 void print2D(TreeNode *root);
+
+void sortedArrToBst(int *arr, int start, int end, Tree *);
 #endif

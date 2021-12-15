@@ -4,7 +4,16 @@
 #include "../includes/bst.h"
 #define COUNT 5
 
-FILE *preOut, *inOut, *postOut;
+int getLevel(int n)
+{
+    int lvl = 0;
+    while (n % 2 == 0)
+    {
+        lvl++;
+        n /= 2;
+    }
+    return lvl;
+}
 
 TreeNode *createNode(int input)
 {
@@ -23,7 +32,7 @@ TreeNode *traverseTree(TreeNode *root, TreeNode *new)
         return root;
     }
     if (new->data == root->data)
-        printf("Duplicate value found\n");
+        printf("Duplicate value found: %d\n", root->data);
     else if (new->data > root->data)
         root->right = traverseTree(root->right, new);
     else if (new->data < root->data)
@@ -38,6 +47,16 @@ void insertNode(Tree *t, int inD)
         return;
     TreeNode *new = createNode(inD);
     t->root = traverseTree(t->root, new);
+}
+
+void sortedArrToBst(int *arr, int start, int end, Tree *root)
+{
+    if (start > end)
+        return;
+    int mid = (start + end) / 2;
+    insertNode(root, arr[mid]);
+    sortedArrToBst(arr, start, mid - 1, root);
+    sortedArrToBst(arr, mid + 1, end, root);
 }
 
 Tree *buildTree(FILE *in)
@@ -189,17 +208,6 @@ void postOrder(TreeNodePtr root, visit_func visit)
     visit(root, '2');
 };
 
-void iVisit(TreeNode *root, char type)
-{
-    printf("Root: %d\n", root->data);
-    if (type == '0')
-        fprintf(preOut, "%d", root->data);
-    else if (type == '1')
-        fprintf(inOut, "%d", root->data);
-    else
-        fprintf(postOut, "%d", root->data);
-}
-
 // Function to print binary tree in 2D
 // It does reverse inorder traversal
 void print2DUtil(TreeNode *root, int space)
@@ -230,49 +238,4 @@ void print2D(TreeNode *root)
 {
     // Pass initial space count as 0
     print2DUtil(root, 0);
-}
-
-int main(int argc, char **argv)
-{
-    FILE *in = fopen("../Texts/bst.txt", "r");
-    Tree *t = buildTree(in);
-    print2D(t->root);
-    insertNode(t, 10);
-    insertNode(t, 9);
-    insertNode(t, 11);
-    print2D(t->root);
-    printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");
-    delete (t, 4);
-    delete (t, 10);
-    delete (t, 9);
-    print2D(t->root);
-    printf("%s\n\n", searchNode(t->root, 11) ? "Found" : "Not Found");
-
-    preOut = fopen("../Texts/preOrder.txt", "w");
-    inOut = fopen("../Texts/inOrder.txt", "w");
-    postOut = fopen("../Texts/postOrder.txt", "w");
-
-    printf("Moment of the tree = %d\n", getNumNodesIT(t));
-    printf("Leaf(Leaves) of the tree = %d\n", getNumLeavesIT(t));
-    printf("Height of the tree = %d\n", getNumLeavesIT(t));
-    printf("is Full Binary tree? = %d\n", isFullBinTreeIT(t));
-    printf("\n");
-
-    printf("preOrder printing\n");
-    preOrder(t->root, iVisit);
-    printf("\n");
-    printf("inOrder printing\n");
-    inOrder(t->root, iVisit);
-    printf("\n");
-    printf("postOrder printing\n");
-    postOrder(t->root, iVisit);
-    printf("\n");
-    print2D(t->root);
-    t->root = freeNode(t->root);
-    print2D(t->root);
-    fclose(in);
-    fclose(preOut);
-    fclose(postOut);
-    fclose(inOut);
-    return 0;
 }
