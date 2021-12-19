@@ -3,7 +3,7 @@
 /* Function to print an array */
 void printArray(int *rand_arr, int size)
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < size; i++)
         printf("%d ", *(rand_arr + i));
     printf("\n");
 }
@@ -25,8 +25,8 @@ int partition(int arr[], int low, int high)
 {
     int pivot = arr[high]; // storing pivot value
     int i = (low - 1);     // indicates the right position of pivot found so far
-    printf("starting index %d:%d\n", i, arr[i]);
-    printf("pivot %d:%d\n", high, pivot);
+    // printf("starting index %d:%d\n", i, arr[i]);
+    // printf("pivot %d:%d\n", high, pivot);
     for (int j = low; j <= high - 1; j++)
     {
         // If current element is smaller than the pivot
@@ -37,8 +37,8 @@ int partition(int arr[], int low, int high)
         }
     }
     swap(&arr[i + 1], &arr[high]);
-    printArray(arr, 10);
-    printf("ending index: %d\n", (i + 1));
+    // printArray(arr, 10);
+    // printf("ending index: %d\n", (i + 1));
     return (i + 1);
 }
 
@@ -53,11 +53,72 @@ void quickSort(int arr[], int low, int high)
         /* pi is partitioning index, arr[p] is now
         at right place */
         int pi = partition(arr, low, high);
-        printf("before: %d\n", pi - 1);
-        printf("after: %d\n", pi + 1);
+        // printf("before: %d\n", pi - 1);
+        // printf("after: %d\n", pi + 1);
         // Separately sort elements before
         // partition and after partition
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
+    }
+}
+
+int partitionAlt(int *arr, int low, int high, int *lp)
+{
+    if (arr[low] > arr[high])
+        swap(&arr[low], &arr[high]);
+
+    // p is the left pivot, and q is the right pivot.
+    int j = low + 1;
+    int g = high - 1, k = low + 1, p = arr[low], q = arr[high];
+    while (k <= g)
+    {
+
+        // if elements are less than the left pivot
+        if (arr[k] < p)
+        {
+            swap(&arr[k], &arr[j]);
+            j++;
+        }
+
+        // if elements are greater than or equal
+        // to the right pivot
+        else if (arr[k] >= q)
+        {
+            while (arr[g] > q && k < g)
+                g--;
+            swap(&arr[k], &arr[g]);
+            g--;
+            if (arr[k] < p)
+            {
+                swap(&arr[k], &arr[j]);
+                j++;
+            }
+        }
+        k++;
+    }
+    j--;
+    g++;
+
+    // bring pivots to their appropriate positions.
+    swap(&arr[low], &arr[j]);
+    swap(&arr[high], &arr[g]);
+
+    // returning the indices of the pivots.
+    *lp = j; // because we cannot return two elements
+    // from a function.
+
+    return g;
+}
+
+void DualPivotQuickSort(int *arr, int low, int high)
+{
+    if (low < high)
+    {
+        // lp means left pivot, and rp means right pivot.
+        int lp, rp;
+        rp = partitionAlt(arr, low, high, &lp);
+        DualPivotQuickSort(arr, low, lp - 1);
+        DualPivotQuickSort(arr, lp + 1, rp - 1);
+        DualPivotQuickSort(arr, rp + 1, high);
     }
 }

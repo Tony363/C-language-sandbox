@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "includes/quicksort.h"
 #include "includes/bubblesort.h"
 #include "includes/selectionsort.h"
 #include "includes/insertionsort.h"
 #include "includes/heapsort.h"
+#include "includes/mergesort.h"
 
 int *gen_random(int n)
 {
@@ -46,26 +48,28 @@ int main(void)
 {
     int threshold = 0, arr_size = 10;
     int *rand_arr = gen_random(arr_size);
-    int *rand_arr2 = NULL;
-    memcpy(rand_arr2, rand_arr);
-    printArray(rand_arr, arr_size);
+    int *rand_arr2 = (int *)malloc(sizeof(int) * arr_size);
+    memcpy(rand_arr2, rand_arr, sizeof(int) * arr_size);
+    // printArray(rand_arr, arr_size);
+    printArray(rand_arr2, arr_size);
     // quickSort(rand_arr, 0, arr_size);
+    // DualPivotQuickSort(rand_arr2, 0, arr_size);
     // bubbleSort(rand_arr, arr_size);
     // selectionSort(rand_arr, arr_size);
     // selectionSortRec(rand_arr, arr_size);
     // insertionSort(rand_arr, arr_size);
-    heapSort(rand_arr, arr_size);
-    printArray(rand_arr, arr_size);
+    // heapSort(rand_arr, arr_size); heapSortUp(rand_arr2, arr_size);
+    // printArray(rand_arr, arr_size);
+    mergeSort(rand_arr2, 0, arr_size - 1);
+    printArray(rand_arr2, arr_size);
 
-    int test[10]; // each time expand processing range of predetermined array, call sift up
-    for (int i = 0; i < arr_size; i++)
-    {
-        siftup(rand_arr, i, arr_size);
-    }
-    printf("\nplease enter threshold:");
-    scanf("%d", &threshold);
-    printf("\n");
-    printSplit(rand_arr, arr_size, threshold);
-    printf("\nMedian value is %d", *(rand_arr + (arr_size / 2)));
+    // printf("\nplease enter threshold:");
+    // scanf("%d", &threshold);
+    // printf("\n");
+    // printSplit(rand_arr, arr_size, threshold);
+    // printf("\nMedian value is %d", *(rand_arr + (arr_size / 2)));
+
+    free(rand_arr);
+    // free(rand_arr2);// why can't i free this?
     return 0;
 }
