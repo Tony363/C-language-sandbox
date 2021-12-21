@@ -47,21 +47,20 @@ void printSplit(int *arr, int size, int threshold)
 int main(void)
 {
     int threshold = 0, arr_size = 10;
-    int *rand_arr = gen_random(arr_size);
-    int *rand_arr2 = (int *)malloc(sizeof(int) * arr_size);
-    memcpy(rand_arr2, rand_arr, sizeof(int) * arr_size);
-    // printArray(rand_arr, arr_size);
-    printArray(rand_arr2, arr_size);
+    // int *rand_arr = gen_random(arr_size);
+    int rand_arr[10] = {53, 12, 98, 63, 18, 32, 80, 46, 72, 21};
+    printArray(rand_arr, 0, arr_size - 1);
     // quickSort(rand_arr, 0, arr_size);
     // DualPivotQuickSort(rand_arr2, 0, arr_size);
     // bubbleSort(rand_arr, arr_size);
     // selectionSort(rand_arr, arr_size);
     // selectionSortRec(rand_arr, arr_size);
     // insertionSort(rand_arr, arr_size);
-    // heapSort(rand_arr, arr_size); heapSortUp(rand_arr2, arr_size);
-    // printArray(rand_arr, arr_size);
-    mergeSort(rand_arr2, 0, arr_size - 1);
-    printArray(rand_arr2, arr_size);
+    // heapSort(rand_arr, arr_size);
+    // heapSortUp(rand_arr2, arr_size);
+    callStackQuickSort(rand_arr, 0, arr_size);
+    // mergeSort(rand_arr2, 0, arr_size - 1);
+    printArray(rand_arr, 0, arr_size - 1);
 
     // printf("\nplease enter threshold:");
     // scanf("%d", &threshold);
@@ -69,7 +68,6 @@ int main(void)
     // printSplit(rand_arr, arr_size, threshold);
     // printf("\nMedian value is %d", *(rand_arr + (arr_size / 2)));
 
-    free(rand_arr);
-    // free(rand_arr2);// why can't i free this?
+    // free(rand_arr);
     return 0;
 }

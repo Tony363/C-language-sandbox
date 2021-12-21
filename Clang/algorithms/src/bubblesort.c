@@ -15,6 +15,6 @@ void bubbleSort(int arr[], int n)
                 swap(&arr[j], &arr[j + 1]);
                 // printf("swapped: %d::%d\n", arr[j], arr[j + 1]);
             }
-            printArray(arr, n);
+            // printArray(arr, 0, n);
         }
 }
