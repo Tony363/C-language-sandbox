@@ -164,8 +164,6 @@ void callStackQuickSort(int *arr, int low, int high)
 {
     if (low > high || low == high)
         return;
-    printf("%d:%d\nInitial:", low, high);
-    printArray(arr, low, high);
     if (low < high)
     {
         /* pi is partitioning index, arr[p] is now
@@ -178,5 +176,22 @@ void callStackQuickSort(int *arr, int low, int high)
         callStackQuickSort(arr, pi + 1, high);
     }
 }
-// TODO implement one pass partition
+
 // TODO implement partitioning for kth smallest
+int kthSmallest(int *arr, int low, int high, int k)
+{
+    // high = high - 1;
+    if (low > high)
+        return -1;
+    if (low == high)
+        return arr[low - 1];
+
+    int pi = onePassPartition(arr, low, high);
+    printf("Pi%d k:%d low:%d high:%d\n", pi, k, low, high);
+    if (pi == k)
+        return arr[pi];
+    else if (pi > k)
+        return kthSmallest(arr, low, pi - 1, k);
+    else
+        return kthSmallest(arr, pi + 1, high, k);
+}

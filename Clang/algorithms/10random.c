@@ -46,7 +46,7 @@ void printSplit(int *arr, int size, int threshold)
 
 int main(void)
 {
-    int threshold = 0, arr_size = 9;
+    int threshold = 0, arr_size = 9, seventhSmallest;
     // int *rand_arr = gen_random(arr_size);
     int rand_arr[10] = {53, 12, 98, 63, 18, 32, 80, 46, 72, 21};
     printArray(rand_arr, 0, arr_size + 1);
@@ -61,7 +61,8 @@ int main(void)
     callStackQuickSort(rand_arr, 0, arr_size);
     // mergeSort(rand_arr2, 0, arr_size - 1);
     printArray(rand_arr, 0, arr_size + 1);
-
+    seventhSmallest = kthSmallest(rand_arr, 0, arr_size, 7);
+    printf("\nSeventh smallest: %d\n", seventhSmallest);
     // printf("\nplease enter threshold:");
     // scanf("%d", &threshold);
     // printf("\n");
