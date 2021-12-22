@@ -109,12 +109,14 @@ StrBSTNode *deleteNode(StrBSTNode *root, const char *value)
         if (root->left == NULL)
         {
             StrBSTNode *temp = root->right;
+            free(root->s);
             free(root);
             return temp;
         }
         else if (root->right == NULL)
         {
             StrBSTNode *temp = root->left;
+            free(root->s);
             free(root);
             return temp;
         }

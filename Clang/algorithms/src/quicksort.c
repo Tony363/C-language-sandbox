@@ -131,32 +131,16 @@ int onePassPartition(int *arr, int low, int high)
     {
         return low;
     }
-    IntQueueA *hiQ = createIntQueueA(high - low);
     int pivot = arr[low], lastSmall = low, p;
-    enqueueIQA(hiQ, low + 1, NULL);
     for (int i = low + 1; i <= high; i++)
     {
         if (arr[i] < pivot)
         {
-            p = dequeueIQA(hiQ, NULL);
-            if (p)
-            {
-                swap(&arr[i], &arr[p]);
-                lastSmall = p;
-            }
-            else
-            {
-                lastSmall = i;
-            }
+            swap(&arr[i], &arr[lastSmall + 1]);
+            lastSmall = lastSmall + 1;
         }
-
-        if (arr[i] > pivot)
-            enqueueIQA(hiQ, i, NULL);
     }
     swap(&arr[low], &arr[lastSmall]);
-    while (dequeueIQA(hiQ, NULL))
-        ;
-    free(hiQ);
     return lastSmall;
 }
 
@@ -180,14 +164,12 @@ void callStackQuickSort(int *arr, int low, int high)
 // TODO implement partitioning for kth smallest
 int kthSmallest(int *arr, int low, int high, int k)
 {
-    // high = high - 1;
-    if (low > high)
+    if (low > high || k > high)
         return -1;
     if (low == high)
-        return arr[low - 1];
+        return arr[low];
 
     int pi = onePassPartition(arr, low, high);
-    printf("Pi%d k:%d low:%d high:%d\n", pi, k, low, high);
     if (pi == k)
         return arr[pi];
     else if (pi > k)

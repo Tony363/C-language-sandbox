@@ -61,7 +61,7 @@ int main(void)
     callStackQuickSort(rand_arr, 0, arr_size);
     // mergeSort(rand_arr2, 0, arr_size - 1);
     printArray(rand_arr, 0, arr_size + 1);
-    seventhSmallest = kthSmallest(rand_arr, 0, arr_size, 7);
+    seventhSmallest = kthSmallest(rand_arr, 0, arr_size, 9);
     printf("\nSeventh smallest: %d\n", seventhSmallest);
     // printf("\nplease enter threshold:");
     // scanf("%d", &threshold);
