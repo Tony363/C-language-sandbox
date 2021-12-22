@@ -37,8 +37,6 @@ int partition(int arr[], int low, int high)
         }
     }
     swap(&arr[i + 1], &arr[high]);
-    // printArray(arr, 10);
-    // printf("ending index: %d\n", (i + 1));
     return (i + 1);
 }
 
@@ -127,21 +125,16 @@ int onePassPartition(int *arr, int low, int high)
     if (high - low == 1 && arr[low] > arr[high])
     {
         swap(&arr[low], &arr[high]);
-        printf("Sorted: ");
-
-        printArray(arr, low, high);
-        return high;
+        return low;
     }
     else if (high - low == 1 && arr[low] < arr[high])
     {
-        printf("Sorted: ");
-        printArray(arr, low, high);
-        return high;
+        return low;
     }
     IntQueueA *hiQ = createIntQueueA(high - low);
     int pivot = arr[low], lastSmall = low, p;
     enqueueIQA(hiQ, low + 1, NULL);
-    for (int i = 1; i < high; i++)
+    for (int i = low + 1; i <= high; i++)
     {
         if (arr[i] < pivot)
         {
@@ -159,16 +152,11 @@ int onePassPartition(int *arr, int low, int high)
 
         if (arr[i] > pivot)
             enqueueIQA(hiQ, i, NULL);
-
-        // printf("%d\n", i);
     }
     swap(&arr[low], &arr[lastSmall]);
-    // printf("%d\n", lastSmall);
     while (dequeueIQA(hiQ, NULL))
         ;
     free(hiQ);
-    printf("Sorted: ");
-    printArray(arr, low, high);
     return lastSmall;
 }
 

@@ -46,10 +46,10 @@ void printSplit(int *arr, int size, int threshold)
 
 int main(void)
 {
-    int threshold = 0, arr_size = 10;
+    int threshold = 0, arr_size = 9;
     // int *rand_arr = gen_random(arr_size);
     int rand_arr[10] = {53, 12, 98, 63, 18, 32, 80, 46, 72, 21};
-    printArray(rand_arr, 0, arr_size - 1);
+    printArray(rand_arr, 0, arr_size + 1);
     // quickSort(rand_arr, 0, arr_size);
     // DualPivotQuickSort(rand_arr2, 0, arr_size);
     // bubbleSort(rand_arr, arr_size);
@@ -60,7 +60,7 @@ int main(void)
     // heapSortUp(rand_arr2, arr_size);
     callStackQuickSort(rand_arr, 0, arr_size);
     // mergeSort(rand_arr2, 0, arr_size - 1);
-    printArray(rand_arr, 0, arr_size - 1);
+    printArray(rand_arr, 0, arr_size + 1);
 
     // printf("\nplease enter threshold:");
     // scanf("%d", &threshold);
