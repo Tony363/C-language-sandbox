@@ -69,6 +69,6 @@ int main(void)
     // printSplit(rand_arr, arr_size, threshold);
     // printf("\nMedian value is %d", *(rand_arr + (arr_size / 2)));
 
-    // free(rand_arr);
+    free(rand_arr);
     return 0;
 }
