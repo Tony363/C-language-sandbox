@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../includes/adjacentGraphs.h"
 
 ajNode *newAGraphNode(char vertex, int edge)
@@ -11,9 +12,11 @@ ajNode *newAGraphNode(char vertex, int edge)
     return newNode;
 }
 
-Graph *newGraph(int V)
+Graph *newGraph(int V, char *d)
 {
     Graph *newGraph = (Graph *)malloc(sizeof(Graph));
+    newGraph->direction = (char *)malloc(sizeof(char) * strlen(d));
+    strcpy(newGraph->direction, d);
     newGraph->V = V;
     newGraph->array = (adjList *)malloc(V * sizeof(adjList));
     for (int i = 0; i < V; i++)
@@ -39,19 +42,23 @@ void addGraphNode(Graph *graph, char vSrc, char vDst, int edge)
             temp = temp->next;
         temp->next = srcNewNode;
     }
-    ajNode *dstNewNode = newAGraphNode(vDst, edge);
-    if (!graph->array[dstIdx].head)
+    if (strcmp(graph->direction, "--") == 0)
     {
-        dstNewNode->next = graph->array[dstIdx].head;
-        graph->array[dstIdx].head = dstNewNode;
+        ajNode *dstNewNode = newAGraphNode(vDst, edge);
+        if (!graph->array[dstIdx].head)
+        {
+            dstNewNode->next = graph->array[dstIdx].head;
+            graph->array[dstIdx].head = dstNewNode;
+        }
+        else
+        {
+            ajNode *temp = graph->array[dstIdx].head;
+            while (temp->next)
+                temp = temp->next;
+            temp->next = dstNewNode;
+        }
     }
-    else
-    {
-        ajNode *temp = graph->array[dstIdx].head;
-        while (temp->next)
-            temp = temp->next;
-        temp->next = dstNewNode;
-    }
+
     // TODO
     // search by edge value that connects 2 vertexes
     // make them undirected
@@ -66,7 +73,7 @@ void printAdjList(Graph *graph)
         printf("%c ", (temp) ? temp->vertex : ' ');
         while (temp != NULL)
         {
-            printf("-> %d ", temp->edge);
+            printf("%s %d ", graph->direction, temp->edge);
             temp = temp->next;
         }
         printf("\n");
@@ -75,7 +82,7 @@ void printAdjList(Graph *graph)
 
 int main(int argc, char **argv)
 {
-    Graph *graph = newGraph(7);
+    Graph *graph = newGraph(7, "--");
     addGraphNode(graph, 'A', 'B', 25);
     addGraphNode(graph, 'A', 'C', 45);
     addGraphNode(graph, 'B', 'D', 50);
