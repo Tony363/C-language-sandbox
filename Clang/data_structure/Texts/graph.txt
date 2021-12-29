@@ -1,0 +1,9 @@
+7
+A B C D E F G
+A 2 B 25 C 45
+B 3 D 50 E 60 F 55
+C 2 B 10 G 70
+D 0
+E 3 C 65 D 20 F 30
+F 1 D 15
+G 2 E 40 F 35
