@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../includes/adjacentGraphs.h"
+#include "../includes/intQueue.h"
 
 ajNode *newAGraphNode(char vertex, int edge)
 {
@@ -12,6 +13,10 @@ ajNode *newAGraphNode(char vertex, int edge)
     return newNode;
 }
 
+void *flagGraph(Graph *graph, int V)
+{
+    memset(graph->flag, 0, V * sizeof(int));
+}
 Graph *newGraph(int V, char *d)
 {
     Graph *newGraph = (Graph *)malloc(sizeof(Graph));
@@ -21,17 +26,15 @@ Graph *newGraph(int V, char *d)
     newGraph->array = (adjList *)malloc(V * sizeof(adjList));
     newGraph->flag = (int *)malloc(V * sizeof(int));
     for (int i = 0; i < V; i++)
-    {
         newGraph->array[i].head = NULL;
-        newGraph->flag[i] = 0;
-    }
+
+    flagGraph(newGraph, V);
     return newGraph;
 }
 
 void addGraphNode(Graph *graph, char vSrc, char vDst, int edge)
 {
     int srcIdx = vSrc - 'A', dstIdx = vDst - 'A';
-    // printf("%c %c\n", vSrc, vDst);
     ajNode *srcNewNode = newAGraphNode(vDst, edge);
 
     if (!graph->array[srcIdx].head)
@@ -64,30 +67,63 @@ void addGraphNode(Graph *graph, char vSrc, char vDst, int edge)
             temp->next = dstNewNode;
         }
     }
-
-    // TODO
-    // search by edge value that connects 2 vertexes
-    // make them undirected
 }
 
 // DFS algo
 int DFS(Graph *graph, char initV, char searchV)
 {
     if (initV == searchV)
+    {
+        printf("Found %c\n", searchV);
         return 1;
+    }
     ajNode *temp = graph->array[initV - 'A'].head;
 
     graph->flag[initV - 'A'] = 1;
-    printf("Visited %c \n", initV);
 
     while (temp)
     {
         char connectedVertex = temp->vertex;
         if (graph->flag[connectedVertex - 'A'] == 0)
             return DFS(graph, connectedVertex, searchV);
-
         temp = temp->next;
     }
+    return 0;
+}
+
+// BFS algorithm
+int BFS(Graph *graph, char startVertex, char searchV)
+{
+    QueueList *q = createQueueIq();
+
+    graph->flag[startVertex - 'A'] = 1;
+    enqueue(q, startVertex - 'A');
+
+    while (!QisEmpty(q))
+    {
+        int currentVertex = dequeue(q);
+        // printf("Visiting vertex %d\n", currentVertex);
+
+        ajNode *temp = graph->array[currentVertex].head;
+
+        while (temp)
+        {
+            int adjVertex = temp->vertex - 'A';
+            // printf("traversing node %d\n", adjVertex);
+            if (temp->vertex == searchV)
+            {
+                printf("Found %c \n", searchV);
+                return 1;
+            }
+            if (graph->flag[adjVertex] == 0)
+            {
+                graph->flag[adjVertex] = 1;
+                enqueue(q, adjVertex);
+            }
+            temp = temp->next;
+        }
+    }
+    free(q);
     return 0;
 }
 
@@ -119,6 +155,7 @@ void freeGraph(Graph *graph)
             free(temp2);
         }
     }
+    free(graph->flag);
     free(graph->direction);
     free(graph->array);
     free(graph);
@@ -145,5 +182,9 @@ int main(int argc, char **argv)
 
     printAdjList(graph);
     printf(DFS(graph, 'A', 'G') ? "Found\n" : "Not Found\n");
+    flagGraph(graph, graph->V);
+    printf(BFS(graph, 'A', 'G') ? "Found\n" : "Not Found\n");
+    freeGraph(graph);
+
     return 0;
 }
