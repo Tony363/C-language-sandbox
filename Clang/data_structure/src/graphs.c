@@ -13,10 +13,6 @@ ajNode *newAGraphNode(char vertex, int edge)
     return newNode;
 }
 
-void *flagGraph(Graph *graph, int V)
-{
-    memset(graph->flag, 0, V * sizeof(int));
-}
 Graph *newGraph(int V, char *d)
 {
     Graph *newGraph = (Graph *)malloc(sizeof(Graph));
@@ -28,7 +24,7 @@ Graph *newGraph(int V, char *d)
     for (int i = 0; i < V; i++)
         newGraph->array[i].head = NULL;
 
-    flagGraph(newGraph, V);
+    memset(newGraph->flag, 0, V * sizeof(int));
     return newGraph;
 }
 
@@ -69,18 +65,28 @@ void addGraphNode(Graph *graph, char vSrc, char vDst, int edge)
     }
 }
 
+void printArr(Graph *graph)
+{
+    for (int i = 0; i < graph->V; i++)
+    {
+        printf("%d ", graph->flag[i]);
+    }
+    printf("\n");
+}
 // DFS algo
+// bugged, infinite recursive loop?
 int DFS(Graph *graph, char initV, char searchV)
 {
     if (initV == searchV)
     {
         printf("Found %c\n", searchV);
+        memset(graph->flag, 0, graph->V * sizeof(int));
         return 1;
     }
     ajNode *temp = graph->array[initV - 'A'].head;
 
     graph->flag[initV - 'A'] = 1;
-
+    // printArr(graph);
     while (temp)
     {
         char connectedVertex = temp->vertex;
@@ -88,6 +94,7 @@ int DFS(Graph *graph, char initV, char searchV)
             return DFS(graph, connectedVertex, searchV);
         temp = temp->next;
     }
+    memset(graph->flag, 0, graph->V * sizeof(int)); // too many traversals because recursive
     return 0;
 }
 
@@ -102,14 +109,12 @@ int BFS(Graph *graph, char startVertex, char searchV)
     while (!QisEmpty(q))
     {
         int currentVertex = dequeue(q);
-        // printf("Visiting vertex %d\n", currentVertex);
 
         ajNode *temp = graph->array[currentVertex].head;
 
         while (temp)
         {
             int adjVertex = temp->vertex - 'A';
-            // printf("traversing node %d\n", adjVertex);
             if (temp->vertex == searchV)
             {
                 printf("Found %c \n", searchV);
@@ -124,6 +129,7 @@ int BFS(Graph *graph, char startVertex, char searchV)
         }
     }
     free(q);
+    memset(graph->flag, 0, graph->V * sizeof(int));
     return 0;
 }
 
@@ -161,8 +167,6 @@ void freeGraph(Graph *graph)
     free(graph);
 }
 
-// TODO implement release graph;
-// initialize array only in function of DFS
 int main(int argc, char **argv)
 {
     Graph *graph = newGraph(7, "--");
@@ -182,7 +186,6 @@ int main(int argc, char **argv)
 
     printAdjList(graph);
     printf(DFS(graph, 'A', 'G') ? "Found\n" : "Not Found\n");
-    flagGraph(graph, graph->V);
     printf(BFS(graph, 'A', 'G') ? "Found\n" : "Not Found\n");
     freeGraph(graph);
 
