@@ -98,21 +98,17 @@ int DFS(Graph *graph, char initV, char searchV)
     return 0;
 }
 
-ajNode *next(Graph *graph, ajNode *node, int adjVertex)
+ajNode *next(Graph *graph, ajNode *node)
 {
     if (!node)
         return NULL;
-    if (!node->next)
-        return node;
-    // printArr(graph);
-    // printf("next %d\n", node->vertex - 'A');
+    int adjVertex = node->vertex - 'A';
     if (graph->flag[adjVertex] == 1)
-        return next(graph, node->next, node->next->vertex - 'A');
+        return next(graph, node->next);
     return node;
 }
 
 // BFS algorithm
-// TODO fix 1 time traversal
 int BFS(Graph *graph, char startVertex, char searchV)
 {
     QueueList *q = createQueueIq();
@@ -124,11 +120,11 @@ int BFS(Graph *graph, char startVertex, char searchV)
     {
         int currentVertex = dequeue(q);
         ajNode *temp = graph->array[currentVertex].head;
-        printf("Visiting %d children\n", currentVertex);
+        // printf("Visiting %d children\n", currentVertex);
         while (temp)
         {
             int adjVertex = temp->vertex - 'A';
-            printf("Traversing %d child\n", adjVertex);
+            // printf("Traversing %d child\n", adjVertex);
 
             if (temp->vertex == searchV)
             {
@@ -140,8 +136,8 @@ int BFS(Graph *graph, char startVertex, char searchV)
                 graph->flag[adjVertex] = 1;
                 enqueue(q, adjVertex);
             }
-            // temp = next(graph, temp->next, adjVertex);
-            temp = temp->next;
+            temp = next(graph, temp->next);
+            // temp = temp->next;
         }
     }
     free(q);
