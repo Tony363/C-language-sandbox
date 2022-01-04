@@ -98,7 +98,21 @@ int DFS(Graph *graph, char initV, char searchV)
     return 0;
 }
 
+ajNode *next(Graph *graph, ajNode *node, int adjVertex)
+{
+    if (!node)
+        return NULL;
+    if (!node->next)
+        return node;
+    // printArr(graph);
+    // printf("next %d\n", node->vertex - 'A');
+    if (graph->flag[adjVertex] == 1)
+        return next(graph, node->next, node->next->vertex - 'A');
+    return node;
+}
+
 // BFS algorithm
+// TODO fix 1 time traversal
 int BFS(Graph *graph, char startVertex, char searchV)
 {
     QueueList *q = createQueueIq();
@@ -109,12 +123,13 @@ int BFS(Graph *graph, char startVertex, char searchV)
     while (!QisEmpty(q))
     {
         int currentVertex = dequeue(q);
-
         ajNode *temp = graph->array[currentVertex].head;
-
+        printf("Visiting %d children\n", currentVertex);
         while (temp)
         {
             int adjVertex = temp->vertex - 'A';
+            printf("Traversing %d child\n", adjVertex);
+
             if (temp->vertex == searchV)
             {
                 printf("Found %c \n", searchV);
@@ -125,6 +140,7 @@ int BFS(Graph *graph, char startVertex, char searchV)
                 graph->flag[adjVertex] = 1;
                 enqueue(q, adjVertex);
             }
+            // temp = next(graph, temp->next, adjVertex);
             temp = temp->next;
         }
     }
@@ -169,7 +185,7 @@ void freeGraph(Graph *graph)
 
 int main(int argc, char **argv)
 {
-    Graph *graph = newGraph(7, "--");
+    Graph *graph = newGraph(7, "->");
     addGraphNode(graph, 'A', 'B', 25);
     addGraphNode(graph, 'A', 'C', 45);
     addGraphNode(graph, 'B', 'D', 50);
