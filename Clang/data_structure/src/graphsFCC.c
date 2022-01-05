@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../includes/adjacentGraphs.h"
+
+void printGraph(GraphFCC *g)
+{
+    int i;
+    for (i = 0; i < g->num_vertices; i++)
+    {
+        ChildNode *c = g->vertices[i].children;
+        printf("[%d]%s ->( ", i, g->vertices[i].name);
+        while (c)
+        {
+            printf("%s ", g->vertices[c->child_idx].name);
+            c = c->next;
+        }
+        printf(")\n");
+    }
+}
 int findVertexIdx(GraphFCC *g, const char *name)
 {
     int i;
@@ -49,10 +65,10 @@ GraphFCC *buildGraph(FILE *input)
 {
     int numV, i;
     char nameV[100];
-    GraphFCC *g = (Graph *)malloc(sizeof(Graph));
-    fscanf("%d", &numV);
+    GraphFCC *g = (GraphFCC *)malloc(sizeof(GraphFCC));
+    fscanf(input, "%d", &numV);
     g->num_vertices = numV;
-    g->num_vertices = (ParentNode *)malloc(sizeof(ParentNode) * numV);
+    g->vertices = (ParentNode *)malloc(sizeof(ParentNode) * numV);
     for (i = 0; i < numV; i++)
     {
         fscanf(input, "%s", nameV);
@@ -66,6 +82,7 @@ GraphFCC *buildGraph(FILE *input)
         if (r < 2)
             break;
         parentIdx = findVertexIdx(g, nameV);
+        ChildNode *tail = NULL;
         for (i = 0; i < numV; i++)
         {
             char nameC[100];
@@ -74,8 +91,20 @@ GraphFCC *buildGraph(FILE *input)
             fscanf(input, "%s %lf", nameC, cost);
             childIdx = findVertexIdx(g, nameC);
             ChildNode *n = createChildNode(childIdx, cost);
+            if (tail == NULL)
+            {
+                /*the 1st child */
+                g->vertices[parentIdx].children = n;
+            }
+            else
+            {
+                tail->next = n;
+            }
+            tail = n;
+            /*
             n->next = g->vertices[parentIdx].children; // parentIdx tell me the char in the vertices; simple prepending
             g->vertices[parentIdx].children = n;
+            */
         }
     }
     return g;
@@ -83,5 +112,10 @@ GraphFCC *buildGraph(FILE *input)
 
 int main(int argc, char **argv)
 {
+    GraphFCC *g;
+    FILE *input = fopen("../Texts/graph.txt", "r"); // graph_data.txt
+    g = buildGraph(input);
+    fclose(input);
+    printGraph(g);
     return 0;
 }

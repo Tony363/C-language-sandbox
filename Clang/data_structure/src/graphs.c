@@ -137,7 +137,6 @@ int BFS(Graph *graph, char startVertex, char searchV)
                 enqueue(q, adjVertex);
             }
             temp = next(graph, temp->next);
-            // temp = temp->next;
         }
     }
     free(q);

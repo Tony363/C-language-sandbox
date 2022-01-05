@@ -56,5 +56,6 @@ void freeChildNode(ChildNode *n);
 void freeParentNode(ParentNode *n);
 
 GraphFCC *buildGraph(FILE *input);
+void printGraph(GraphFCC *g);
 void freeGFCC(GraphFCC *g);
 #endif
