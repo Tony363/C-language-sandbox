@@ -20,7 +20,7 @@ typedef struct _CBinTree
 
 CBinTree *buildCBinTree(const char *str);
 CBinTreeNode *createNode(const char *word);
-CBinTreeNode *traversal(CBinTreeNode *root, CBinTreeNode *new);
+CBinTreeNode *traversal(CBinTreeNode *root, const char *word);
 
 int isMaxHeapCBT(CBinTree *tree);
 int _isMaxHeapCBT(CBinTreeNode *root);
