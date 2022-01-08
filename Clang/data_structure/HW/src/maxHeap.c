@@ -5,6 +5,8 @@
 #include "../includes/maxHeap.h"
 #define COUNT 5
 
+int n_chars, offset = 0;
+
 double getMag(ComplexNum val)
 {
     return (val.real * val.real) + (val.imag * val.imag);
@@ -51,31 +53,26 @@ CBinTreeNode *createNode(const char *word)
     return n;
 }
 
-CBinTreeNode *traversal(CBinTreeNode *root, const char *word)
+CBinTreeNode *_buildCBinTree(CBinTreeNode *root, const char *s)
 {
-    if (!root && strcmp(word, "@"))
-        return createNode(word);
-    else if (!root)
+    char word[10];
+    if (sscanf(s + offset, "%s%n", word, &n_chars))
+        offset += n_chars;
+    else
         return NULL;
-    // if (!root->right)
-    root->left = traversal(root->left, word);
+    if (word[0] == '@')
+        return NULL;
 
-    // if (!root->left)
-    root->right = traversal(root->right, word);
+    root = createNode(word);
+    root->left = _buildCBinTree(root->left, s);
+    root->right = _buildCBinTree(root->right, s);
     return root;
 }
 
 CBinTree *buildCBinTree(const char *s)
 {
     CBinTree *tree = (CBinTree *)malloc(sizeof(CBinTree));
-    tree->root = NULL;
-    char word[100];
-    int n_chars, offset = 0;
-    while (1 == sscanf(s + offset, "%s%n", word, &n_chars))
-    {
-        tree->root = traversal(tree->root, word);
-        offset += n_chars;
-    }
+    tree->root = _buildCBinTree(tree->root, s);
     return tree;
 }
 
@@ -116,11 +113,11 @@ int main(int argc, char **argv)
     CBinTree *tree;
     // tree = buildCBinTree("5+3i @ @");
 
-    // tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
+    tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
 
     // tree = buildCBinTree("3+4i 3 2.1i @ @ 1 @ @ -4i @ @");
 
-    tree = buildCBinTree("3+4i 3 8.1i @ @ 1 @ @ -4i @ @");
+    // tree = buildCBinTree("3+4i 3 8.1i @ @ 1 @ @ -4i @ @");
     printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");
     print2D(tree->root);
 
