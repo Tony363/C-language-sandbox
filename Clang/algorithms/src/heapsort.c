@@ -4,7 +4,7 @@
 /*
 underlying data structure applied on is array
 sift down or up is for building tree
-    sift up builds "tree" incrementally (if needed to build heap it iteratively)
+    sift up builds "tree" incrementally (if needed to build heap iteratively)
     sift down builds tree given array and "heapifies" it in each sub tree iteration
 sift down specifically, "heapify" for sorting array representing binary tree
 */
@@ -77,10 +77,10 @@ void heapSort(int arr[], int n)
     // One by one extract an element from heap
     for (int i = n - 1; i > 0; i--)
     {
-        // Move current root to end
+        // Move current root to end because root is supposedly largest
         swap(&arr[0], &arr[i]);
 
         // call max heapify on the reduced heap
-        heapify(arr, i, 0);
+        heapify(arr, i, 0); // 'i' decremented to not include sorted area
     }
 }

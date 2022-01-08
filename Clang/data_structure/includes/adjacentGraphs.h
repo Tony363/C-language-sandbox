@@ -29,33 +29,4 @@ void printAdjList(Graph *graph);
 void freeGraph(Graph *graph);
 
 /**************************************************************************/
-
-typedef struct _childNode
-{
-    int child_idx;
-    double cost;
-    struct _childNode *next;
-} ChildNode;
-
-typedef struct _ParentNode
-{
-    char *name;
-    ChildNode *children;
-} ParentNode;
-
-typedef struct _Graph
-{
-    ParentNode *vertices;
-    int num_vertices;
-} GraphFCC;
-
-ChildNode *createChildNode(int idx, double cost);
-ParentNode *createParentNode(const char *name);
-void initParentNode(ParentNode *n, const char *name);
-void freeChildNode(ChildNode *n);
-void freeParentNode(ParentNode *n);
-
-GraphFCC *buildGraph(FILE *input);
-void printGraph(GraphFCC *g);
-void freeGFCC(GraphFCC *g);
 #endif
