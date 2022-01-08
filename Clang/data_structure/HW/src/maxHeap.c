@@ -10,19 +10,13 @@ double getMag(ComplexNum val)
     return (val.real * val.real) + (val.imag * val.imag);
 }
 
-int _isMaxHeapCBT(CBinTreeNode *root)
+int _isMaxHeapCBT(CBinTreeNode *root, double Rval)
 {
-    // printf("%lf\n", getMag(root->value));
-
-    if (!root->left && !root->right)
+    if (root == NULL)
         return 1;
-    if (root->left && root->right && getMag(root->left->value) > getMag(root->value) && getMag(root->right->value) > getMag(root->value))
+    if (getMag(root->value) > Rval)
         return 0;
-    if (root->left && getMag(root->value) < getMag(root->left->value))
-        return 0;
-    if (root->right && getMag(root->value) < getMag(root->right->value))
-        return 0;
-    return _isMaxHeapCBT(root->left) && _isMaxHeapCBT(root->right);
+    return _isMaxHeapCBT(root->left, Rval) && _isMaxHeapCBT(root->right, Rval);
 }
 
 int isMaxHeapCBT(CBinTree *tree)
@@ -32,7 +26,7 @@ int isMaxHeapCBT(CBinTree *tree)
         return 0;
     if (!tree->root->left && !tree->root->right)
         return 1;
-    return _isMaxHeapCBT(tree->root);
+    return _isMaxHeapCBT(tree->root, getMag(tree->root->value));
 }
 
 CBinTreeNode *createNode(const char *word)
@@ -63,10 +57,11 @@ CBinTreeNode *traversal(CBinTreeNode *root, const char *word)
         return createNode(word);
     else if (!root)
         return NULL;
+    // if (!root->right)
     root->left = traversal(root->left, word);
 
-    if (!root->left)
-        root->right = traversal(root->right, word);
+    // if (!root->left)
+    root->right = traversal(root->right, word);
     return root;
 }
 
@@ -120,15 +115,12 @@ int main(int argc, char **argv)
 {
     CBinTree *tree;
     // tree = buildCBinTree("5+3i @ @");
-    // printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");
 
-    tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
-    // printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");
+    // tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
 
     // tree = buildCBinTree("3+4i 3 2.1i @ @ 1 @ @ -4i @ @");
-    // printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");
 
-    // tree = buildCBinTree("3+4i 3 8.1i @ @ 1 @ @ -4i @ @");
+    tree = buildCBinTree("3+4i 3 8.1i @ @ 1 @ @ -4i @ @");
     printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");
     print2D(tree->root);
 

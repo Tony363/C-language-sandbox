@@ -23,6 +23,6 @@ CBinTreeNode *createNode(const char *word);
 CBinTreeNode *traversal(CBinTreeNode *root, const char *word);
 
 int isMaxHeapCBT(CBinTree *tree);
-int _isMaxHeapCBT(CBinTreeNode *root);
+int _isMaxHeapCBT(CBinTreeNode *root, double Rval);
 
 #endif
