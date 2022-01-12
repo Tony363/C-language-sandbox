@@ -5,8 +5,6 @@
 #include "../includes/maxHeap.h"
 #define COUNT 5
 
-// int n_chars, offset = 0;
-
 double getMag(ComplexNum val)
 {
     return (val.real * val.real) + (val.imag * val.imag);
@@ -14,21 +12,12 @@ double getMag(ComplexNum val)
 
 int _isMaxHeapCBT(CBinTreeNode *root, double Rval)
 {
-    if (root == NULL)
-        return 1;
-    if (getMag(root->value) > Rval)
-        return 0;
-    return _isMaxHeapCBT(root->left, Rval) && _isMaxHeapCBT(root->right, Rval);
+    return !root || !(getMag(root->value) > Rval) && _isMaxHeapCBT(root->left, Rval) && _isMaxHeapCBT(root->right, Rval);
 }
 
 int isMaxHeapCBT(CBinTree *tree)
 {
-
-    if (!tree || !tree->root)
-        return 0;
-    if (!tree->root->left && !tree->root->right)
-        return 1;
-    return _isMaxHeapCBT(tree->root, getMag(tree->root->value));
+    return (!tree->root->left && !tree->root->right) || tree && tree->root && _isMaxHeapCBT(tree->root, getMag(tree->root->value));
 }
 
 CBinTreeNode *createNode(const char *word)
@@ -115,9 +104,9 @@ int main(int argc, char **argv)
     CBinTree *tree;
     // tree = buildCBinTree("5+3i @ @");
 
-    tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
+    // tree = buildCBinTree("3+4i 3 @ @ -4i @ @");
 
-    // tree = buildCBinTree("3+4i 3 2.1i @ @ 1 @ @ -4i @ @");
+    tree = buildCBinTree("3+4i 3 2.1i @ @ 1 @ @ -4i @ @");
 
     // tree = buildCBinTree("3+4i 3 8.1i @ @ 1 @ @ -4i @ @");
     printf("%s\n", isMaxHeapCBT(tree) ? "TRUE" : "FALSE");

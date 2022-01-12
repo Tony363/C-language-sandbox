@@ -15,22 +15,18 @@ StrBSTNode *createStrBSTNode(const char *s)
     StrBSTNode *n = (StrBSTNode *)malloc(sizeof(StrBSTNode));
     n->s = (char *)malloc(sizeof(char) * (strlen(s) + 1));
     strcpy(n->s, s);
-    n->left = NULL;
-    n->right = NULL;
+    n->left = n->right = NULL;
     return n;
 }
 
-StrBSTNode *_addValueSB(StrBSTNode *root, StrBSTNode *new)
+StrBSTNode *_addValueSB(StrBSTNode *root, const char *s)
 {
     if (!root)
-    {
-        root = new;
-        return root;
-    }
-    if (strcmp(new->s, root->s) > 0)
-        root->right = _addValueSB(root->right, new);
-    else if (strcmp(new->s, root->s) < 0)
-        root->left = _addValueSB(root->left, new);
+        return createStrBSTNode(s);
+    if (strcmp(s, root->s) > 0)
+        root->right = _addValueSB(root->right, s);
+    else if (strcmp(s, root->s) < 0)
+        root->left = _addValueSB(root->left, s);
     return root;
 }
 
@@ -38,8 +34,7 @@ void addValueSB(StrBST *bst, const char *value)
 {
     if (!bst || !value)
         return;
-    StrBSTNode *new = createStrBSTNode(value);
-    bst->root = _addValueSB(bst->root, new);
+    bst->root = _addValueSB(bst->root, value);
 }
 
 void value_depth(const char *value, int depth)
@@ -180,5 +175,6 @@ int main(int argc, char **argv)
     delValueSB(bst, "cat");
     toSortedList(bst, value_depth);
     printf("\n");
+
     return 0;
 }
