@@ -73,29 +73,33 @@ void printArr(Graph *graph)
     }
     printf("\n");
 }
+
 // DFS algo
-// bugged, infinite recursive loop?
-int DFS(Graph *graph, char initV, char searchV)
+int _DFS(Graph *graph, char initV, char searchV, int *flagArr)
 {
     if (initV == searchV)
     {
         printf("Found %c\n", searchV);
-        memset(graph->flag, 0, graph->V * sizeof(int));
         return 1;
     }
     ajNode *temp = graph->array[initV - 'A'].head;
 
-    graph->flag[initV - 'A'] = 1;
-    // printArr(graph);
+    flagArr[initV - 'A'] = 1;
     while (temp)
     {
         char connectedVertex = temp->vertex;
-        if (graph->flag[connectedVertex - 'A'] == 0)
-            return DFS(graph, connectedVertex, searchV);
+        if (flagArr[connectedVertex - 'A'] == 0)
+            return _DFS(graph, connectedVertex, searchV, flagArr);
         temp = temp->next;
     }
-    memset(graph->flag, 0, graph->V * sizeof(int)); // too many traversals because recursive
     return 0;
+}
+
+int DFS(Graph *graph, char initV, char searchV)
+{
+    int flagArr[graph->V];
+    memset(flagArr, 0, graph->V * sizeof(int));
+    return _DFS(graph, initV, searchV, flagArr);
 }
 
 ajNode *next(Graph *graph, ajNode *node)
@@ -120,11 +124,9 @@ int BFS(Graph *graph, char startVertex, char searchV)
     {
         int currentVertex = dequeue(q);
         ajNode *temp = graph->array[currentVertex].head;
-        // printf("Visiting %d children\n", currentVertex);
         while (temp)
         {
             int adjVertex = temp->vertex - 'A';
-            // printf("Traversing %d child\n", adjVertex);
 
             if (temp->vertex == searchV)
             {
