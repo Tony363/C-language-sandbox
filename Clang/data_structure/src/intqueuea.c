@@ -1,6 +1,7 @@
 #include "../includes/intqueuea.h"
 #include <stdlib.h>
 
+// ring buffer modulo approach
 IntQueueA *createIntQueueA(int size)
 {
     IntQueueA *q = (IntQueueA *)malloc(sizeof(IntQueueA));
@@ -43,6 +44,7 @@ void enqueueIQA(IntQueueA *queue, int value, int *status)
     }
 }
 
+// or have ring buffer to waste 1 space to counter for head and tail indexes
 int dequeueIQA(IntQueueA *queue, int *status)
 {
     int value;
@@ -57,7 +59,7 @@ int dequeueIQA(IntQueueA *queue, int *status)
     }
 
     value = queue->queueAry[queue->head];
-    if (queue->head == queue->tail)
+    if (queue->head == queue->tail) // case where there is only 1 element in array based queue
     {
         queue->head = queue->tail = -1;
     }

@@ -5,7 +5,7 @@
 #include "../includes/maxHeap.h"
 #define COUNT 5
 
-int n_chars, offset = 0;
+// int n_chars, offset = 0;
 
 double getMag(ComplexNum val)
 {
@@ -53,26 +53,28 @@ CBinTreeNode *createNode(const char *word)
     return n;
 }
 
-CBinTreeNode *_buildCBinTree(CBinTreeNode *root, const char *s)
+CBinTreeNode *_buildCBinTree(CBinTreeNode *root, const char *s, int *offset)
 {
     char word[10];
-    if (sscanf(s + offset, "%s%n", word, &n_chars))
-        offset += n_chars;
+    int n_chars;
+    if (sscanf(s + *offset, "%s%n", word, &n_chars))
+        *offset += n_chars;
     else
         return NULL;
     if (word[0] == '@')
         return NULL;
 
     root = createNode(word);
-    root->left = _buildCBinTree(root->left, s);
-    root->right = _buildCBinTree(root->right, s);
+    root->left = _buildCBinTree(root->left, s, offset);
+    root->right = _buildCBinTree(root->right, s, offset);
     return root;
 }
 
 CBinTree *buildCBinTree(const char *s)
 {
+    int n_chars, offset = 0;
     CBinTree *tree = (CBinTree *)malloc(sizeof(CBinTree));
-    tree->root = _buildCBinTree(tree->root, s);
+    tree->root = _buildCBinTree(tree->root, s, &offset);
     return tree;
 }
 

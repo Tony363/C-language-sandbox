@@ -36,59 +36,31 @@ void printChildren(Child *first)
  * @param m The (positive) count to the target child.
  * @return The pointer to the new first child.
  */
+
 Child *countOut(Child *first, int m)
 {
-    if (first == NULL || (first != NULL && first->next == first))
+    if (first == NULL || (first != NULL && first->next == first) || m < 0)
     {
         free(first);
         return NULL;
     }
-    else if (m < 1)
-    {
-        return first;
-    }
     else if (m == 1)
     {
-        Child *tmp = first;
-        while (tmp->next != first)
-            tmp = tmp->next;
-        tmp->next = first->next;
-        return first->next;
+        Child *cur = first;
+        while (cur->next != first)
+            cur = cur->next;
+        cur->next = first->next;
+        free(first);
+        return cur->next;
     }
-    Child *cur = first;
-    Child *prev = NULL;
-    int length = 1;
-    while (cur->next != first)
+    if (m == 2)
     {
-        if (m == length)
-        {
-            Child *tmp = cur->next;
-            prev->next = cur->next;
-            free(cur);
-            return tmp;
-        }
-        prev = cur;
-        cur = cur->next;
-        length++;
-    }
-    if (m == length && cur->next == first)
-    {
-        Child *tmp = cur->next;
-        prev->next = cur->next;
-        free(cur);
+        Child *tmp = first->next->next;
+        free(first->next);
+        first->next = tmp;
         return tmp;
     }
-    length = (m - length) % length;
-    while (length > 0)
-    {
-        prev = cur;
-        cur = cur->next;
-        length--;
-    }
-    Child *tmp = cur->next;
-    prev->next = cur->next;
-    free(cur);
-    return tmp;
+    return countOut(first->next, m - 1);
 }
 
 Child *linkChildren(int nChild)
@@ -125,7 +97,7 @@ Child *linkChildren(int nChild)
 int main(int argc, char **argv)
 {
     Child *first = linkChildren(4);
-    first = countOut(first, 100);
+    first = countOut(first, 1);
     printChildren(first);
     return 0;
 }
