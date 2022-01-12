@@ -117,14 +117,13 @@ StrBSTNode *deleteNode(StrBSTNode *root, const char *value)
         }
 
         // node with two children:
-        // Get the inorder successor, leftmost node
-        // (smallest in the right subtree)
+        // Get the inorder successor
+        // (smallest in the right subtree, all the way left of right subtree)
         StrBSTNode *temp = minValueNode(root->right);
 
         // Copy the inorder
         // successor's content to this node
-        root->s = temp->s;
-
+        strcpy(root->s, temp->s);
         // Delete the inorder successor
         // Delete the node that is copied to location of root to be deleted
         // since that specific node now should be with no children or single children case
@@ -165,6 +164,17 @@ int main(int argc, char **argv)
     // toSortedList(bst, value_depth);
     // printf("\n");
 
+    // StrBST *bst = createStrBST();
+    // addValueSB(bst, "egg");
+    // addValueSB(bst, "hi");
+    // addValueSB(bst, "cat");
+    // addValueSB(bst, "apple");
+    // addValueSB(bst, "bell");
+    // delValueSB(bst, "bell");
+    // delValueSB(bst, "cat");
+    // toSortedList(bst, value_depth);
+    // printf("\n");
+
     StrBST *bst = createStrBST();
     addValueSB(bst, "egg");
     addValueSB(bst, "hi");
@@ -173,8 +183,29 @@ int main(int argc, char **argv)
     addValueSB(bst, "bell");
     delValueSB(bst, "bell");
     delValueSB(bst, "cat");
+    addValueSB(bst, "bell");
+    addValueSB(bst, "cat");
+    addValueSB(bst, "123");
+    delValueSB(bst, "apple");
     toSortedList(bst, value_depth);
     printf("\n");
+
+    // StrBST *bst = createStrBST();
+    // addValueSB(bst, "egg");
+    // addValueSB(bst, "hi");
+    // addValueSB(bst, "cat");
+    // addValueSB(bst, "apple");
+    // addValueSB(bst, "bell");
+    // delValueSB(bst, "bell");
+    // delValueSB(bst, "cat");
+    // addValueSB(bst, "bell");
+    // addValueSB(bst, "cat");
+    // addValueSB(bst, "123");
+    // delValueSB(bst, "apple");
+    // delValueSB(bst, "egg");
+    // delValueSB(bst, "app");
+    // toSortedList(bst, value_depth);
+    // printf("\n");
 
     return 0;
 }
