@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 // ring buffer modulo approach
+// can implement with just head, no tail, only need to increment head,
+// and counter in structure of queue to see if it matches queue size
 IntQueueA *createIntQueueA(int size)
 {
     IntQueueA *q = (IntQueueA *)malloc(sizeof(IntQueueA));
@@ -59,7 +61,7 @@ int dequeueIQA(IntQueueA *queue, int *status)
     }
 
     value = queue->queueAry[queue->head];
-    if (queue->head == queue->tail) // idx 90 case where there is only 1 element in array based queue
+    if (queue->head == queue->tail) // idx 0 case where there is only 1 element in array based queue
     {
         queue->head = queue->tail = -1;
     }
