@@ -1,12 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct Node
-{
-    int data;
-    struct Node *next;
-} Node;
+#include "../includes/linklist.h"
 
 Node *createNode(int data)
 {
@@ -160,30 +155,30 @@ Node *freeList(Node *head)
     return NULL;
 }
 
-int getValueIl(int *head, int index, int *status_code)
-{
-    int i;
-    Node *cur = head;
-    if (!head || index < 0)
-    {
-        // invalid index return
-        if (status_code)
-            *status_code = -1;
-        return 0;
-    }
-    for (i = 0; i < index; i++)
-    {
-        if (!cur && i != index)
-            break;
-        cur = cur->next;
-    }
-    if (i < index)
-    {
-        if (status_code)
-            *status_code = -1;
-        return 0;
-    }
-    if (status_code)
-        *status_code = 0;
-    return cur->data;
-}
+// int getValueIl(int *head, int index, int *status_code)
+// {
+//     int i;
+//     Node *cur = head;
+//     if (!head || index < 0)
+//     {
+//         // invalid index return
+//         if (status_code)
+//             *status_code = -1;
+//         return 0;
+//     }
+//     for (i = 0; i < index; i++)
+//     {
+//         if (!cur && i != index)
+//             break;
+//         cur = cur->next;
+//     }
+//     if (i < index)
+//     {
+//         if (status_code)
+//             *status_code = -1;
+//         return 0;
+//     }
+//     if (status_code)
+//         *status_code = 0;
+//     return cur->data;
+// }

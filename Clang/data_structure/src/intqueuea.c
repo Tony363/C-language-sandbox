@@ -59,7 +59,7 @@ int dequeueIQA(IntQueueA *queue, int *status)
     }
 
     value = queue->queueAry[queue->head];
-    if (queue->head == queue->tail) // case where there is only 1 element in array based queue
+    if (queue->head == queue->tail) // idx 90 case where there is only 1 element in array based queue
     {
         queue->head = queue->tail = -1;
     }

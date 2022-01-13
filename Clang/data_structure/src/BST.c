@@ -4,17 +4,6 @@
 #include "../includes/bst.h"
 #define COUNT 5
 
-int getLevel(int n)
-{
-    int lvl = 0;
-    while (n % 2 == 0)
-    {
-        lvl++;
-        n /= 2;
-    }
-    return lvl;
-}
-
 TreeNode *createNode(int input)
 {
     TreeNode *new = (TreeNode *)malloc(sizeof(TreeNode));
