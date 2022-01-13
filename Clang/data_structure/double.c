@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "includes/circularlist.h"
+#include "includes/doublelist.h"
 
 int main(int argc, char **argv)
 {
@@ -16,15 +16,16 @@ int main(int argc, char **argv)
         9,
     };
     int len = sizeof(arr) / sizeof(arr[0]);
-    Node *head = createDoubleList(arr, len);
-    print_double_list(head);
-    Node *five = GetCircular(head, 5);
-    printf("%d\n", (five) ? five->data : 9999);
-    head = insertNode(head, 999);
-    print_double_list(head);
-    head = removeDouble(head, 0);
-    print_double_list(head);
-    head = freeCircular(head);
-    print_double_list(head);
+    DList *lst = createDoubleList();
+    for (int i = 0; i < len; i++)
+        insertNode(lst, arr[i]);
+    print_double_list(lst->head);
+    int five;
+    printf("%d\n", (five = GetCircular(lst->head, 5)->data) ? five : 9999);
+
+    removeDouble(lst, 0);
+    print_double_list(lst->head);
+    lst->head = freeCircular(lst->head);
+    print_double_list(lst->head);
     return 0;
 }

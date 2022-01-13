@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct _Node
-{
-    int data;
-    struct _Node *next;
-    struct _Node *prev;
-} Node;
+#include "../includes/doublelist.h"
 
 Node *createNode(int data)
 {
@@ -17,42 +11,33 @@ Node *createNode(int data)
     return node;
 }
 
-Node *insertNode(Node *head, int data)
+void insertNode(DList *lst, int data)
 {
     Node *node = createNode(data);
-    if (head == NULL)
+    if (!lst->head)
     {
-        head = node;
+        lst->head = node;
+        lst->tail = node;
+        return;
     }
     else
     {
-        Node *temp = head;
-        while (temp->next != NULL)
+        Node *temp = lst->head;
+        while (temp->next)
         {
             temp = temp->next;
         }
         temp->next = node;
         node->prev = temp;
     }
-    return head;
 }
-Node *createDoubleList(int arr[], int len)
+
+DList *createDoubleList()
 {
-    Node *head = createNode(arr[0]);
-    head->prev = NULL;
-    head->next = NULL;
-    Node *cur = head;
-    Node *prev;
-    int i = 1;
-    while (i < len)
-    {
-        cur->next = createNode(arr[i]);
-        cur->next->prev = cur;
-        cur = cur->next;
-        i++;
-    }
-    cur->next = NULL;
-    return head;
+    DList *list = (DList *)malloc(sizeof(DList));
+    list->head = NULL;
+    list->tail = NULL;
+    return list;
 }
 
 Node *GetCircular(Node *head, int data)
@@ -79,48 +64,29 @@ Node *GetCircular(Node *head, int data)
 }
 
 // need to counter for last node and first node
-Node *removeDouble(Node *head, int val)
+void removeDouble(DList *lst, int data)
 {
-    if (!head || !head->next)
+    if (!lst || !lst->head)
+        return;
+    Node *temp = lst->head;
+    if (temp->data == data)
     {
-        return NULL;
-    }
-    else if (head->data == val)
-    {
-        Node *temp = head;
-        // printf("wtf: %d\n", head->data);
-        head = head->next;
-        head->prev = NULL;
-        // printf("wtf: %d\n", head->data);
+        lst->head = temp->next;
         free(temp);
-        return head;
+        return;
     }
-    Node *temp = head;
-    int next = 0, prev = 0;
-    if (temp->next)
-        next = 1;
-    else
-        prev = 1;
     while (temp)
     {
-        if (temp->data == val)
+        if (temp->data == data)
         {
-            if (temp->prev)
-            {
-                temp->prev->next = temp->next;
-            }
+            temp->prev->next = temp->next;
             if (temp->next)
-            {
                 temp->next->prev = temp->prev;
-            }
-            free(temp);
+            else
+                lst->tail = temp->prev;
         }
-        if (next == 1) // going backwards or forwards
-            temp = temp->next;
-        else
-            temp = temp->prev;
+        temp = temp->next;
     }
-    return head;
 }
 
 void print_double_list(Node *head)
