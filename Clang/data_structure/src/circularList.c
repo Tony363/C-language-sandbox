@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct Node
-{
-    int data;
-    struct Node *next;
-} Node;
+#include "../includes/circularlist.h"
 
 int length(Node *linkList)
 {
@@ -27,24 +22,18 @@ Node *createNode(int data)
     return node;
 }
 
-Node *circularList(int data[], int len)
+CirList *circularList()
 {
-    Node *head = createNode(data[0]);
-    Node *node = head;
-    int i = 1;
-    while (i < len)
-    {
-        Node *temp = createNode(data[i]);
-        node->next = temp;
-        node = node->next;
-        i++;
-    }
-    node->next = head;
-    return head;
+    CirList *list = (CirList *)malloc(sizeof(CirList));
+    list->head = NULL;
+    list->tail = NULL;
+    return list;
 }
 
 void printCircular(Node *head)
 {
+    if (!head)
+        return;
     Node *temp = head;
     printf("[");
     while (temp->next != head)
@@ -70,44 +59,45 @@ Node *getCirNode(Node *head, int data)
     return NULL;
 }
 
-Node *add(Node *head, int data)
+void add(CirList *lst, int data)
 {
     Node *new = createNode(data);
-    Node *temp = head->next;
-    head->next = new;
-    new->next = temp;
-    return head;
+    if (!lst->head)
+    {
+        lst->head = new;
+        lst->tail = new;
+        new->next = lst->head;
+        return;
+    }
+    lst->tail->next = new;
+    new->next = lst->head;
+    lst->head = new;
 }
 
-Node *Remove(Node *head, int data)
+void Remove(CirList *lst, int data)
 {
-    Node *cur = head;
-    Node *prev = NULL;
-    Node *last = NULL;
-    while (cur->next != head)
+    if (!lst)
+        return;
+    if (lst->head->data == data)
     {
-        if (cur->data == data)
+        Node *tmp = lst->head;
+        lst->tail->next = lst->head->next;
+        lst->head = lst->head->next;
+        free(tmp);
+        return;
+    }
+    Node *tmp = lst->head;
+    while (tmp->next != lst->head)
+    {
+        if (tmp->next->data == data)
         {
-            prev->next = cur->next;
-            free(cur);
-            return head;
+            Node *tmp2 = tmp->next;
+            tmp->next = tmp->next->next;
+            free(tmp2);
+            return;
         }
-        prev = cur;
-        cur = cur->next;
+        tmp = tmp->next;
     }
-    if (head == cur && cur->data == data)
-    {
-        while (cur->next != head)
-            cur = cur->next;
-        last = cur;
-        last->next = head->next;
-        return head->next;
-    }
-    else
-    {
-        prev->next = head;
-    }
-    return head;
 }
 
 Node *freeCircular(Node *head)

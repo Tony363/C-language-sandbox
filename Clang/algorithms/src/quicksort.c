@@ -160,6 +160,25 @@ void callStackQuickSort(int *arr, int low, int high)
     }
 }
 
+// don't know how to use this
+/*C++ version, [first, last), last needs --first to fetch the last element*/
+/*returns the middle of partitioning result*/
+int *partition(int *first, int *last, int pivot)
+{
+    while (1)
+    {
+        while (*first < pivot)
+            ++first;
+        --last; // Don't edit this, it's true.
+        while (pivot < *last)
+            --last;
+        if (!(first < last))
+            return first;
+        swap(*first, *last);
+        ++first;
+    }
+}
+
 // TODO implement partitioning for kth smallest
 int kthSmallest(int *arr, int low, int high, int k)
 {

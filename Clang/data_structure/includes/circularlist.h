@@ -7,11 +7,18 @@ typedef struct Node
     struct Node *next;
 } Node;
 
+typedef struct CirList
+{
+    Node *head;
+    Node *tail;
+} CirList;
+
+CirList *circularList();
 Node *createNode(int data);
-Node *insertNode(Node *head, int data);
-Node *createDoubleList(int arr[], int len);
-Node *GetCircular(Node *head, int data);
-Node *removeDouble(Node *head, int val);
-void print_double_list(Node *head);
+void printCircular(Node *head);
+Node *getCirNode(Node *head, int data);
+void add(CirList *lst, int data);
+void Remove(CirList *lst, int data);
 Node *freeCircular(Node *head);
+
 #endif
