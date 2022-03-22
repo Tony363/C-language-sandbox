@@ -27,6 +27,8 @@ Graph *newGraph(int V, char *d);
 void addGraphNode(Graph *graph, char vSrc, char vDst, int edge);
 void printAdjList(Graph *graph);
 void freeGraph(Graph *graph);
+int BFS(Graph *graph, char startVertex, char searchV);
+int DFS(Graph *graph, char initV, char searchV);
 
 /**************************************************************************/
 #endif
