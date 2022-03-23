@@ -1,3 +1,7 @@
+# user all to build the binaries
+# use doc to build the API doc
+# use clean to delete generated files
+
 CFLAGS=-Isrc
 all: build/myprog
 
