@@ -1,2 +1,8 @@
-inPostfix.o: inPostfix.c
-	gcc -c inPostfix.c 
+CFLAGS=-Isrc
+all: inPostfix
+
+inPostfix: inPostfix.c
+	gcc -g -o $@ $<
+
+clean:
+	rm -f *.o
