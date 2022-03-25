@@ -1,8 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
-#include "aggs.h"
+#include "src/aggs.h"
 /*
 This assignment is for practicing the automation of the
 project building process by a Makefile.The C or C++ programreads
